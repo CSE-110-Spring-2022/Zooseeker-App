@@ -1,9 +1,6 @@
 package com.example.cse110_lab5;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -14,10 +11,10 @@ import android.widget.EditText;
 
 import java.util.List;
 
-public class TodoListActivity extends AppCompatActivity {
+public class GraphActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
-    private TodoListViewModel viewModel;
+    private GraphViewModel viewModel;
     private EditText newTodoText;
     private Button addTodoButton;
     @Override
@@ -25,8 +22,16 @@ public class TodoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_list);
 
+        List<Node> nodes = Node.loadJSON(this, "sample_node_info.json");
+        List<Edge> edges = Edge.loadJSON(this, "sample_edge_info.json");
+
+        Log.d("Nodes", nodes.toString());
+        Log.d("Edges", edges.toString());
+
+        /**
         viewModel = new ViewModelProvider(this)
-                .get(TodoListViewModel.class);
+                .get(GraphViewModel.class);
+
 
         TodoListAdapter adapter = new TodoListAdapter();
         adapter.setHasStableIds(true);
@@ -45,11 +50,13 @@ public class TodoListActivity extends AppCompatActivity {
         addTodoButton.setOnClickListener(this::onAddTodoClicked);
 
         //adapter.setTodoListItems(TodoListItem.loadJSON(this, "demo_todos.json"));
-
+        */
     }
+    /**
     void onAddTodoClicked(View view) {
         String text = newTodoText.getText().toString();
         newTodoText.setText("");
         viewModel.createTodo(text);
     }
+     */
 }

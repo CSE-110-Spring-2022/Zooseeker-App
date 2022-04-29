@@ -9,17 +9,21 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-public class TodoListViewModel extends AndroidViewModel {
+public class GraphViewModel extends AndroidViewModel {
     private LiveData<List<TodoListItem>> todoListItems;
-    private final TodoListItemDao todoListItemDao;
+    private final EdgeDao edgeDao;
+    private final NodeDao nodeDao;
 
-    public TodoListViewModel(@NonNull Application application) {
+    public GraphViewModel(@NonNull Application application) {
         super(application);
         Context context = getApplication().getApplicationContext();
-        TodoDatabase db = TodoDatabase.getSingleton(context);
-        todoListItemDao = db.todoListItemDao();
+        GraphDatabase db = GraphDatabase.getSingleton(context);
+        edgeDao = db.edgeDao();
+        nodeDao = db.nodeDao();
     }
 
+    //ADAPT THIS FOR OUR NEW DATABASE
+    /**
     public LiveData<List<TodoListItem>> getTodoListItems() {
         if (todoListItems == null) {
             loadUsers();
@@ -27,10 +31,16 @@ public class TodoListViewModel extends AndroidViewModel {
         return todoListItems;
     }
 
-    public void toggleCompleted (TodoListItem todoListItem) {
+
+    public void toggleCompleted (Node node, Edge edge) {
+        node.completed = !todoListItem.completed;
+        todoListItemDao.update(todoListItem);
+
         todoListItem.completed = !todoListItem.completed;
         todoListItemDao.update(todoListItem);
     }
+
+
     private void loadUsers() {
         todoListItems = todoListItemDao.getAllLive();
     }
@@ -47,4 +57,6 @@ public class TodoListViewModel extends AndroidViewModel {
     public void deleteTodo(TodoListItem todoListItem){
         todoListItemDao.delete(todoListItem);
     }
+
+     */
 }

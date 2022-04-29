@@ -17,19 +17,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @RunWith(AndroidJUnit4.class)
 public class TodoDatabaseTest {
-    private TodoListItemDao dao;
-    private TodoDatabase db;
+    private EdgeDao edgeDao;
+    private NodeDao nodeDao;
+    private GraphDatabase db;
 
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context,TodoDatabase.class)
+        db = Room.inMemoryDatabaseBuilder(context, GraphDatabase.class)
                 .allowMainThreadQueries()
                 .build();
-        dao = db.todoListItemDao();
+        edgeDao = db.edgeDao();
+        nodeDao = db.nodeDao();
     }
 
     @After
@@ -37,6 +41,7 @@ public class TodoDatabaseTest {
         db.close();
     }
 
+    /*
     @Test
     public void testInsert() {
         TodoListItem item1 = new TodoListItem("Pizza time", false, 0);
@@ -47,20 +52,26 @@ public class TodoDatabaseTest {
 
         assertNotEquals(id1, id2);
     }
-
+*/
     @Test
     public void testGet() {
-        TodoListItem insertedItem = new TodoListItem("Pizza time", false, 0);
-        long id = dao.insert(insertedItem);
+        Edge testEdge = new Edge("test-edge", "test street");
+        Node testNode = new Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
+        long edgeID = edgeDao.insert(testEdge);
+        long nodeID = nodeDao.insert(testNode);
 
-        TodoListItem item = dao.get(id);
-        assertEquals(id, item.id);
-        assertEquals(insertedItem.text, item.text);
-        assertEquals(insertedItem.completed, item.completed);
-        assertEquals(insertedItem.order, item.order);
+        Edge edge = edgeDao.get("test-edge");
+        Node node = nodeDao.get("test-exhibit");
+        assertEquals(testEdge.id, edge.id);
+        assertEquals(testEdge.street, edge.street);
+
+        assertEquals(testNode.id, node.id);
+        assertEquals(testNode.kind, node.kind);
+        assertEquals(testNode.name, node.name);
+        assertEquals(testNode.tags, node.tags);
     }
 
-    @Test
+   /* @Test
     public void testUpdate() {
         TodoListItem item = new TodoListItem("Pizza time", false, 0);
         long id = dao.insert(item);
@@ -73,8 +84,9 @@ public class TodoDatabaseTest {
         item = dao.get(id);
         assertNotNull(item);
         assertEquals("Photos of Spider-Man", item.text);
-    }
+    }*/
 
+    /*
     @Test
     public void testDelete() {
         TodoListItem item = new TodoListItem("Pizza time", false, 0);
@@ -84,5 +96,5 @@ public class TodoDatabaseTest {
         int itemsDeleted = dao.delete(item);
         assertEquals(1, itemsDeleted);
         assertNull(dao.get(id));
-    }
+    }*/
 }

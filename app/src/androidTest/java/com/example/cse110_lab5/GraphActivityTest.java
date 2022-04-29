@@ -24,8 +24,8 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class TodoListActivityTest {
-    TodoDatabase testDb;
+public class GraphActivityTest {
+    GraphDatabase testDb;
     TodoListItemDao todoListItemDao;
 
     private static void forceLayout(RecyclerView recyclerView) {
@@ -36,10 +36,10 @@ public class TodoListActivityTest {
     @Before
     public void resetDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
-        testDb = Room.inMemoryDatabaseBuilder(context, TodoDatabase.class)
+        testDb = Room.inMemoryDatabaseBuilder(context, GraphDatabase.class)
                 .allowMainThreadQueries()
                 .build();
-        TodoDatabase.injectTestDatabase(testDb);
+        GraphDatabase.injectTestDatabase(testDb);
 
         List<TodoListItem> todos = TodoListItem.loadJSON(context, "demo_todos.json");
         todoListItemDao = testDb.todoListItemDao();
@@ -50,8 +50,8 @@ public class TodoListActivityTest {
     @Test
     public void testEditTodoText() {
         String newText = "Ensure all tests pass";
-        ActivityScenario<TodoListActivity> scenario
-                = ActivityScenario.launch(TodoListActivity.class);
+        ActivityScenario<GraphActivity> scenario
+                = ActivityScenario.launch(GraphActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.moveToState(Lifecycle.State.RESUMED);
@@ -74,8 +74,8 @@ public class TodoListActivityTest {
     @Test
     public void testAddNewTodo() {
         String newText = "Ensure all tests pass";
-        ActivityScenario<TodoListActivity> scenario
-                = ActivityScenario.launch(TodoListActivity.class);
+        ActivityScenario<GraphActivity> scenario
+                = ActivityScenario.launch(GraphActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle. State.STARTED);
         scenario.moveToState(Lifecycle.State.RESUMED);
@@ -97,8 +97,8 @@ public class TodoListActivityTest {
 
     @Test
     public void testDeleteTodo() {
-        ActivityScenario<TodoListActivity> scenario
-                = ActivityScenario.launch(TodoListActivity.class);
+        ActivityScenario<GraphActivity> scenario
+                = ActivityScenario.launch(GraphActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.moveToState(Lifecycle.State.RESUMED);
@@ -125,8 +125,8 @@ public class TodoListActivityTest {
     @Test
     public void testCheckoffTodo() {
         //String newText = "Ensure all tests pass";
-        ActivityScenario<TodoListActivity> scenario
-                = ActivityScenario.launch(TodoListActivity.class);
+        ActivityScenario<GraphActivity> scenario
+                = ActivityScenario.launch(GraphActivity.class);
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.moveToState(Lifecycle. State.STARTED);
         scenario.moveToState(Lifecycle.State.RESUMED);
