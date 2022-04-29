@@ -1,0 +1,10 @@
+#Thu Apr 28 18:22:21 PDT 2022
+base.2=/Users/joshualapidario/AndroidStudioProjects/zooseeker-cse-110-team-61/app/build/intermediates/dex/debug/mergeProjectDexDebug/12/classes.dex
+path.2=12/classes.dex
+base.1=/Users/joshualapidario/AndroidStudioProjects/zooseeker-cse-110-team-61/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+path.1=0/classes.dex
+base.0=/Users/joshualapidario/AndroidStudioProjects/zooseeker-cse-110-team-61/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+path.0=classes.dex

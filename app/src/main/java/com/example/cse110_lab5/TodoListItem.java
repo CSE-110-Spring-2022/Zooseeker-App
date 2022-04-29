@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
+//EDIT THIS TO MATCH ZOOSEEKER
 @Entity(tableName = "todo_list_items")
 public class TodoListItem {
 

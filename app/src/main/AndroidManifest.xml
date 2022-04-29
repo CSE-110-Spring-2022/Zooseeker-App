@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE110Lab5">
         <activity
-            android:name=".TodoListActivity"
+            android:name=".GraphActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

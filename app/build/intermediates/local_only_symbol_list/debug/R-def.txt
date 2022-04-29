@@ -1,0 +1,24 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id add_todo_btn
+id completed
+id delete_btn
+id new_todo_text
+id todo_item_text
+id todo_items
+layout activity_main
+layout activity_todo_list
+layout todo_list_item
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Theme.CSE110Lab5

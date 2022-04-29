@@ -1,0 +1,5 @@
+[
+  {"text": "Grocery shopping",     "completed": true,  "order": 1},
+  {"text": "Pay utilities",        "completed": false, "order": 2},
+  {"text": "Finish CSE 110 Lab 5", "completed": false, "order": 3}
+]
