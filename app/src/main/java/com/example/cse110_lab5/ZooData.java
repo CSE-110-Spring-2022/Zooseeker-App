@@ -1,5 +1,8 @@
 package com.example.cse110_lab5;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -8,6 +11,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.nio.json.JSONImporter;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -37,44 +41,58 @@ public class ZooData {
         public String street;
     }
 
-    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path) {
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
-        Reader reader = new InputStreamReader(inputStream);
+    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(Context context, String path) {
+        try {
+            InputStream inputStream = context.getAssets().open(path);
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<ZooData.VertexInfo>>(){}.getType();
-        List<ZooData.VertexInfo> zooData = gson.fromJson(reader, type);
+            Reader reader = new InputStreamReader(inputStream);
 
-        // This code is equivalent to:
-        //
-        // Map<String, ZooData.VertexInfo> indexedZooData = new HashMap();
-        // for (ZooData.VertexInfo datum : zooData) {
-        //   indexedZooData[datum.id] = datum;
-        // }
-        //
-        Map<String, ZooData.VertexInfo> indexedZooData = zooData
-                .stream()
-                .collect(Collectors.toMap(v -> v.id, datum -> datum));
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<ZooData.VertexInfo>>() {
+            }.getType();
+            List<ZooData.VertexInfo> zooData = gson.fromJson(reader, type);
 
-        return indexedZooData;
+            // This code is equivalent to:
+            //
+            // Map<String, ZooData.VertexInfo> indexedZooData = new HashMap();
+            // for (ZooData.VertexInfo datum : zooData) {
+            //   indexedZooData[datum.id] = datum;
+            // }
+            //
+            Map<String, ZooData.VertexInfo> indexedZooData = zooData
+                    .stream()
+                    .collect(Collectors.toMap(v -> v.id, datum -> datum));
+
+            return indexedZooData;
+        } catch (IOException e) {
+            Log.e("IO", "Could not load vertex info, " + e);
+            return null;
+        }
     }
 
-    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path) {
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
-        Reader reader = new InputStreamReader(inputStream);
+    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(Context context, String path) {
+        try {
+            InputStream inputStream = context.getAssets().open(path);
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<ZooData.EdgeInfo>>(){}.getType();
-        List<ZooData.EdgeInfo> zooData = gson.fromJson(reader, type);
+            Reader reader = new InputStreamReader(inputStream);
 
-        Map<String, ZooData.EdgeInfo> indexedZooData = zooData
-                .stream()
-                .collect(Collectors.toMap(v -> v.id, datum -> datum));
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<ZooData.EdgeInfo>>() {
+            }.getType();
+            List<ZooData.EdgeInfo> zooData = gson.fromJson(reader, type);
 
-        return indexedZooData;
+            Map<String, ZooData.EdgeInfo> indexedZooData = zooData
+                    .stream()
+                    .collect(Collectors.toMap(v -> v.id, datum -> datum));
+
+            return indexedZooData;
+        } catch (IOException e) {
+            Log.e("IO", "Could not load edge info, " + e);
+            return null;
+        }
     }
 
-    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path) {
+    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(Context context, String path) {
         // Create an empty graph to populate.
         Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
 
@@ -88,14 +106,18 @@ public class ZooData {
         // While this is automatic for vertices, it isn't for edges. We keep the
         // definition of this in the IdentifiedWeightedEdge class for convenience.
         importer.addEdgeAttributeConsumer(IdentifiedWeightedEdge::attributeConsumer);
+        try {
+            // On Android, you would use context.getAssets().open(path) here like in Lab 5.
+            InputStream inputStream = context.getAssets().open(path);
+            Reader reader = new InputStreamReader(inputStream);
 
-        // On Android, you would use context.getAssets().open(path) here like in Lab 5.
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
-        Reader reader = new InputStreamReader(inputStream);
+            // And now we just import it!
+            importer.importGraph(g, reader);
 
-        // And now we just import it!
-        importer.importGraph(g, reader);
-
-        return g;
+            return g;
+        } catch (IOException e) {
+            Log.e("IO", "Could not load zoo graph info, " + e);
+            return null;
+        }
     }
 }
