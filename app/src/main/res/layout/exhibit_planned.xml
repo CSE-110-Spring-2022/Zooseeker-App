@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".GraphActivity">
+    android:layout_height="64dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/planned_exhibits"
-        android:layout_width="367dp"
-        android:layout_height="703dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+    <EditText
+        android:id="@+id/todo_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="50dp"
+        android:hint="exhibit name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
