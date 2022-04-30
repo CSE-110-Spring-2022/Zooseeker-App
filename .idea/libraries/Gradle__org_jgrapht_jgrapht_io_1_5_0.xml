@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jgrapht:jgrapht-io:1.5.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jgrapht/jgrapht-io/1.5.0/4dd1f0c63038b15b95ac694ce33f1d0fdf4496c6/jgrapht-io-1.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jgrapht/jgrapht-io/1.5.0/b3e4598ba1b1820f250ff6ecd667e3a97b2b8689/jgrapht-io-1.5.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jgrapht/jgrapht-io/1.5.0/cc0ba41c0cdb7f3507da74399e835fdcabafa62f/jgrapht-io-1.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

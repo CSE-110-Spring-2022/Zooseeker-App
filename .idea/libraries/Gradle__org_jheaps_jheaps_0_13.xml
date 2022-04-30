@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jheaps:jheaps:0.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jheaps/jheaps/0.13/b30f6a9c1e99b2e102126060195469ef7fd7211b/jheaps-0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jheaps/jheaps/0.13/c89a975a1d01e1bfa4a112ff758dcdf5e906d41e/jheaps-0.13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jheaps/jheaps/0.13/bc9436c063a6a51ece5f7649f6c7be65274e149f/jheaps-0.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
