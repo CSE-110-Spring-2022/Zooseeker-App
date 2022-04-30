@@ -1,13 +1,5 @@
 package com.example.cse110_lab5;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -15,6 +7,14 @@ import com.google.gson.reflect.TypeToken;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.nio.json.JSONImporter;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ZooData {
     public static class VertexInfo {
@@ -38,7 +38,7 @@ public class ZooData {
     }
 
     public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path) {
-        InputStream inputStream = App.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
         Reader reader = new InputStreamReader(inputStream);
 
         Gson gson = new Gson();
@@ -60,7 +60,7 @@ public class ZooData {
     }
 
     public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path) {
-        InputStream inputStream = App.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
         Reader reader = new InputStreamReader(inputStream);
 
         Gson gson = new Gson();
@@ -90,7 +90,7 @@ public class ZooData {
         importer.addEdgeAttributeConsumer(IdentifiedWeightedEdge::attributeConsumer);
 
         // On Android, you would use context.getAssets().open(path) here like in Lab 5.
-        InputStream inputStream = App.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
         Reader reader = new InputStreamReader(inputStream);
 
         // And now we just import it!

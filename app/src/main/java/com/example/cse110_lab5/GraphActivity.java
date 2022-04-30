@@ -1,12 +1,12 @@
 package com.example.cse110_lab5;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ public class GraphActivity extends AppCompatActivity {
     private GraphViewModel viewModel;
     private EditText newTodoText;
     private Button addTodoButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
