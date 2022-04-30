@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jgrapht.Graph;
@@ -37,20 +38,19 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_todo_list);
+        setContentView(R.layout.planned_exhibits);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         List<Node> nodes = Node.loadJSON(this, "sample_node_info.json");
         List<Edge> edges = Edge.loadJSON(this, "sample_edge_info.json");
-
-        Log.d("Nodes", nodes.toString());
-        Log.d("Edges", edges.toString());
 
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON(this, "sample_zoo_graph.json");
         String start = "entrance_exit_gate";
         String[] toVisit = {"lions", "elephant_odyssey"};
 
+        /**
         List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> shortestPath = tsp(g, start, toVisit);
         ArrayList<String> totalPath = new ArrayList<>();
         totalPath.add(start);
@@ -66,6 +66,13 @@ public class GraphActivity extends AppCompatActivity {
         }
         Log.d("Exhibit Order", String.join(" -> ", exhibitOrder));
         Log.d("Overall Path", String.join(" -> ", totalPath));
+        **/
+
+        recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(tsp(g, start, toVisit));
+        recyclerView.setAdapter(oEadapter);
+
 
 
         /**
