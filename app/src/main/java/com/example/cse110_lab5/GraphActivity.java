@@ -21,7 +21,9 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_list);
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         List<Node> nodes = Node.loadJSON(this, "sample_node_info.json");
         List<Edge> edges = Edge.loadJSON(this, "sample_edge_info.json");
 
