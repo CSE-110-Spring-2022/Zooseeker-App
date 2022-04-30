@@ -42,7 +42,7 @@ public class GraphActivityTest {
         GraphDatabase.injectTestDatabase(testDb);
 
         List<TodoListItem> todos = TodoListItem.loadJSON(context, "demo_todos.json");
-        todoListItemDao = testDb.todoListItemDao();
+        //todoListItemDao = testDb.todoListItemDao();
         todoListItemDao.insertAll(todos);
 
     }
