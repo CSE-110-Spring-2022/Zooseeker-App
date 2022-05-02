@@ -27,8 +27,8 @@ jobs:
           java-version: '11'
           
       #Execute unit tests
-      - name: Test Get
-        run: ./gradlew testGet
+      - name: Unit Test
+        run: ./gradlew testDebugUnitTest
         
       #Report test results
       - name: Android Tes Report
