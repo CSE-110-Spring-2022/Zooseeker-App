@@ -17,8 +17,8 @@ import java.util.List;
 public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibitsAdapter.ViewHolder>{
     private List<Pair<String, GraphPath<String,IdentifiedWeightedEdge>>> plannedExs = Collections.emptyList();
 
-    public OrderedExhibitsAdapter(List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> stuff) {
-        this.plannedExs = stuff;
+    public OrderedExhibitsAdapter(List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> plannedExs) {
+        this.plannedExs = plannedExs;
     }
     @NonNull
     @Override

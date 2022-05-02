@@ -5,20 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="64dp">
 
-    <EditText
-        android:id="@+id/exhibit_planned"
+    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="50dp"
-        android:hint="exhibit_name"
-        android:inputType="text"
-        android:maxLines="1"
+        android:layout_marginEnd="20dp"
+        android:background="@color/gray"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/exhibit_planned"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="200dp"
+        android:maxLines="1"
+        android:minHeight="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
