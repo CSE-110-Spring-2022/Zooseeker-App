@@ -39,16 +39,18 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planned_exhibits);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle(" ZooSeeker");
 
         List<Node> nodes = Node.loadJSON(this, "sample_node_info.json");
         List<Edge> edges = Edge.loadJSON(this, "sample_edge_info.json");
 
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON(this, "sample_zoo_graph.json");
         String start = "entrance_exit_gate";
-        String[] toVisit = {"lions", "elephant_odyssey"};
+        String[] toVisit = {};
 
         /**
         List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> shortestPath = tsp(g, start, toVisit);
@@ -71,7 +73,13 @@ public class GraphActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(tsp(g, start, toVisit));
-        recyclerView.setAdapter(oEadapter);
+        if (oEadapter.getItemCount() == 2) {
+            setContentView(R.layout.no_plan);
+        }
+        else{
+            recyclerView.setAdapter(oEadapter);
+        }
+
 
 
 
