@@ -52,24 +52,6 @@ public class GraphActivity extends AppCompatActivity {
         String start = "entrance_exit_gate";
         String[] toVisit = {};
 
-        /**
-        List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> shortestPath = tsp(g, start, toVisit);
-        ArrayList<String> totalPath = new ArrayList<>();
-        totalPath.add(start);
-        ArrayList<String> exhibitOrder = new ArrayList<>();
-        for (Pair<String, GraphPath<String, IdentifiedWeightedEdge>> pairPath : shortestPath) {
-            String exhibit = pairPath.getFirst();
-            exhibitOrder.add(exhibit);
-
-            GraphPath<String, IdentifiedWeightedEdge> path = pairPath.getSecond();
-            if (path != null) {
-                totalPath.addAll(path.getVertexList().subList(1, path.getVertexList().size()));
-            }
-        }
-        Log.d("Exhibit Order", String.join(" -> ", exhibitOrder));
-        Log.d("Overall Path", String.join(" -> ", totalPath));
-        **/
-
         recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(tsp(g, start, toVisit));
@@ -120,7 +102,7 @@ public class GraphActivity extends AppCompatActivity {
      *                      that node from the previous node. Includes the start node itself (with a
      *                      null path).
      */
-    public List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> tsp(Graph<String, IdentifiedWeightedEdge> g, String start, String[] visit) {
+    public static List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> tsp(Graph<String, IdentifiedWeightedEdge> g, String start, String[] visit) {
         List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> finalPath = new ArrayList<>();
         finalPath.add(new Pair<>(start, null));
 
