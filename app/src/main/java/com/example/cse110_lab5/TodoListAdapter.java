@@ -1,7 +1,5 @@
 package com.example.cse110_lab5;
 
-import static android.view.LayoutInflater.from;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
