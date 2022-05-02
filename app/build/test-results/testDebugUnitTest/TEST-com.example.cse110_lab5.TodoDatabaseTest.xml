@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.cse110_lab5.TodoDatabaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-04-29T01:29:45" hostname="Joshuas-MacBook-Pro.local" time="2.292">
+<testsuite name="com.example.cse110_lab5.TodoDatabaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-05-02T00:48:01" hostname="Joshuas-MacBook-Pro.local" time="1.954">
   <properties/>
-  <testcase name="testGet" classname="com.example.cse110_lab5.TodoDatabaseTest" time="2.292"/>
+  <testcase name="testGet" classname="com.example.cse110_lab5.TodoDatabaseTest" time="1.954"/>
   <system-out><![CDATA[resources.arsc in APK '/Users/joshualapidario/.m2/repository/org/robolectric/android-all-instrumented/12-robolectric-7732740-i3/android-all-instrumented-12-robolectric-7732740-i3.jar' is compressed.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
