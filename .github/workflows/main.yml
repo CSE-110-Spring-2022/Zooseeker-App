@@ -23,7 +23,7 @@ jobs:
       - name: set up JDK 11
         uses: actions/setup-java@v2
         with:
-          distributions: 'zulu'
+          distribution: 'zulu'
           java-version: '11'
           
       #Execute unit tests
