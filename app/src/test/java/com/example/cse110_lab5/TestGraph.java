@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.cse110_lab5.database.ZooData;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
@@ -18,7 +20,7 @@ import java.util.List;
 public class TestGraph {
     @Test
     public void testGraph() {
-        Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
+        Graph<String, ZooData.IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(ZooData.IdentifiedEdge.class);
 
         g.addVertex("entrance_exit_gate");
         g.addVertex("entrance_plaza");
@@ -39,7 +41,7 @@ public class TestGraph {
         String start1 = "entrance_exit_gate";
         String[] toVisit1 = {"lions", "elephant_odyssey"};
 
-        List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> test1 = GraphActivity.tsp(g, start1, toVisit1);
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> test1 = GraphActivity.tsp(g, start1, toVisit1);
         // Verify that this goes through 4 total exhibits (beginning, lions, elephants, exit) when 2 are provided
         assertEquals(4, test1.size());
 
@@ -47,14 +49,14 @@ public class TestGraph {
         String[] toVisit2 = {};
 
         // Verify that this goes through 2 total exhibits (beginning and exit) when 0 are provided
-        List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> test2 = GraphActivity.tsp(g, start2, toVisit2);
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> test2 = GraphActivity.tsp(g, start2, toVisit2);
         assertEquals(2, test2.size());
 
         ArrayList<String> totalPath = new ArrayList<>();
-        for (Pair<String, GraphPath<String, IdentifiedWeightedEdge>> pairPath : test1) {
+        for (Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> pairPath : test1) {
             String exhibit = pairPath.getFirst();
 
-            GraphPath<String, IdentifiedWeightedEdge> path = pairPath.getSecond();
+            GraphPath<String, ZooData.IdentifiedEdge> path = pairPath.getSecond();
             if (path != null) {
                 totalPath.addAll(path.getVertexList().subList(1, path.getVertexList().size()));
             }

@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -12,23 +12,23 @@ import java.util.List;
 @Dao
 public interface NodeDao {
     @Insert
-    long insert(Node node);
+    long insert(ZooData.Node node);
 
     @Insert
-    List<Long> insertAll(List<Node> nodes);
+    List<Long> insertAll(List<ZooData.Node> nodes);
 
     @Query("SELECT * FROM `nodes` WHERE `id`=:id")
-    Node get(String id);
+    ZooData.Node get(String id);
 
     @Query("SELECT * FROM `nodes`")
-    List<Node> getAll();
+    List<ZooData.Node> getAll();
 
     @Query("SELECT * FROM `nodes`")
-    LiveData<List<Node>> getAllLive();
+    LiveData<List<ZooData.Node>> getAllLive();
 
     @Update
-    int update(Node node);
+    int update(ZooData.Node node);
 
     @Delete
-    int delete(Node node);
+    int delete(ZooData.Node node);
 }

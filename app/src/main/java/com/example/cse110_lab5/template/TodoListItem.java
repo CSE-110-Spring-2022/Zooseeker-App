@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.template;
 
 import android.content.Context;
 
@@ -17,34 +17,40 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-@Entity(tableName = "edges")
-public class Edge {
-    @PrimaryKey @NonNull
-    public String id;
+//EDIT THIS TO MATCH ZOOSEEKER
+@Entity(tableName = "todo_list_items")
+public class TodoListItem {
+
+    @PrimaryKey(autoGenerate = true)
+    public long id;
 
     @NonNull
-    public String street;
+    public String text;
+    public boolean completed;
+    public int order;
 
     @Override
     public String toString() {
         return "TodoListItem{" +
                 "id=" + id +
-                ", street=" + street +
+                ", text='" + text + '\'' +
+                ", completed=" + completed +
+                ", order=" + order +
                 '}';
     }
 
-    public Edge(String id, String street){
-        this.id = id;
-        this.street = street;
+    TodoListItem(String text, boolean completed, int order){
+        this.text = text;
+        this.completed = completed;
+        this.order = order;
     }
-
     // 3. Factory method for loading our JSON.
-    public static List<Edge> loadJSON(Context context, String path) {
+    public static List<TodoListItem> loadJSON(Context context, String path) {
         try {
             InputStream input = context.getAssets().open(path);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<List<Edge>>(){}.getType();
+            Type type = new TypeToken<List<TodoListItem>>(){}.getType();
             return gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();

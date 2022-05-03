@@ -11,6 +11,11 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.cse110_lab5.database.EdgeDao;
+import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.database.NodeDao;
+import com.example.cse110_lab5.database.ZooData;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,13 +59,13 @@ public class TodoDatabaseTest {
 */
     @Test
     public void testGet() {
-        Edge testEdge = new Edge("test-edge", "test street");
-        Node testNode = new Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
+        ZooData.Edge testEdge = new ZooData.Edge("test-edge", "test street");
+        ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
         long edgeID = edgeDao.insert(testEdge);
         long nodeID = nodeDao.insert(testNode);
 
-        Edge edge = edgeDao.get("test-edge");
-        Node node = nodeDao.get("test-exhibit");
+        ZooData.Edge edge = edgeDao.get("test-edge");
+        ZooData.Node node = nodeDao.get("test-exhibit");
         assertEquals(testEdge.id, edge.id);
         assertEquals(testEdge.street, edge.street);
 

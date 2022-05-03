@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.database;
 
 import androidx.room.TypeConverter;
 

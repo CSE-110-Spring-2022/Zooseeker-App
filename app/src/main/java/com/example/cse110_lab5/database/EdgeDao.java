@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -12,23 +12,23 @@ import java.util.List;
 @Dao
 public interface EdgeDao {
     @Insert
-    long insert(Edge edge);
+    long insert(ZooData.Edge edge);
 
     @Insert
-    List<Long> insertAll(List<Edge> edge);
+    List<Long> insertAll(List<ZooData.Edge> edge);
 
     @Query("SELECT * FROM `edges` WHERE `id`=:id")
-    Edge get(String id);
+    ZooData.Edge get(String id);
 
     @Query("SELECT * FROM `edges`")
-    List<Edge> getAll();
+    List<ZooData.Edge> getAll();
 
     @Query("SELECT * FROM `edges`")
-    LiveData<List<Edge>> getAllLive();
+    LiveData<List<ZooData.Edge>> getAllLive();
 
     @Update
-    int update(Edge edge);
+    int update(ZooData.Edge edge);
 
     @Delete
-    int delete(Edge edge);
+    int delete(ZooData.Edge edge);
 }

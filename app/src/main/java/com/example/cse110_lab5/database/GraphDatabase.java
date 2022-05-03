@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.database;
 
 import android.content.Context;
 
@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Node.class, Edge.class}, version = 1)
+@Database(entities = {ZooData.Node.class, ZooData.Edge.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class GraphDatabase extends RoomDatabase {
     private static GraphDatabase singleton = null;
@@ -36,12 +36,12 @@ public abstract class GraphDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
-                            List<Edge> edges = Edge
+                            List<ZooData.Edge> edges = ZooData.Edge
                                     .loadJSON(context, "sample_edge_info.json");
                             getSingleton(context).edgeDao().insertAll(edges);
 
                             //TEST
-                            List<Node> nodes = Node
+                            List<ZooData.Node> nodes = ZooData.Node
                                     .loadJSON(context, "sample_node_info.json");
                             getSingleton(context).nodeDao().insertAll(nodes);
 
