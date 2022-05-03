@@ -97,6 +97,12 @@ public class GraphActivity extends AppCompatActivity {
         return finalPath;
     }
 
+    /**
+     * Helper function to find the shortest path in a ManyToManyShortestPaths object
+     *
+     * @param paths     the ManyToManyShortestPaths object
+     * @return          the shortest path as a GraphPath
+     */
     public static GraphPath<String, ZooData.IdentifiedEdge> findShortestPath(ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<String, ZooData.IdentifiedEdge> paths) {
         String source = paths.getSources().iterator().next();
 
