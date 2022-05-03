@@ -10,9 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cse110_lab5.GraphViewModel;
-import com.example.cse110_lab5.OrderedExhibitsAdapter;
-import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -47,11 +44,11 @@ public class GraphActivity extends AppCompatActivity {
 
         Graph<String, ZooData.IdentifiedEdge> g = loadZooGraphJSON(this, "sample_zoo_graph.json");
         String start = "entrance_exit_gate";
-        String[] toVisit = {};
+        String[] toVisit = {"lions", "gators"};
 
         recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(tsp(g, start, toVisit));
+        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, tsp(g, start, toVisit));
         if (oEadapter.getItemCount() == 2) {
             setContentView(R.layout.no_plan);
         }
