@@ -2,6 +2,7 @@ package com.example.cse110_lab5;
 
 import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,9 +38,18 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planned_exhibits);
 
-        Graph<String, ZooData.IdentifiedEdge> g = loadZooGraphJSON(this, "sample_zoo_graph.json");
-        String start = "entrance_exit_gate";
-        String[] toVisit = {"lions", "gators"};
+        Graph<String, ZooData.IdentifiedEdge> g = null;
+        String start = "";
+        String[] toVisit = {};
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        if (bundle != null) {
+            g = loadZooGraphJSON(this, bundle.getString("path"));
+            start = bundle.getString("start");
+            toVisit = bundle.getStringArray("toVisit");
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
