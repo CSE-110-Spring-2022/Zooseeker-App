@@ -4,6 +4,7 @@ import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,9 +30,6 @@ import java.util.Set;
 public class GraphActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
-    private GraphViewModel viewModel;
-    private EditText newTodoText;
-    private Button addTodoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +51,33 @@ public class GraphActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, tsp(g, start, toVisit));
+
+        List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
+        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, plan);
+
         if (oEadapter.getItemCount() == 2) {
             setContentView(R.layout.no_plan);
         }
         else{
             recyclerView.setAdapter(oEadapter);
         }
+
+        Intent nav = new Intent(this, NavigationActivity.class);
+
+        for (int i = 0;  i< plan.size(); i++) {
+            nav.putExtra(String.valueOf(i), plan.get(i));
+        }
+
+        final Button button = findViewById(R.id.nav_bttn);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(nav);
+            }
+        });
+
+
+
+
     }
 
     /**
