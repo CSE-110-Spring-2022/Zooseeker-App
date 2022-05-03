@@ -37,11 +37,6 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planned_exhibits);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setTitle(" ZooSeeker");
-
         Graph<String, ZooData.IdentifiedEdge> g = loadZooGraphJSON(this, "sample_zoo_graph.json");
         String start = "entrance_exit_gate";
         String[] toVisit = {"lions", "gators"};
