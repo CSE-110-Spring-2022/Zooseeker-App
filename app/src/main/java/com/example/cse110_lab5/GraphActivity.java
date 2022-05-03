@@ -1,7 +1,8 @@
 package com.example.cse110_lab5;
 
+import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -9,19 +10,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.GraphViewModel;
+import com.example.cse110_lab5.OrderedExhibitsAdapter;
+import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.database.ZooData;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraManyToManyShortestPaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
-import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
-import org.jgrapht.nio.json.JSONImporter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,10 +45,7 @@ public class GraphActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle(" ZooSeeker");
 
-        List<Node> nodes = Node.loadJSON(this, "sample_node_info.json");
-        List<Edge> edges = Edge.loadJSON(this, "sample_edge_info.json");
-
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON(this, "sample_zoo_graph.json");
+        Graph<String, ZooData.IdentifiedEdge> g = loadZooGraphJSON(this, "sample_zoo_graph.json");
         String start = "entrance_exit_gate";
         String[] toVisit = {};
 
@@ -61,33 +58,6 @@ public class GraphActivity extends AppCompatActivity {
         else{
             recyclerView.setAdapter(oEadapter);
         }
-
-
-
-
-        /**
-        viewModel = new ViewModelProvider(this)
-                .get(GraphViewModel.class);
-
-
-        TodoListAdapter adapter = new TodoListAdapter();
-        adapter.setHasStableIds(true);
-        adapter.setOnCheckBoxClickedHandler(viewModel::toggleCompleted);
-        adapter.setOnDeleteClickedHandler(viewModel::deleteTodo);
-        adapter.setOnTextEditedHandler(viewModel::updateText);
-        viewModel.getTodoListItems().observe(this, adapter::setTodoListItems);
-
-        recyclerView = findViewById(R.id.todo_items);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        this.newTodoText = this.findViewById(R.id.new_todo_text);
-        this.addTodoButton = this.findViewById(R.id.add_todo_btn);
-
-        addTodoButton.setOnClickListener(this::onAddTodoClicked);
-
-        //adapter.setTodoListItems(TodoListItem.loadJSON(this, "demo_todos.json"));
-        */
     }
 
     /**
@@ -102,20 +72,20 @@ public class GraphActivity extends AppCompatActivity {
      *                      that node from the previous node. Includes the start node itself (with a
      *                      null path).
      */
-    public static List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> tsp(Graph<String, IdentifiedWeightedEdge> g, String start, String[] visit) {
-        List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> finalPath = new ArrayList<>();
+    public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit) {
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> finalPath = new ArrayList<>();
         finalPath.add(new Pair<>(start, null));
 
         Set<String> remaining = new HashSet<>(Arrays.asList(visit));
         String prev = start;
 
         while (!remaining.isEmpty()) {
-            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<String, IdentifiedWeightedEdge> paths =
+            ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<String, ZooData.IdentifiedEdge> paths =
                     new DijkstraManyToManyShortestPaths<>(g)
                             .getManyToManyPaths(
                                     new HashSet<>(Arrays.asList(prev)), remaining);
 
-            GraphPath<String, IdentifiedWeightedEdge> shortestPath = findShortestPath(paths);
+            GraphPath<String, ZooData.IdentifiedEdge> shortestPath = findShortestPath(paths);
             finalPath.add(new Pair<>(shortestPath.getEndVertex(), shortestPath));
             ;
             prev = shortestPath.getEndVertex();
@@ -127,14 +97,14 @@ public class GraphActivity extends AppCompatActivity {
         return finalPath;
     }
 
-    public static GraphPath<String, IdentifiedWeightedEdge> findShortestPath(ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<String, IdentifiedWeightedEdge> paths) {
+    public static GraphPath<String, ZooData.IdentifiedEdge> findShortestPath(ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<String, ZooData.IdentifiedEdge> paths) {
         String source = paths.getSources().iterator().next();
 
-        GraphPath<String, IdentifiedWeightedEdge> currShortest = null;
+        GraphPath<String, ZooData.IdentifiedEdge> currShortest = null;
         double shortestDistance = Double.MAX_VALUE;
 
         for (String node : paths.getTargets()) {
-            GraphPath<String, IdentifiedWeightedEdge> path = paths.getPath(source, node);
+            GraphPath<String, ZooData.IdentifiedEdge> path = paths.getPath(source, node);
             if (path.getWeight() < shortestDistance) {
                 currShortest = path;
                 shortestDistance = path.getWeight();
@@ -143,14 +113,4 @@ public class GraphActivity extends AppCompatActivity {
 
         return currShortest;
     }
-
-
-
-    /**
-    void onAddTodoClicked(View view) {
-        String text = newTodoText.getText().toString();
-        newTodoText.setText("");
-        viewModel.createTodo(text);
-    }
-     */
 }

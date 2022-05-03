@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.template;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

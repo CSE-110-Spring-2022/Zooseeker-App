@@ -2,11 +2,12 @@ package com.example.cse110_lab5;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
@@ -15,9 +16,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibitsAdapter.ViewHolder>{
-    private List<Pair<String, GraphPath<String,IdentifiedWeightedEdge>>> plannedExs = Collections.emptyList();
+    private List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs = Collections.emptyList();
 
-    public OrderedExhibitsAdapter(List<Pair<String, GraphPath<String, IdentifiedWeightedEdge>>> plannedExs) {
+    public OrderedExhibitsAdapter(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
         this.plannedExs = plannedExs;
     }
     @NonNull
@@ -31,7 +32,7 @@ public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibits
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Pair<String, GraphPath<String, IdentifiedWeightedEdge>> object = plannedExs.get(position);
+        Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> object = plannedExs.get(position);
         holder.exhibitName.setText(object.getFirst());
     }
 
