@@ -35,7 +35,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.exhibit_planned, parent, false);
+                .inflate(R.layout.direction, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,7 +49,8 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
             Log.d("Nodes", "node " + vertex + " did not exist in database");
         } else {
             holder.exhibitName.setText(edge.street);
-            double weight = path.getGraph().getEdgeWeight(vertex); // TODO: implement UI for weight
+            double weight = path.getGraph().getEdgeWeight(vertex);
+            holder.distance.setText(String.valueOf(weight) + " ft");
         }
     }
 
@@ -60,10 +61,12 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView exhibitName;
+        private final TextView distance;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            exhibitName = (TextView) itemView.findViewById(R.id.exhibit_planned);
+            exhibitName = (TextView) itemView.findViewById(R.id.direction);
+            distance = (TextView) itemView.findViewById(R.id.distance);
         }
 
     }

@@ -42,8 +42,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/path_to_exhibit"
-        android:layout_width="362dp"
-        android:layout_height="700dp"
+        android:layout_width="372dp"
+        android:layout_height="670dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,27 +51,27 @@
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.115" />
-
-    <Button
-        android:id="@+id/prev_bttn"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="232dp"
-        android:layout_marginBottom="36dp"
-        android:text="Prev"
-        android:onClick="onPrevPressed"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintVertical_bias="0.264" />
 
     <Button
         android:id="@+id/next_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="96dp"
+        android:layout_marginEnd="92dp"
         android:layout_marginBottom="36dp"
-        android:text="Next"
         android:onClick="onNextPressed"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/prev_bttn"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="228dp"
+        android:layout_marginBottom="36dp"
+        android:onClick="onPrevPressed"
+        android:text="Prev"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
