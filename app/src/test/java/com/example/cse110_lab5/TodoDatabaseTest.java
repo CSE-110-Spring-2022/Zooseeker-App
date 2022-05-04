@@ -74,7 +74,6 @@ public class TodoDatabaseTest {
         assertEquals(testNode.tags, node.tags);
     }
 
-
     /**
      * Testing to see if exhibits can be added continuously without issues.
      */
