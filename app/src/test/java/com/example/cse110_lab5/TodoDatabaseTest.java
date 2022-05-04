@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class TodoDatabaseTest {
@@ -73,6 +74,35 @@ public class TodoDatabaseTest {
         assertEquals(testNode.kind, node.kind);
         assertEquals(testNode.name, node.name);
         assertEquals(testNode.tags, node.tags);
+    }
+
+    @Test
+    public void testFiltered() {
+        ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
+        ZooData.Node testNode2 = new ZooData.Node("test-exhibit2", "exhibit", "test2", Arrays.asList(new String[]{"tag1", "penguins"}));
+        long nodeID = nodeDao.insert(testNode);
+        long nodeID2 = nodeDao.insert(testNode2);
+
+        List<ZooData.Node> nodes = nodeDao.getFiltered("test");
+
+        assertEquals(1, nodes.size());
+
+        nodes = nodeDao.getFiltered("tag1");
+
+        assertEquals(2, nodes.size());
+    }
+
+    @Test
+    public void testFiltered2() {
+        ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
+        ZooData.Node testNode2 = new ZooData.Node("test-exhibit2", "exhibit", "test2", Arrays.asList(new String[]{"tag1", "penguins"}));
+        ZooData.Node testNode3 = new ZooData.Node("test-exhibit3", "exhibit", "test3", Arrays.asList(new String[]{"penguins"}));
+        long nodeID = nodeDao.insert(testNode);
+        long nodeID2 = nodeDao.insert(testNode2);
+        long nodeID3 = nodeDao.insert(testNode3);
+
+        List<ZooData.Node> nodes = nodeDao.getFiltered("t");
+        assertEquals(2, nodes.size());
     }
 
    /* @Test

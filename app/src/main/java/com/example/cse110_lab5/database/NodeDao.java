@@ -26,6 +26,9 @@ public interface NodeDao {
     @Query("SELECT * FROM `nodes`")
     LiveData<List<ZooData.Node>> getAllLive();
 
+    @Query("SELECT * from `nodes` WHERE `kind`='exhibit' AND tags LIKE '%' || :tag || '%'")
+    List<ZooData.Node> getFiltered(String tag);
+
     @Update
     int update(ZooData.Node node);
 
