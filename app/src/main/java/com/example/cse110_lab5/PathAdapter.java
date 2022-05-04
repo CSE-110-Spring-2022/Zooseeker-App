@@ -41,20 +41,20 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String vertex = path.getVertexList().get(position);
-        ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(vertex);
+        ZooData.IdentifiedEdge vertex = path.getEdgeList().get(position);
+        ZooData.Edge edge = GraphDatabase.getSingleton(context).edgeDao().get(vertex.getId());
 
-        if(node == null) {
-            holder.exhibitName.setText(vertex);
+        if(edge == null) {
+            holder.exhibitName.setText(vertex.getId());
             Log.d("Nodes", "node " + vertex + " did not exist in database");
         } else {
-            holder.exhibitName.setText(node.name);
+            holder.exhibitName.setText(edge.street);
         }
     }
 
     @Override
     public int getItemCount() {
-        return path.getLength() + 1;
+        return path.getEdgeList().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
