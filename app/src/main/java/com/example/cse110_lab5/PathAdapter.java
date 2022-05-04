@@ -49,6 +49,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
             Log.d("Nodes", "node " + vertex + " did not exist in database");
         } else {
             holder.exhibitName.setText(edge.street);
+            double weight = path.getGraph().getEdgeWeight(vertex); // TODO: implement UI for weight
         }
     }
 
