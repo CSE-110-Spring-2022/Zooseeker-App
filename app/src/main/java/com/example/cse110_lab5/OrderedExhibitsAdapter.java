@@ -1,4 +1,5 @@
 package com.example.cse110_lab5;
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibits
             holder.exhibitName.setText(node.name);
         }
     }
+
 
     @Override
     public int getItemCount() {
