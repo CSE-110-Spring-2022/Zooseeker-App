@@ -3,6 +3,7 @@ package com.example.cse110_lab5;
 import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,10 @@ public class NavigationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
+        Button prevButton = findViewById(R.id.prev_bttn);
+        prevButton.setBackgroundColor(Color.GRAY);
+        prevButton.setClickable(false);
+
         Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> exhibitDirections
                 = new Pair<>("", null);
 
@@ -50,16 +55,34 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void onNextPressed(View v) {
-        if (curr_exhibit < getIntent().getExtras().size() - 1)
+        if (curr_exhibit != getIntent().getExtras().size() - 1) {
             curr_exhibit += 1;
+
+            Button button = findViewById(R.id.prev_bttn);
+            button.setBackgroundColor(Color.GREEN);
+            button.setClickable(true);
+        } else {
+            Button button = findViewById(R.id.next_bttn);
+            button.setBackgroundColor(Color.GRAY);
+            button.setClickable(false);
+        }
         Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
                 (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
         recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
+
     }
 
     public void onPrevPressed(View v) {
-        if (curr_exhibit > 1)
+        if (curr_exhibit != 1) {
             curr_exhibit -= 1;
+            Button button = findViewById(R.id.next_bttn);
+            button.setBackgroundColor(Color.GREEN);
+            button.setClickable(true);
+        } else {
+            Button button = findViewById(R.id.prev_bttn);
+            button.setBackgroundColor(Color.GRAY);
+            button.setClickable(false);
+        }
         Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
                 (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
         recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
