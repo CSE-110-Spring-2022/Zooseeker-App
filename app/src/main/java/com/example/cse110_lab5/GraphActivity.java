@@ -2,12 +2,11 @@ package com.example.cse110_lab5;
 
 import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +21,6 @@ import org.jgrapht.alg.shortestpath.DijkstraManyToManyShortestPaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
 
-import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -76,10 +74,6 @@ public class GraphActivity extends AppCompatActivity {
                 startActivity(nav);
             }
         });
-
-
-
-
     }
 
     /**
