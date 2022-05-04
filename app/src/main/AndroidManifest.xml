@@ -13,6 +13,9 @@
             android:name=".GraphActivity"
             android:exported="false" />
         <activity
+            android:name=".NavigationActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
