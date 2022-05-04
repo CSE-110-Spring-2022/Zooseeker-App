@@ -59,7 +59,7 @@ public class NavigationActivity extends AppCompatActivity {
             curr_exhibit += 1;
 
             Button button = findViewById(R.id.prev_bttn);
-            button.setBackgroundColor(Color.GREEN);
+            button.setBackgroundColor(getResources().getColor(R.color.green_500));
             button.setClickable(true);
         } else {
             Button button = findViewById(R.id.next_bttn);
@@ -76,7 +76,7 @@ public class NavigationActivity extends AppCompatActivity {
         if (curr_exhibit != 1) {
             curr_exhibit -= 1;
             Button button = findViewById(R.id.next_bttn);
-            button.setBackgroundColor(Color.GREEN);
+            button.setBackgroundColor(getResources().getColor(R.color.green_500));
             button.setClickable(true);
         } else {
             Button button = findViewById(R.id.prev_bttn);
