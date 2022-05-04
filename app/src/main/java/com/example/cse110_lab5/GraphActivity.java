@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,6 +61,9 @@ public class GraphActivity extends AppCompatActivity {
             setContentView(R.layout.no_plan);
         }
         else{
+            int amtExs = oEadapter.getItemCount() -2;
+            TextView total = findViewById(R.id.total);
+            total.setText("Total: " + amtExs);
             recyclerView.setAdapter(oEadapter);
         }
 

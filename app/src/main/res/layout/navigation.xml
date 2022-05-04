@@ -26,13 +26,13 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/Exhibit_Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="108dp"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="250dp"
-        android:text="ZooSeeker"
+        android:inputType="text"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"

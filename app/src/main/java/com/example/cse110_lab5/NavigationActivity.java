@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
@@ -51,6 +53,10 @@ public class NavigationActivity extends AppCompatActivity {
 
         PathAdapter pathAdapter = new PathAdapter(this, exhibitDirections.getFirst(), exhibitDirections.getSecond());
 
+        TextView total = findViewById(R.id.Exhibit_Name);
+        String name = GraphDatabase.getSingleton(this).nodeDao().get(exhibitDirections.getFirst()).name;
+        total.setText(name);
+
         recyclerView.setAdapter(pathAdapter);
     }
 
@@ -68,6 +74,9 @@ public class NavigationActivity extends AppCompatActivity {
         }
         Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
                 (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
+        TextView total = findViewById(R.id.Exhibit_Name);
+        String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
+        total.setText(name);
         recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
 
     }
@@ -85,6 +94,9 @@ public class NavigationActivity extends AppCompatActivity {
         }
         Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
                 (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
+        TextView total = findViewById(R.id.Exhibit_Name);
+        String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
+        total.setText(name);
         recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
     }
 }
