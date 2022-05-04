@@ -60,7 +60,7 @@ public class GraphActivity extends AppCompatActivity {
         if (oEadapter.getItemCount() == 2) {
             setContentView(R.layout.no_plan);
         }
-        else{
+        else {
             int amtExs = oEadapter.getItemCount() -2;
             TextView total = findViewById(R.id.total);
             total.setText("Total: " + amtExs);
@@ -91,7 +91,7 @@ public class GraphActivity extends AppCompatActivity {
      *
      * @return              The path represented as a list of pairs of nodes and the paths to reach
      *                      that node from the previous node. Includes the start node itself (with a
-     *                      null path).
+     *                      null path). Returns null if a given node to visit is unreachable.
      */
     public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit) {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> finalPath = new ArrayList<>();
@@ -107,8 +107,12 @@ public class GraphActivity extends AppCompatActivity {
                                     new HashSet<>(Arrays.asList(prev)), remaining);
 
             GraphPath<String, ZooData.IdentifiedEdge> shortestPath = findShortestPath(paths);
+            if (shortestPath == null) {
+                Log.d("TSP Paths", "Unreachable destination given");
+                return null;
+            }
+
             finalPath.add(new Pair<>(shortestPath.getEndVertex(), shortestPath));
-            ;
             prev = shortestPath.getEndVertex();
             remaining.remove(prev);
         }
@@ -132,7 +136,7 @@ public class GraphActivity extends AppCompatActivity {
 
         for (String node : paths.getTargets()) {
             GraphPath<String, ZooData.IdentifiedEdge> path = paths.getPath(source, node);
-            if (path.getWeight() < shortestDistance) {
+            if (path != null && path.getWeight() < shortestDistance) {
                 currShortest = path;
                 shortestDistance = path.getWeight();
             }
