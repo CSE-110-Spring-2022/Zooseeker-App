@@ -51,7 +51,7 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        PathAdapter pathAdapter = new PathAdapter(this, exhibitDirections.getFirst(), exhibitDirections.getSecond());
+        PathAdapter pathAdapter = new PathAdapter(this, exhibitDirections.getSecond());
 
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(exhibitDirections.getFirst()).name;
@@ -77,7 +77,7 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
+        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getSecond()));
 
     }
 
@@ -97,6 +97,6 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getFirst(), nextDirections.getSecond()));
+        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getSecond()));
     }
 }

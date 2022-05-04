@@ -13,20 +13,14 @@ import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.util.Pair;
-
-import java.util.Collections;
-import java.util.List;
 
 public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
     private Context context;
 
-    private String destination;
     private GraphPath<String, ZooData.IdentifiedEdge> path;
 
-    public PathAdapter(Context context, String destination, GraphPath<String, ZooData.IdentifiedEdge> path) {
+    public PathAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
         this.context = context;
-        this.destination = destination;
         this.path = path;
     }
 
@@ -50,7 +44,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
         } else {
             holder.exhibitName.setText(edge.street);
             double weight = path.getGraph().getEdgeWeight(vertex);
-            holder.distance.setText(String.valueOf(weight) + " ft");
+            holder.distance.setText(String.format("%s ft", String.valueOf(weight)));
         }
     }
 
