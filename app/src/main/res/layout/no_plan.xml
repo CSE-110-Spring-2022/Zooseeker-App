@@ -6,7 +6,8 @@
 
     <include
         android:id="@+id/imageView2"
-        layout="@layout/top_bar" />
+        layout="@layout/top_bar"
+        />
 
     <TextView
         android:id="@+id/textView2"
