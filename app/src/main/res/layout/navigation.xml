@@ -42,23 +42,29 @@
         android:id="@+id/next_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="92dp"
+        android:layout_marginStart="64dp"
         android:layout_marginBottom="36dp"
         android:onClick="onNextPressed"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/path_to_exhibit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/prev_bttn" />
 
     <Button
         android:id="@+id/prev_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="228dp"
         android:layout_marginBottom="36dp"
         android:onClick="onPrevPressed"
         android:text="Prev"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintEnd_toStartOf="@+id/next_bttn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/path_to_exhibit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
