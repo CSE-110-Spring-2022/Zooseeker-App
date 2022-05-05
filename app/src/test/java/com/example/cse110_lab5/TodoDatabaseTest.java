@@ -69,6 +69,9 @@ public class TodoDatabaseTest {
         assertEquals(testEdge.id, edge.id);
         assertEquals(testEdge.street, edge.street);
 
+        assertNotNull(edgeDao.get("test-edge"));
+        assertNotNull(nodeDao.get("test-exhibit"));
+
         assertEquals(testNode.id, node.id);
         assertEquals(testNode.kind, node.kind);
         assertEquals(testNode.name, node.name);

@@ -1,4 +1,7 @@
 package com.example.cse110_lab5;
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.database.EdgeDao;
+import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
@@ -17,9 +22,11 @@ import java.util.List;
 
 public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibitsAdapter.ViewHolder>{
     private List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs = Collections.emptyList();
+    private Context context;
 
-    public OrderedExhibitsAdapter(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
+    public OrderedExhibitsAdapter(Context context, List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
         this.plannedExs = plannedExs;
+        this.context = context;
     }
     @NonNull
     @Override
@@ -33,8 +40,16 @@ public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibits
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> object = plannedExs.get(position);
-        holder.exhibitName.setText(object.getFirst());
+        ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
+
+        if(node == null) {
+            holder.exhibitName.setText(object.getFirst());
+            Log.d("Nodes", "node " + object.getFirst() + " did not exist in database");
+        } else {
+            holder.exhibitName.setText(node.name);
+        }
     }
+
 
     @Override
     public int getItemCount() {

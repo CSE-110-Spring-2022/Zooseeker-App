@@ -1,6 +1,7 @@
 package com.example.cse110_lab5;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -10,6 +11,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,9 +20,15 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class TestGraph {
-    @Test
-    public void testGraph() {
-        Graph<String, ZooData.IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(ZooData.IdentifiedEdge.class);
+
+    private Graph<String, ZooData.IdentifiedEdge> g;
+
+    /**
+     * Initialize sample data graph for testing
+     */
+    @Before
+    public void initGraph() {
+        g = new DefaultUndirectedWeightedGraph<>(ZooData.IdentifiedEdge.class);
 
         g.addVertex("entrance_exit_gate");
         g.addVertex("entrance_plaza");
@@ -37,34 +45,74 @@ public class TestGraph {
         g.setEdgeWeight(g.addEdge("entrance_plaza", "arctic_foxes"), 300);
         g.setEdgeWeight(g.addEdge("entrance_plaza", "gators"), 100);
         g.setEdgeWeight(g.addEdge("gators", "lions"), 200);
+    }
 
-        String start1 = "entrance_exit_gate";
-        String[] toVisit1 = {"lions", "elephant_odyssey"};
+    /**
+     * Ensure that path-generating algorithm safely returns null when unreachable exhibits are given
+     */
+    @Test
+    public void unreachableDestinationTest() {
+        g.addVertex("unreachable_node");
 
-        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> test1 = GraphActivity.tsp(g, start1, toVisit1);
-        // Verify that this goes through 4 total exhibits (beginning, lions, elephants, exit) when 2 are provided
-        assertEquals(4, test1.size());
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"unreachable_node"};
 
-        String start2 = "entrance_exit_gate";
-        String[] toVisit2 = {};
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = GraphActivity.tsp(g, start, toVisit);
 
-        // Verify that this goes through 2 total exhibits (beginning and exit) when 0 are provided
-        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> test2 = GraphActivity.tsp(g, start2, toVisit2);
-        assertEquals(2, test2.size());
+        assertNull(path);
+    }
 
-        ArrayList<String> totalPath = new ArrayList<>();
-        for (Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> pairPath : test1) {
-            String exhibit = pairPath.getFirst();
+    /**
+     * Ensure that path-generating algorithm safely returns null when nonexistent exhibits are given
+     */
+    @Test
+    public void invalidDestinationTest() {
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"invalid_node"};
 
-            GraphPath<String, ZooData.IdentifiedEdge> path = pairPath.getSecond();
-            if (path != null) {
-                totalPath.addAll(path.getVertexList().subList(1, path.getVertexList().size()));
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = GraphActivity.tsp(g, start, toVisit);
+
+        assertNull(path);
+    }
+
+    /**
+     * Ensure that path-generating algorithm safely returns an "empty" path when there are no exhibits given
+     */
+    @Test
+    public void testNoPath() {
+        String start = "entrance_exit_gate";
+        String[] toVisit = {};
+
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = GraphActivity.tsp(g, start, toVisit);
+
+        // Ensure that the generated path is of expected size (just the entrance and exit)
+        assertEquals(2, path.size());
+    }
+
+    /**
+     * Ensure that path-generating algorithm returns the correct shortest path in the normal case
+     */
+    @Test
+    public void testPath() {
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"lions", "elephant_odyssey"};
+
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit);
+
+        // Ensure that the generated path is of expected size (entrance and exit, and two exhibits)
+        assertEquals(4, paths.size());
+
+        // Ensure that the paths between each exhibit are the smallest possible size and have correct lengths
+        int[] expectedWeights = {310, 200, 510};
+        int[] expectedLengths = {3, 1, 4};
+        for(int i = 1; i < paths.size(); i++) {
+            Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> pair = paths.get(i);
+            if (pair.getSecond() != null) {
+                assertEquals(expectedWeights[i - 1], pair.getSecond().getWeight(), 0.0001);
+                assertEquals(expectedLengths[i - 1], pair.getSecond().getLength());
             }
         }
-
-        // Verify that the overall path created from start to finish was the correct length for the non-zero case
-        assertEquals(8, totalPath.size());
-
     }
+
 
 }

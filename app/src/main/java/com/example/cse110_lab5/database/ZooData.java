@@ -127,6 +127,13 @@ public class ZooData {
         }
     }
 
+    /**
+     * Helper function to load a Graph from JSON data
+     *
+     * @param context       the Application Context
+     * @param path          the path to the JSON file
+     * @return              a Graph object containing the graph represented by the JSON file
+     */
     public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
         Graph<String, IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
