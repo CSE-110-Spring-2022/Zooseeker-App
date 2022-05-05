@@ -1,16 +1,21 @@
 package com.example.cse110_lab5;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.cse110_lab5.GraphActivity;
-import com.example.cse110_lab5.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cse110_lab5.template.ExhibitItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    public RecyclerView recyclerView;
 
     //Create application
     @Override
@@ -18,6 +23,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String[] sampleExhibits = {"lions", "gators"};
+        ArrayList<ExhibitItem> sampleExhibitItems = new ArrayList<>();
+        for (String exhibit : sampleExhibits) {
+            sampleExhibitItems.add(new ExhibitItem(exhibit));
+        }
+        ExhibitListAdapter adapter = new ExhibitListAdapter();
+        adapter.setHashStableIds(true);
+
+        recyclerView = findViewById(R.id.exhibit_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.setExhibitItems(sampleExhibitItems);
 
         String start = "entrance_exit_gate";
         String path = "sample_zoo_graph.json";
