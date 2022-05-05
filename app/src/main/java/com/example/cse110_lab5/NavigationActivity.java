@@ -46,8 +46,6 @@ public class NavigationActivity extends AppCompatActivity {
             exhibitDirections = (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) bundle.get(String.valueOf(curr_exhibit));
         }
 
-        Log.d("pain", exhibitDirections.getSecond().getVertexList().toString());
-
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
