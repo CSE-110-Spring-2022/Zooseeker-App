@@ -102,7 +102,6 @@ public class TodoDatabaseTest {
      */
     @Test
     public void testFiltered3() {
-
         List<ZooData.Node> nodes = nodeDao.getFiltered("m");
         assertEquals( 0, nodes.size());
     }
