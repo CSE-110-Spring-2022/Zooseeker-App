@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.ViewHolder> {
-    private List<ExhibitItem> allExhibits = Collections.emptyList();
-    private Consumer<ExhibitItem> onCheckBoxClicked;
+    private List<ZooData.Node> allExhibits = Collections.emptyList();
+    private Consumer<ZooData.Node> onCheckBoxClicked;
     private Context context;
     private ArrayList<String> selectedExhibits = new ArrayList<>();
 
@@ -29,20 +29,20 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
         this.selectedExhibits = selectedExhibits;
         this.context = context;
     }*/
-    public void setExhibitItems(List<ExhibitItem> newExhibitItems) {
+    public void setExhibitItems(List<ZooData.Node> newExhibitItems) {
         this.allExhibits.clear();
         this.allExhibits = newExhibitItems;
         notifyDataSetChanged();
     }
 
-    public void setOnCheckBoxClickedHandler(Consumer<ExhibitItem> onCheckBoxClicked) {
+    public void setOnCheckBoxClickedHandler(Consumer<ZooData.Node> onCheckBoxClicked) {
         this.onCheckBoxClicked = onCheckBoxClicked;
     }
 
     public void setHashStableIds(boolean b) {
     }
 
-    public static void toggleCompleted(ExhibitItem exhibitItem){
+    public static void toggleCompleted(ZooData.Node exhibitItem){
         exhibitItem.selected = !exhibitItem.selected;
     }
 
@@ -57,7 +57,7 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setExhibitItem(allExhibits.get(position));
-        ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
+        //ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
 
     }
 
@@ -70,14 +70,12 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
         return selectedExhibits;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return allExhibits.get(position).id;
-    }
+    //@Override
+    //public long getItemId(int position) {return allExhibits.get(position).id;}
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-        private ExhibitItem exhibitItem;
+        private ZooData.Node exhibitItem;
         private final CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView) {
@@ -86,10 +84,10 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
             this.checkBox = itemView.findViewById(R.id.selected);
 
             this.checkBox.setOnClickListener(view -> {
-                if(selectedExhibits.contains(this.exhibitItem.text)){
-                    selectedExhibits.remove(this.exhibitItem.text);
+                if(selectedExhibits.contains(this.exhibitItem.id)){
+                    selectedExhibits.remove(this.exhibitItem.id);
                 } else {
-                    selectedExhibits.add(this.exhibitItem.text);
+                    selectedExhibits.add(this.exhibitItem.id);
                 }
                 System.out.println("checkbox clicked");
                 if(onCheckBoxClicked == null) return;
@@ -97,10 +95,10 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
             });
         }
 
-        public ExhibitItem getExhibitItem() {return exhibitItem;}
+        public ZooData.Node getExhibitItem() {return exhibitItem;}
 
-        public void setExhibitItem(ExhibitItem exhibitItem) {
-            this.textView.setText(exhibitItem.text);
+        public void setExhibitItem(ZooData.Node exhibitItem) {
+            this.textView.setText(exhibitItem.name);
             this.checkBox.setChecked(exhibitItem.selected);
             this.exhibitItem = exhibitItem;
         }
