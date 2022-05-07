@@ -46,18 +46,6 @@ public class TodoDatabaseTest {
         db.close();
     }
 
-    /*
-    @Test
-    public void testInsert() {
-        TodoListItem item1 = new TodoListItem("Pizza time", false, 0);
-        TodoListItem item2 = new TodoListItem("Photos of Spider-Man", false, 1);
-
-        long id1 = dao.insert(item1);
-        long id2 = dao.insert(item2);
-
-        assertNotEquals(id1, id2);
-    }
-*/
     @Test
     public void testGet() {
         ZooData.Edge testEdge = new ZooData.Edge("test-edge", "test street");
@@ -76,6 +64,10 @@ public class TodoDatabaseTest {
         assertEquals(testNode.tags, node.tags);
     }
 
+
+    /**
+     * Testing to see if exhibits can be added continuously without issues.
+     */
     @Test
     public void testFiltered() {
         ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
@@ -92,6 +84,9 @@ public class TodoDatabaseTest {
         assertEquals(2, nodes.size());
     }
 
+    /**
+     * Testing to see if there are two matches when two exhibits both start with "t".
+     */
     @Test
     public void testFiltered2() {
         ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
@@ -105,30 +100,20 @@ public class TodoDatabaseTest {
         assertEquals(2, nodes.size());
     }
 
-   /* @Test
-    public void testUpdate() {
-        TodoListItem item = new TodoListItem("Pizza time", false, 0);
-        long id = dao.insert(item);
-
-        item = dao.get(id);
-        item.text = "Photos of Spider-Man";
-        int itemsUpdated = dao.update(item);
-        assertEquals(1, itemsUpdated);
-
-        item = dao.get(id);
-        assertNotNull(item);
-        assertEquals("Photos of Spider-Man", item.text);
-    }*/
-
-    /*
+    /**
+     * Testing for no matches.
+     */
     @Test
-    public void testDelete() {
-        TodoListItem item = new TodoListItem("Pizza time", false, 0);
-        long id = dao.insert(item);
+    public void testFiltered3() {
+        ZooData.Node testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
+        ZooData.Node testNode2 = new ZooData.Node("test-exhibit2", "exhibit", "test2", Arrays.asList(new String[]{"tag1", "penguins"}));
+        ZooData.Node testNode3 = new ZooData.Node("test-exhibit3", "exhibit", "test3", Arrays.asList(new String[]{"penguins"}));
+        long nodeID = nodeDao.insert(testNode);
+        long nodeID2 = nodeDao.insert(testNode2);
+        long nodeID3 = nodeDao.insert(testNode3);
 
-        item = dao.get(id);
-        int itemsDeleted = dao.delete(item);
-        assertEquals(1, itemsDeleted);
-        assertNull(dao.get(id));
-    }*/
+        List<ZooData.Node> nodes = nodeDao.getFiltered("m");
+        assertEquals( 0, nodes.size());
+    }
+
 }
