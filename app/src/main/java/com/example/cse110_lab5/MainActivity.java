@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String[] sampleExhibits = {"lions", "gators"};
+        String[] sampleExhibits = {"lions", "gators", "gorillas", "arctic_foxes"};
         ArrayList<ExhibitItem> sampleExhibitItems = new ArrayList<>();
         for (String exhibit : sampleExhibits) {
             sampleExhibitItems.add(new ExhibitItem(exhibit));
@@ -35,19 +35,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setExhibitItems(sampleExhibitItems);
-
-        String start = "entrance_exit_gate";
-        String path = "sample_zoo_graph.json";
-        String[] toVisit = {"lions", "gators"};
+        adapter.setOnCheckBoxClickedHandler(ExhibitListAdapter::toggleCompleted);
 
         Intent notEmpty = new Intent(this, GraphActivity.class);
-        notEmpty.putExtra("path", path);
-        notEmpty.putExtra("start", start);
-        notEmpty.putExtra("toVisit", toVisit);
 
         final Button button = findViewById(R.id.plan_bttn);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                ArrayList<String> testExhibitList = adapter.getSelectedExhibits();
+                System.out.println(testExhibitList.size());
+                String[] testToVisit = testExhibitList.toArray(new String[testExhibitList.size()]);
+                String start = "entrance_exit_gate";
+                String path = "sample_zoo_graph.json";
+                String[] toVisit = {"lions", "gators"};
+                notEmpty.putExtra("path", path);
+                notEmpty.putExtra("start", start);
+                notEmpty.putExtra("toVisit", testToVisit);
                 startActivity(notEmpty);
             }
         });
