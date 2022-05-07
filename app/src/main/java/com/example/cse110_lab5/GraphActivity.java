@@ -55,23 +55,22 @@ public class GraphActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
+        System.out.println(plan);
         OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, plan);
 
-        if (oEadapter.getItemCount() == 2) {
-            setContentView(R.layout.no_plan);
-        }
-        else {
-            int amtExs = oEadapter.getItemCount() -2;
-            TextView total = findViewById(R.id.total);
-            total.setText("Total: " + amtExs);
-            recyclerView.setAdapter(oEadapter);
-        }
+
+        int amtExs = oEadapter.getItemCount() -2;
+        TextView total = findViewById(R.id.total);
+        total.setText("Total: " + amtExs);
+        recyclerView.setAdapter(oEadapter);
+
 
         Intent nav = new Intent(this, NavigationActivity.class);
 
         for (int i = 0;  i< plan.size(); i++) {
             nav.putExtra(String.valueOf(i), plan.get(i));
         }
+        System.out.println("here");
 
         final Button button = findViewById(R.id.nav_bttn);
         button.setOnClickListener(new View.OnClickListener() {
