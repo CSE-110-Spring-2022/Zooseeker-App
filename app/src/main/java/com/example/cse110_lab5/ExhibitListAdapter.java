@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cse110_lab5.database.GraphDatabase;
-import com.example.cse110_lab5.database.ZooData;
 import com.example.cse110_lab5.template.ExhibitItem;
 
 import java.util.ArrayList;
@@ -57,8 +55,6 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setExhibitItem(allExhibits.get(position));
-        ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
-
     }
 
     @Override
