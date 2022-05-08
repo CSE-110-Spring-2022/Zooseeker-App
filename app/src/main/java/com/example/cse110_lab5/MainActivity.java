@@ -77,19 +77,14 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ArrayList<String> testExhibitList = adapter.getSelectedExhibits();
+                String[] testToVisit = testExhibitList.toArray(new String[testExhibitList.size()]);
+                String start = "entrance_exit_gate";
+                String path = "sample_zoo_graph.json";
+                notEmpty.putExtra("path", path);
+                notEmpty.putExtra("start", start);
+                notEmpty.putExtra("toVisit", testToVisit);
+                startActivity(notEmpty);
 
-                if (testExhibitList.size() == 0) {
-                    setContentView(R.layout.no_plan);
-                }
-                else {
-                    String[] testToVisit = testExhibitList.toArray(new String[testExhibitList.size()]);
-                    String start = "entrance_exit_gate";
-                    String path = "sample_zoo_graph.json";
-                    notEmpty.putExtra("path", path);
-                    notEmpty.putExtra("start", start);
-                    notEmpty.putExtra("toVisit", testToVisit);
-                    startActivity(notEmpty);
-                }
             }
         });
 
