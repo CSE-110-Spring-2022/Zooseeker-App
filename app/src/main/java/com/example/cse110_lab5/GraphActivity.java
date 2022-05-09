@@ -52,8 +52,10 @@ public class GraphActivity extends AppCompatActivity {
 
         if (toVisit.length == 0) {
             setContentView(R.layout.no_plan);
+            Log.d("Graph", "No exhibits were selected for planning");
         }
         else {
+            Log.d("Graph", toVisit.length + " exhibits were selected for planning");
             setContentView(R.layout.planned_exhibits);
 
             recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);

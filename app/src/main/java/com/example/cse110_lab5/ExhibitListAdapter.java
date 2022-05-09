@@ -1,6 +1,7 @@
 package com.example.cse110_lab5;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,10 +87,11 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
             this.checkBox.setOnClickListener(view -> {
                 if(selectedExhibits.contains(this.exhibitItem.id)){
                     selectedExhibits.remove(this.exhibitItem.id);
+                    Log.d("Exhibits Menu", this.exhibitItem.name + " was unchecked");
                 } else {
                     selectedExhibits.add(this.exhibitItem.id);
+                    Log.d("Exhibits Menu", this.exhibitItem.name + " was checked");
                 }
-                System.out.println("checkbox clicked");
                 if(onCheckBoxClicked == null) return;
                 onCheckBoxClicked.accept(exhibitItem);
             });

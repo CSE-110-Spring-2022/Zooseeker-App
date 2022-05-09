@@ -59,6 +59,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void onNextPressed(View v) {
+        Log.d("Navigation", "Next button pressed");
         if (curr_exhibit != getIntent().getExtras().size() - 1) {
             curr_exhibit += 1;
 
@@ -80,6 +81,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void onPrevPressed(View v) {
+        Log.d("Navigation", "Prev button pressed");
         if (curr_exhibit != 1) {
             curr_exhibit -= 1;
             Button button = findViewById(R.id.next_bttn);
