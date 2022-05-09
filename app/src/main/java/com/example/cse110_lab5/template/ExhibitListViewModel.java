@@ -33,7 +33,7 @@ public class ExhibitListViewModel extends AndroidViewModel {
     }
 
     private void loadUsers() {
-        todoListItems = todoListItemDao.getAllLive();
+        todoListItems = todoListItemDao.getAllExhibitLive();
     }
 
     public void toggleSelected(ZooData.Node zooDataNode) {

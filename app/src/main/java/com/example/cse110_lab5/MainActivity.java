@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setExhibitItems(sampleExhibitItems);
         adapter.setOnCheckBoxClickedHandler(viewModel::toggleSelected);
-        //viewModel.getTodoListItems().observe(this, adapter::setExhibitItems);
+        viewModel.getTodoListItems().observe(this, adapter::setExhibitItems);
         recyclerView = findViewById(R.id.exhibit_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
