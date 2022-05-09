@@ -74,7 +74,6 @@ public class TodoDatabaseTest {
         assertEquals(testNode.tags, node.tags);
     }
 
-
     /**
      * Testing to see if exhibits can be added continuously without issues.
      */
@@ -103,7 +102,6 @@ public class TodoDatabaseTest {
      */
     @Test
     public void testFiltered3() {
-
         List<ZooData.Node> nodes = nodeDao.getFiltered("m");
         assertEquals( 0, nodes.size());
     }

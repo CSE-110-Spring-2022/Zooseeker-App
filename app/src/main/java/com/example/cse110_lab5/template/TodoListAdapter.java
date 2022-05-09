@@ -67,28 +67,16 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView textView;
         private final CheckBox checkBox;
-        private final TextView deleteButton;
         private TodoListItem todoItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.todo_item_text);
-            this.checkBox = itemView.findViewById(R.id.completed);
-            this.deleteButton = itemView.findViewById(R.id.delete_btn);
+            this.textView = itemView.findViewById(R.id.exhibit_name);
+            this.checkBox = itemView.findViewById(R.id.selected);
 
             this.textView.setOnFocusChangeListener((view, hasFocus) -> {
                 if (!hasFocus) {
                     onTextEditedHandler.accept(todoItem, textView.getText().toString());                }
-            });
-
-            this.checkBox.setOnClickListener(view -> {
-                if (onCheckBoxClicked == null) return;
-                onCheckBoxClicked.accept(todoItem);
-            });
-
-            this.deleteButton.setOnClickListener(view -> {
-                if (onDeleteClicked == null) return;
-                onDeleteClicked.accept(todoItem);
             });
         }
 

@@ -73,6 +73,7 @@ public class ZooData {
         public String kind;
         public String name;
         public List<String> tags;
+        public boolean selected;
 
         @Override
         public String toString() {
@@ -89,6 +90,7 @@ public class ZooData {
             this.kind = kind;
             this.name = name;
             this.tags = tags;
+            this.selected = false;
         }
 
         public static List<Node> loadJSON(Context context, String path) {

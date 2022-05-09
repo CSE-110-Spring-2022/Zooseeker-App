@@ -36,7 +36,6 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.planned_exhibits);
 
         Graph<String, ZooData.IdentifiedEdge> g = null;
         String start = "";
@@ -51,34 +50,38 @@ public class GraphActivity extends AppCompatActivity {
             toVisit = bundle.getStringArray("toVisit");
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
-        OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, plan);
-
-        if (oEadapter.getItemCount() == 2) {
+        if (toVisit.length == 0) {
             setContentView(R.layout.no_plan);
+            Log.d("Graph", "No exhibits were selected for planning");
         }
         else {
+            Log.d("Graph", toVisit.length + " exhibits were selected for planning");
+            setContentView(R.layout.planned_exhibits);
+
+            recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
+            OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, plan);
+
             int amtExs = oEadapter.getItemCount() -2;
             TextView total = findViewById(R.id.total);
             total.setText("Total: " + amtExs);
             recyclerView.setAdapter(oEadapter);
-        }
 
-        Intent nav = new Intent(this, NavigationActivity.class);
+            Intent nav = new Intent(this, NavigationActivity.class);
 
-        for (int i = 0;  i< plan.size(); i++) {
-            nav.putExtra(String.valueOf(i), plan.get(i));
-        }
-
-        final Button button = findViewById(R.id.nav_bttn);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(nav);
+            for (int i = 0;  i< plan.size(); i++) {
+                nav.putExtra(String.valueOf(i), plan.get(i));
             }
-        });
+
+            final Button button = findViewById(R.id.nav_bttn);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(nav);
+                }
+            });
+        }
     }
 
     /**
