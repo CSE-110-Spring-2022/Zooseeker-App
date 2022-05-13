@@ -77,10 +77,16 @@ public class ExhibitListTest {
                 todoText.performClick();
                 ZooData.Node editedItem = nodeDao.get("gorillas");
                 assertFalse(editedItem.selected);
+                todoText.performClick();
+                editedItem = nodeDao.get("gorillas");
+                assertTrue(editedItem.selected);
             } else {
                 todoText.performClick();
                 ZooData.Node editedItem = nodeDao.get("gorillas");
                 assertTrue(editedItem.selected);
+                todoText.performClick();
+                editedItem = nodeDao.get("gorillas");
+                assertFalse(editedItem.selected);
             }
         });
     }
