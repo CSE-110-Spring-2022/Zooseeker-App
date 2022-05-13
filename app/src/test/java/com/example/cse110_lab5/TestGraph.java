@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.cse110_lab5.activity.graph.GraphActivity;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -15,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)

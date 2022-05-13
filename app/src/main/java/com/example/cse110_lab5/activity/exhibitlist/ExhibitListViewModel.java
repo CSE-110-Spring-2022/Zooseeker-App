@@ -1,4 +1,4 @@
-package com.example.cse110_lab5.template;
+package com.example.cse110_lab5.activity.exhibitlist;
 
 import android.app.Application;
 import android.content.Context;

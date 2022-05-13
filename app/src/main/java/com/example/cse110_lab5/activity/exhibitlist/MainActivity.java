@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.activity.exhibitlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.activity.exhibitlist.ExhibitListAdapter;
+import com.example.cse110_lab5.activity.exhibitlist.ExhibitListViewModel;
+import com.example.cse110_lab5.activity.graph.GraphActivity;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
-import com.example.cse110_lab5.template.ExhibitItem;
-import com.example.cse110_lab5.template.ExhibitListViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
