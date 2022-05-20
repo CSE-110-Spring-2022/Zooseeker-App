@@ -35,6 +35,9 @@ public interface NodeDao {
     @Query("SELECT * from `nodes` WHERE `kind`='exhibit' AND tags LIKE '%' || :tag || '%'")
     List<ZooData.Node> getFiltered(String tag);
 
+    @Query("SELECT id FROM `nodes` WHERE `kind`='exhibit' AND `selected`=1")
+    List<String> getSelected();
+
     @Update
     int update(ZooData.Node node);
 

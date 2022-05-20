@@ -76,15 +76,12 @@ public class MainActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.plan_bttn);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ArrayList<String> testExhibitList = adapter.getSelectedExhibits();
-                String[] testToVisit = testExhibitList.toArray(new String[testExhibitList.size()]);
                 String start = "entrance_exit_gate";
                 String path = "sample_zoo_graph.json";
                 notEmpty.putExtra("path", path);
                 notEmpty.putExtra("start", start);
-                notEmpty.putExtra("toVisit", testToVisit);
+                notEmpty.putExtra("toVisit", nodeDao.getSelected().toArray(new String[]{}));
                 startActivity(notEmpty);
-
             }
         });
 
