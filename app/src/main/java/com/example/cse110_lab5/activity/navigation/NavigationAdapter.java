@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.activity.navigation;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,17 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
 
-public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder>{
+public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.ViewHolder>{
     private Context context;
 
     private GraphPath<String, ZooData.IdentifiedEdge> path;
 
-    public PathAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
+    public NavigationAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
         this.context = context;
         this.path = path;
     }

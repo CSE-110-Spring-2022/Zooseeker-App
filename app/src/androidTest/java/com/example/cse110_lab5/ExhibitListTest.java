@@ -8,9 +8,7 @@ package com.example.cse110_lab5;
 
         import android.content.Context;
         import android.view.View;
-        import android.widget.Button;
         import android.widget.CheckBox;
-        import android.widget.EditText;
 
         import androidx.lifecycle.Lifecycle;
         import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +16,7 @@ package com.example.cse110_lab5;
         import androidx.test.core.app.ActivityScenario;
         import androidx.test.core.app.ApplicationProvider;
 
+        import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
         import com.example.cse110_lab5.database.EdgeDao;
         import com.example.cse110_lab5.database.GraphDatabase;
         import com.example.cse110_lab5.database.NodeDao;

@@ -1,5 +1,4 @@
-package com.example.cse110_lab5;
-import android.app.Activity;
+package com.example.cse110_lab5.activity.graph;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cse110_lab5.database.EdgeDao;
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
@@ -20,11 +19,11 @@ import org.jgrapht.alg.util.Pair;
 import java.util.Collections;
 import java.util.List;
 
-public class OrderedExhibitsAdapter extends RecyclerView.Adapter<OrderedExhibitsAdapter.ViewHolder>{
+public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.ViewHolder>{
     private List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs = Collections.emptyList();
     private Context context;
 
-    public OrderedExhibitsAdapter(Context context, List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
+    public GraphAdapter(Context context, List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
         this.plannedExs = plannedExs;
         this.context = context;
     }

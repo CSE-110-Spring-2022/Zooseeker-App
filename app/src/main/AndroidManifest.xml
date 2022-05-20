@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE110Lab5">
         <activity
-            android:name=".GraphActivity"
+            android:name=".activity.graph.GraphActivity"
             android:exported="false" />
         <activity
-            android:name=".NavigationActivity"
+            android:name=".activity.navigation.NavigationActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.exhibitlist.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

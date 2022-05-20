@@ -1,6 +1,4 @@
-package com.example.cse110_lab5;
-
-import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
+package com.example.cse110_lab5.activity.navigation;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,13 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
-
-import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -49,7 +46,7 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        PathAdapter pathAdapter = new PathAdapter(this, exhibitDirections.getSecond());
+        NavigationAdapter pathAdapter = new NavigationAdapter(this, exhibitDirections.getSecond());
 
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(exhibitDirections.getFirst()).name;
@@ -76,7 +73,7 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getSecond()));
+        recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
 
     }
 
@@ -97,6 +94,6 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new PathAdapter(this, nextDirections.getSecond()));
+        recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
     }
 }

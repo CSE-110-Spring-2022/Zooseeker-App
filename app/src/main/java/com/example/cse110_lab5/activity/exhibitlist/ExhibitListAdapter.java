@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.activity.exhibitlist;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,9 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.ZooData;
-import com.example.cse110_lab5.template.ExhibitItem;
 
 import java.util.ArrayList;
 import java.util.Collections;

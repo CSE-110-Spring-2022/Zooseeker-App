@@ -1,4 +1,4 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.activity.graph;
 
 import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 
@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cse110_lab5.activity.navigation.NavigationActivity;
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -62,7 +63,7 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
-            OrderedExhibitsAdapter oEadapter = new OrderedExhibitsAdapter(this, plan);
+            GraphAdapter oEadapter = new GraphAdapter(this, plan);
 
             int amtExs = oEadapter.getItemCount() -2;
             TextView total = findViewById(R.id.total);
