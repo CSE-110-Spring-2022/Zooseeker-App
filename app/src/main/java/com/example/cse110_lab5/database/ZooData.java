@@ -89,7 +89,6 @@ public class ZooData {
                     ", kind='" + kind + '\'' +
                     ", name=" + name +
                     ", tags=" + tags +
-                    ", tags=" + tags +
                     ", lat=" + lat +
                     ", lng=" + lng +
                     '}';
@@ -141,6 +140,13 @@ public class ZooData {
         @Override
         public String toString() {
             return "(" + getSource() + " :" + id + ": " + getTarget() + ")";
+        }
+
+        public String getTargetId() {
+            return getTarget().toString();
+        }
+        public String getSourceId() {
+            return getSource().toString();
         }
 
         public static void attributeConsumer(Pair<IdentifiedEdge, String> pair, Attribute attr) {
