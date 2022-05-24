@@ -1,13 +1,18 @@
 package com.example.cse110_lab5.activity.navigation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +28,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
     private int curr_exhibit = 1;
+    private final PermissionChecker permissionChecker = new PermissionChecker(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,25 @@ public class NavigationActivity extends AppCompatActivity {
         total.setText(name);
 
         recyclerView.setAdapter(pathAdapter);
+
+        //Permission checker
+        if (permissionChecker.ensurePermissions()){
+            Log.d("Permissions","Being checked");
+        }
+
+        /* Listen for location Updates */
+
+            var provider = LocationManager.GPS_PROVIDER;
+            var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            var locationListener = new LocationListener(){
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    Log.d("LAB7", String.format("Location changed: %s", location));
+
+                }
+            };
+
+            locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
     }
 
     public void onNextPressed(View v) {

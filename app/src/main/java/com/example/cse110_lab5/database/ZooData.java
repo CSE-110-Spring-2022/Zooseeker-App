@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
@@ -74,6 +75,10 @@ public class ZooData {
         public String name;
         public List<String> tags;
         public boolean selected;
+        public double lat;
+        public double lng;
+
+        public String parent_id;
 
         @Override
         public String toString() {
@@ -82,15 +87,33 @@ public class ZooData {
                     ", kind='" + kind + '\'' +
                     ", name=" + name +
                     ", tags=" + tags +
+                    ", tags=" + tags +
+                    ", lat=" + lat +
+                    ", lng=" + lng +
                     '}';
         }
 
-        public Node(String id, String kind, String name, List<String> tags){
+        //Constructor for exhibit without parent_id or exhibit_group
+        public Node(String id, String kind, String name, List<String> tags, double lat, double lng){
             this.id = id;
             this.kind = kind;
             this.name = name;
             this.tags = tags;
             this.selected = false;
+            this.lat = lat;
+            this.lng = lng;
+        }
+
+        //Constructor for exhibit with parent_id / part of an exhibit_group
+        @Ignore //know idea what this does but it fixes the errors for multiple constructors
+        public Node(String id, String kind, String name, List<String> tags, String parent_id){
+            this.id = id;
+            this.kind = kind;
+            this.name = name;
+            this.tags = tags;
+            this.selected = false;
+            this.parent_id = parent_id;
+            //might need to grab lat and long from parent during compile time
         }
 
         public static List<Node> loadJSON(Context context, String path) {
