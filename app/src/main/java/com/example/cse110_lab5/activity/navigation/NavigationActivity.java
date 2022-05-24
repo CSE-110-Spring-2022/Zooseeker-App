@@ -24,6 +24,8 @@ import com.example.cse110_lab5.database.ZooData;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 
+import java.util.List;
+
 public class NavigationActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
@@ -60,7 +62,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(pathAdapter);
 
-        //Permission checker
+        //Permission checker (refactor later)
         if (permissionChecker.ensurePermissions()){
             Log.d("Permissions","Being checked");
         }
@@ -73,7 +75,7 @@ public class NavigationActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("LAB7", String.format("Location changed: %s", location));
-
+                    detectOffTrack(); //need access to list of all exhibits in path
                 }
             };
 
@@ -121,4 +123,22 @@ public class NavigationActivity extends AppCompatActivity {
         total.setText(name);
         recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
     }
+
+    public void detectOffTrack(Location location, List<ZooData.Node> exhibits, ZooData.Node target){
+        //Check if distance from your current location to the start is still the minimum distance out of the distance
+        //from your current location to every exhibit
+        double min_distance = Double.MAX_VALUE;
+
+        for(ZooData.Node exhibit: exhibits){
+            if(!exhibit.id.equals(target.id)){
+                Location current_exhibit_location = new Location("");
+                current_exhibit_location.setLatitude(exhibit.lat);
+                current_exhibit_location.setLongitude(exhibit.lng);
+                double distance = current_exhibit_location.distanceTo(location);
+                if(distance < min_distance) min_distance = distance;
+            }
+        }
+    }
+
+
 }

@@ -65,4 +65,5 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
         }
 
     }
+
 }
