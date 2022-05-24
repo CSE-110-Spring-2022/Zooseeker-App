@@ -63,9 +63,9 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
-            GraphAdapter oEadapter = new GraphAdapter(this, plan);
+            GraphAdapter oEadapter = new GraphAdapter(this, plan.subList(1, plan.size() - 1));
 
-            int amtExs = oEadapter.getItemCount() -2;
+            int amtExs = oEadapter.getItemCount();
             TextView total = findViewById(R.id.total);
             total.setText("Total: " + amtExs);
             recyclerView.setAdapter(oEadapter);
