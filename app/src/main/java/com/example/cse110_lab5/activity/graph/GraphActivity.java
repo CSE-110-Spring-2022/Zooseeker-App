@@ -62,7 +62,7 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            c plan = tsp(g, start, toVisit);
+            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
             GraphAdapter oEadapter = new GraphAdapter(this, plan);
 
             int amtExs = oEadapter.getItemCount() -2;

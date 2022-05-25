@@ -18,12 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.activity.graph.GraphActivity;
 import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity {
@@ -61,7 +65,7 @@ public class NavigationActivity extends AppCompatActivity {
 	    graph = (Graph<String, ZooData.IdentifiedEdge>) bundle.get("graph");
 	    // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
 	    for(int i = 0; i < bundle.size() -3; i++){
-		    plan.add(bundle.get((Par<String,GraphPath<String, ZooData.IdentifiedEdge>>)String.valueOf(i));
+		    plan.add((Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>)bundle.get(String.valueOf(i)));
 	    }
         }
 
@@ -94,7 +98,7 @@ public class NavigationActivity extends AppCompatActivity {
                     Log.d("LAB7", String.format("Location changed: %s", location));
 		    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
 		    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
-		    plan = GraphActivity.tsp(newStartID, toVisit);
+		    plan = GraphActivity.tsp(graph, newStartID, toVisit);
                 }
             };
 
