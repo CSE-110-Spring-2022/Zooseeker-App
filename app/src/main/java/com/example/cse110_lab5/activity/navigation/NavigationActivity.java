@@ -71,11 +71,19 @@ public class NavigationActivity extends AppCompatActivity {
 
             var provider = LocationManager.GPS_PROVIDER;
             var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            var locationListener = new LocationListener(){
+            var nodeDAO = GraphDatabase.getSingleton(this).nodeDao();
+            var exhibits = nodeDAO.getExhibits();
+            var locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("LAB7", String.format("Location changed: %s", location));
-                    detectOffTrack(); //need access to list of all exhibits in path
+                    if (curr_exhibit != getIntent().getExtras().size() - 1) {
+                        Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
+                                (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit+1));
+                        ZooData.Node targetNode = nodeDAO.get(nextDirections.getFirst());
+                        String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
+                        List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> graph;
+                    }
                 }
             };
 
@@ -124,20 +132,25 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
     }
 
-    public void detectOffTrack(Location location, List<ZooData.Node> exhibits, ZooData.Node target){
+    //Refactor name
+    public String detectOffTrack(Location location, List<ZooData.Node> exhibits, ZooData.Node target) {
         //Check if distance from your current location to the start is still the minimum distance out of the distance
         //from your current location to every exhibit
         double min_distance = Double.MAX_VALUE;
-
+        String startExhibit = "";
         for(ZooData.Node exhibit: exhibits){
             if(!exhibit.id.equals(target.id)){
                 Location current_exhibit_location = new Location("");
                 current_exhibit_location.setLatitude(exhibit.lat);
                 current_exhibit_location.setLongitude(exhibit.lng);
                 double distance = current_exhibit_location.distanceTo(location);
-                if(distance < min_distance) min_distance = distance;
+                if(distance < min_distance) {
+                    min_distance = distance;
+                    startExhibit = exhibit.id;
+                }
             }
         }
+        return startExhibit;
     }
 
 
