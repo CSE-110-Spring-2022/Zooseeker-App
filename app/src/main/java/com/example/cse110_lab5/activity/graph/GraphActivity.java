@@ -76,6 +76,8 @@ public class GraphActivity extends AppCompatActivity {
                 nav.putExtra(String.valueOf(i), plan.get(i));
             }
 
+	    nav.putExtra("toVisit", toVisit);
+
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {

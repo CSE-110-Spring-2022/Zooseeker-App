@@ -31,6 +31,13 @@ public class NavigationActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private int curr_exhibit = 1;
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
+    Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections; 
+    NodeDao nodeDao;
+    String[] exhibitList;
+    String[] toVisit;
+    Bundle bundle;
+    List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan;
+    Graph<String, ZooData.IdentifiedEdge> graph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class NavigationActivity extends AppCompatActivity {
         setContentView(R.layout.navigation);
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+        bundle = intent.getExtras();
 
         Button prevButton = findViewById(R.id.prev_bttn);
         prevButton.setBackgroundColor(Color.GRAY);
@@ -49,6 +56,13 @@ public class NavigationActivity extends AppCompatActivity {
 
         if (bundle != null) {
             exhibitDirections = (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) bundle.get(String.valueOf(curr_exhibit));
+	    exhibitList = bundle.getStringArray("toVisit");
+	    toVisit = exhibitList;
+	    graph = (Graph<String, ZooData.IdentifiedEdge>) bundle.get("graph");
+	    // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
+	    for(int i = 0; i < bundle.size() -3; i++){
+		    plan.add(bundle.get((Par<String,GraphPath<String, ZooData.IdentifiedEdge>>)String.valueOf(i));
+	    }
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
@@ -62,6 +76,8 @@ public class NavigationActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(pathAdapter);
 
+	nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+
         //Permission checker (refactor later)
         if (permissionChecker.ensurePermissions()){
             Log.d("Permissions","Being checked");
@@ -71,19 +87,14 @@ public class NavigationActivity extends AppCompatActivity {
 
             var provider = LocationManager.GPS_PROVIDER;
             var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            var nodeDAO = GraphDatabase.getSingleton(this).nodeDao();
-            var exhibits = nodeDAO.getExhibits();
+            var exhibits = nodeDao.getExhibits();
             var locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("LAB7", String.format("Location changed: %s", location));
-                    if (curr_exhibit != getIntent().getExtras().size() - 1) {
-                        Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
-                                (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit+1));
-                        ZooData.Node targetNode = nodeDAO.get(nextDirections.getFirst());
-                        String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
-                        List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> graph;
-                    }
+		    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
+		    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
+		    plan = GraphActivity.tsp(newStartID, toVisit);
                 }
             };
 
@@ -92,7 +103,7 @@ public class NavigationActivity extends AppCompatActivity {
 
     public void onNextPressed(View v) {
         Log.d("Navigation", "Next button pressed");
-        if (curr_exhibit != getIntent().getExtras().size() - 1) {
+        if (curr_exhibit != plan.size() - 1) {
             curr_exhibit += 1;
 
             Button button = findViewById(R.id.prev_bttn);
@@ -103,10 +114,11 @@ public class NavigationActivity extends AppCompatActivity {
             button.setBackgroundColor(Color.GRAY);
             button.setClickable(false);
         }
-        Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
-                (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
+	nextDirections =
+		plan.get(curr_exhibit);
+	toVisit = Arrays.copyOfRange(exhibitList, curr_exhibit, exhibitList.length);
         TextView total = findViewById(R.id.Exhibit_Name);
-        String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
+        String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
         recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
 
@@ -124,10 +136,11 @@ public class NavigationActivity extends AppCompatActivity {
             button.setBackgroundColor(Color.GRAY);
             button.setClickable(false);
         }
-        Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections =
-                (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) getIntent().getExtras().get(String.valueOf(curr_exhibit));
+	nextDirections = 
+		plan.get(curr_exhibit);
+	toVisit = Arrays.copyOfRange(exhibitList, curr_exhibit, exhibitList.length);
         TextView total = findViewById(R.id.Exhibit_Name);
-        String name = GraphDatabase.getSingleton(this).nodeDao().get(nextDirections.getFirst()).name;
+        String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
         recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
     }
