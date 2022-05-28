@@ -7,8 +7,7 @@
 
     <include
         android:id="@+id/imageView2"
-        layout="@layout/top_bar"
-        />
+        layout="@layout/top_bar" />
 
     <TextView
         android:id="@+id/Exhibit_Name"
@@ -34,8 +33,10 @@
         android:paddingRight="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/next_bttn"
@@ -51,6 +52,17 @@
         app:layout_constraintStart_toEndOf="@+id/prev_bttn" />
 
     <Button
+        android:id="@+id/mock_btn"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="216dp"
+        android:layout_marginBottom="40dp"
+        android:onClick="onMockPressed"
+        android:text="Mock"
+        app:layout_constraintBottom_toTopOf="@+id/next_bttn"
+        app:layout_constraintStart_toStartOf="@+id/path_to_exhibit" />
+
+    <Button
         android:id="@+id/prev_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -61,6 +73,31 @@
         app:layout_constraintEnd_toStartOf="@+id/next_bttn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/path_to_exhibit" />
+
+    <EditText
+        android:id="@+id/lat"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Latitude"
+        android:inputType="numberSigned"
+        android:minHeight="48dp"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/lon"
+        app:layout_constraintStart_toStartOf="@+id/path_to_exhibit" />
+
+    <EditText
+        android:id="@+id/lon"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Longitude"
+        android:inputType="numberSigned"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/prev_bttn"
+        app:layout_constraintStart_toStartOf="@+id/path_to_exhibit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

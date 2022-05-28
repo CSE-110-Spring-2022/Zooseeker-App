@@ -73,6 +73,7 @@ public class GraphActivity extends AppCompatActivity {
             Intent nav = new Intent(this, NavigationActivity.class);
 
             for (int i = 0;  i< plan.size(); i++) {
+                Log.d("graph", ""+i);
                 nav.putExtra(String.valueOf(i), plan.get(i));
             }
 
