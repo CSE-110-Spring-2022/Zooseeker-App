@@ -1,5 +1,7 @@
 package com.example.cse110_lab5.activity.navigation;
 
+import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +29,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,13 +63,16 @@ public class NavigationActivity extends AppCompatActivity {
 
         if (bundle != null) {
             exhibitDirections = (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) bundle.get(String.valueOf(curr_exhibit));
-	    exhibitList = bundle.getStringArray("toVisit");
-	    toVisit = exhibitList;
-	    graph = (Graph<String, ZooData.IdentifiedEdge>) bundle.get("graph");
-	    // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
-	    for(int i = 0; i < bundle.size() -3; i++){
-		    plan.add((Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>)bundle.get(String.valueOf(i)));
-	    }
+            exhibitList = bundle.getStringArray("toVisit");
+            toVisit = exhibitList;
+            graph = loadZooGraphJSON(this, bundle.getString("path"));
+
+            plan = new ArrayList<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>>();
+            // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
+            for(int i = 0; i < bundle.size() -3; i++){
+                plan.add((Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>)bundle.get(String.valueOf(i)));
+                Log.d("exhibit", plan.get(i).getFirst());
+            }
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
@@ -96,9 +102,9 @@ public class NavigationActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("LAB7", String.format("Location changed: %s", location));
-		    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
-		    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
-		    plan = GraphActivity.tsp(graph, newStartID, toVisit);
+//		    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
+//		    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
+//		    plan = GraphActivity.tsp(graph, newStartID, toVisit);
                 }
             };
 
@@ -113,13 +119,15 @@ public class NavigationActivity extends AppCompatActivity {
             Button button = findViewById(R.id.prev_bttn);
             button.setBackgroundColor(getResources().getColor(R.color.green_500));
             button.setClickable(true);
-        } else {
+        }
+        if (curr_exhibit == plan.size() - 1){
             Button button = findViewById(R.id.next_bttn);
             button.setBackgroundColor(Color.GRAY);
             button.setClickable(false);
         }
 	nextDirections =
 		plan.get(curr_exhibit);
+
 	toVisit = Arrays.copyOfRange(exhibitList, curr_exhibit, exhibitList.length);
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = nodeDao.get(nextDirections.getFirst()).name;
@@ -135,7 +143,8 @@ public class NavigationActivity extends AppCompatActivity {
             Button button = findViewById(R.id.next_bttn);
             button.setBackgroundColor(getResources().getColor(R.color.green_500));
             button.setClickable(true);
-        } else {
+        }
+        if(curr_exhibit == 1){
             Button button = findViewById(R.id.prev_bttn);
             button.setBackgroundColor(Color.GRAY);
             button.setClickable(false);
