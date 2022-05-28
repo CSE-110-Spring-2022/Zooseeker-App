@@ -46,9 +46,9 @@ public class GraphActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         if (bundle != null) {
-            g = loadZooGraphJSON(this, bundle.getString("path"));
-            start = bundle.getString("start");
             toVisit = bundle.getStringArray("toVisit");
+            g = loadZooGraphJSON(this, bundle.getString("path"), toVisit);
+            start = bundle.getString("start");
         }
 
         if (toVisit.length == 0) {

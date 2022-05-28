@@ -159,7 +159,7 @@ public class ZooData {
      * @param path          the path to the JSON file
      * @return              a Graph object containing the graph represented by the JSON file
      */
-    public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
+    public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path, String[] toVisit) {
         Graph<String, IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
         JSONImporter<String, IdentifiedEdge> importer = new JSONImporter<>();
@@ -171,6 +171,19 @@ public class ZooData {
             Reader reader = new InputStreamReader(inputStream);
 
             importer.importGraph(g, reader);
+
+            if(toVisit != null){
+                NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
+                for (int i = 0; i < toVisit.length; i++){
+                    ZooData.Node node = nodeDao.get(toVisit[i]);
+                    if(node.parent_id != null){
+                        g.addVertex(node.id);
+                        IdentifiedEdge edge = g.addEdge(node.id, node.parent_id);
+                        edge.setId(node.id + "_to_" + node.parent_id);
+                        g.setEdgeWeight(edge, 0);
+                    }
+                }
+            }
             return g;
         } catch (IOException e) {
             Log.e("IO", "Could not load zoo graph info, " + e);

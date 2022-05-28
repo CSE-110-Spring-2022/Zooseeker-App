@@ -65,7 +65,7 @@ public class NavigationActivity extends AppCompatActivity {
             exhibitDirections = (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) bundle.get(String.valueOf(curr_exhibit));
             exhibitList = bundle.getStringArray("toVisit");
             toVisit = exhibitList;
-            graph = loadZooGraphJSON(this, bundle.getString("path"));
+            graph = loadZooGraphJSON(this, bundle.getString("path"), toVisit);
 
             plan = new ArrayList<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>>();
             // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
@@ -102,9 +102,9 @@ public class NavigationActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     Log.d("LAB7", String.format("Location changed: %s", location));
-//		    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
-//		    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
-//		    plan = GraphActivity.tsp(graph, newStartID, toVisit);
+//                    ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
+//                    String newStartID = detectOffTrack(location, exhibits, targetNode); //need access to list of all exhibits in path
+//                    plan = GraphActivity.tsp(graph, newStartID, toVisit);
                 }
             };
 
