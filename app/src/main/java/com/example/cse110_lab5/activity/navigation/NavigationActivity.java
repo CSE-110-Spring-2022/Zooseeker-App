@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
 
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class NavigationActivity extends AppCompatActivity {
 
     public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
     private final String TAG = "Location";
+
+    private final String gateID = "entrance_exit_gate";
 
     private boolean useLocationService;
     private LocationModel model;
@@ -126,7 +129,61 @@ public class NavigationActivity extends AppCompatActivity {
                 ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
                 String newStartID = detectOffTrack(coord, exhibits, targetNode); //need access to list of all exhibits in path
                 Log.d(TAG, newStartID);
-//                plan = GraphActivity.tsp(graph, newStartID, toVisit);
+                /*
+                plan is a list and we have curr exhibit
+                split plan into 0:currExhibit and currExhibit:size()
+                compute TSP on [newStartID + currExhibit:size()]
+                remove newStartID (first index) from new plan
+                add 0:currExhibit + newPlan
+
+                [A,B,C,E,F,G]
+                [A,B,C] -> 0:currExhibit
+                TSP(D + [E,F,G])
+                [D,F,G,E]
+                [F,G,E]
+                [A,B,C,F,G,E]
+                 */
+                List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> initial = plan.subList(0, curr_exhibit);
+                List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> newPlan = plan.subList(curr_exhibit, plan.size());
+                List<String> remainderIds = new ArrayList<String>();
+                for (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> node : newPlan){
+                    if(!node.getFirst().equals(gateID))remainderIds.add(node.getFirst());
+                }
+                if(remainderIds.size() == 0){
+                    remainderIds.add(gateID);
+                }
+                String[] toVisit = new String[remainderIds.size()];
+                remainderIds.toArray(toVisit);
+                Log.d("plan/toVisit", Arrays.toString(toVisit));
+                newPlan = GraphActivity.tsp(graph, newStartID, toVisit);
+                
+                // this removes the directions to the newStartID at the beginning and end of TSP since it's useless for us
+                // apart from rerouting
+                Log.d("plan/newOriginal", newPlan.toString());
+                newPlan.remove(0);
+                newPlan.remove(newPlan.size()-1);
+                Log.d("plan/initial", initial.toString());
+                Log.d("plan/new", newPlan.toString());
+
+                if(newPlan.size() > 0){
+                    String lastExhibit = newPlan.get(newPlan.size()-1).getFirst();
+                    if(!lastExhibit.equals(gateID)) {
+                        newPlan.add(new Pair<>(gateID, new DijkstraShortestPath<>(graph).getPath(newPlan.get(newPlan.size()-1).getFirst(), gateID)));
+                    }
+
+                    if(!newPlan.get(0).getFirst().equals(plan.get(curr_exhibit))){
+                        // prompt for replan to see if they actually want to accept our replan
+                    }
+                    initial.addAll(newPlan);
+                }
+                plan = initial;
+
+                nextDirections =
+                        plan.get(curr_exhibit);
+
+                String exhibitName = nodeDao.get(nextDirections.getFirst()).name;
+                total.setText(exhibitName);
+                recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
             });
     }
 
@@ -159,12 +216,6 @@ public class NavigationActivity extends AppCompatActivity {
 	nextDirections =
 		plan.get(curr_exhibit);
 
-	if(curr_exhibit == plan.size() - 1){
-        toVisit = new String[]{"entrance_exit_gate"}; // since when you're at the last node you can only visit the exit next
-    } else{
-        toVisit = Arrays.copyOfRange(exhibitList, curr_exhibit, exhibitList.length);
-    }
-
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
@@ -187,7 +238,7 @@ public class NavigationActivity extends AppCompatActivity {
         }
 	nextDirections = 
 		plan.get(curr_exhibit);
-	toVisit = Arrays.copyOfRange(exhibitList, curr_exhibit, exhibitList.length);
+
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
