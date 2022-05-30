@@ -5,17 +5,16 @@ import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,8 +27,6 @@ import com.example.cse110_lab5.activity.location.LocationModel;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -39,11 +36,11 @@ import org.jgrapht.alg.util.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class NavigationActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
+    public Switch directionsSwitch;
     private int curr_exhibit = 1;
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
     Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections; 
@@ -97,6 +94,14 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         NavigationAdapter pathAdapter = new NavigationAdapter(this, exhibitDirections.getSecond());
+
+        directionsSwitch = (Switch) findViewById(R.id.directionsSwitch);
+        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
+                pathAdapter.refreshView(toggled);
+            }
+        });
 
         nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         TextView total = findViewById(R.id.Exhibit_Name);

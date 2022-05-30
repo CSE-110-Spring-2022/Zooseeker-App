@@ -1,4 +1,5 @@
 package com.example.cse110_lab5.activity.navigation;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import com.example.cse110_lab5.database.ZooData;
 import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.ViewHolder>{
     private Context context;
@@ -29,6 +29,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
     private NodeDao nodeDao;
 
     private ArrayList<String> detailedPath = new ArrayList<>();
+    private boolean useDetailedPath = false;
 
     public NavigationAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
         this.context = context;
@@ -38,16 +39,15 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
         this.edgeDao = db.edgeDao();
         this.nodeDao = db.nodeDao();
 
-        boolean useDetailedPath = false;
-        detailedPath = generatePathStrings(path, useDetailedPath);
-
-        Log.d("detailed path", detailedPath.toString());
+        this.detailedPath = generatePathStrings(path, this.useDetailedPath);
+        Log.d("detailed path", this.detailedPath.toString());
     }
 
     private ArrayList<String> generatePathStrings(GraphPath<String, ZooData.IdentifiedEdge> path, boolean useDetailedPath) {
         ArrayList<String> pathStrings = new ArrayList<>();
         String lastStreetName = "";
         if(useDetailedPath) {
+            Log.d("new path", "using detailed");
             for(int i = 0; i < path.getEdgeList().size(); i++) {
                 ZooData.IdentifiedEdge edge = path.getEdgeList().get(i);
                 ZooData.Node targetNode = nodeDao.get(edge.getTargetId());
@@ -71,7 +71,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
                 lastStreetName = streetName;
             }
         } else {
-
+            Log.d("new path", "using basic");
             double totalDist = 0;
             for(int i = 0; i < path.getEdgeList().size(); i++) {
                 ZooData.IdentifiedEdge edge = path.getEdgeList().get(i);
@@ -106,6 +106,13 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
             }
         }
         return pathStrings;
+    }
+
+    public void refreshView(boolean toggleValue){
+        this.useDetailedPath = toggleValue;
+        this.detailedPath = generatePathStrings(this.path, this.useDetailedPath);
+        Log.d("new path", String.valueOf(this.detailedPath));
+        notifyItemRangeChanged(0, this.detailedPath.size());
     }
 
     @NonNull
