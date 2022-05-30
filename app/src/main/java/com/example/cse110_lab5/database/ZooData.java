@@ -28,6 +28,8 @@ import java.util.List;
 
 public class ZooData {
 
+    public static final Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
+
     @Entity(tableName = "edges")
     public static class Edge {
         @PrimaryKey
@@ -159,8 +161,7 @@ public class ZooData {
      * @param path          the path to the JSON file
      * @return              a Graph object containing the graph represented by the JSON file
      */
-    public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path, String[] toVisit) {
-        Graph<String, IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
+    public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
 
         JSONImporter<String, IdentifiedEdge> importer = new JSONImporter<>();
         importer.setVertexFactory(v -> v);
@@ -170,21 +171,19 @@ public class ZooData {
             InputStream inputStream = context.getAssets().open(path);
             Reader reader = new InputStreamReader(inputStream);
 
-            importer.importGraph(g, reader);
+            importer.importGraph(graph, reader);
 
-            if(toVisit != null){
-                NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
-                for (int i = 0; i < toVisit.length; i++){
-                    ZooData.Node node = nodeDao.get(toVisit[i]);
-                    if(node.parent_id != null){
-                        g.addVertex(node.id);
-                        IdentifiedEdge edge = g.addEdge(node.id, node.parent_id);
-                        edge.setId(node.id + "_to_" + node.parent_id);
-                        g.setEdgeWeight(edge, 0);
-                    }
+            NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
+            List<ZooData.Node> nodes = nodeDao.getExhibits();
+            for (ZooData.Node node : nodes){
+                if(node.parent_id != null){
+                    graph.addVertex(node.id);
+                    IdentifiedEdge edge = graph.addEdge(node.id, node.parent_id);
+                    edge.setId(node.id + "_to_" + node.parent_id);
+                    graph.setEdgeWeight(edge, 0);
                 }
             }
-            return g;
+            return graph;
         } catch (IOException e) {
             Log.e("IO", "Could not load zoo graph info, " + e);
             return null;

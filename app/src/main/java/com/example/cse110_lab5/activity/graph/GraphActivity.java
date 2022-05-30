@@ -47,7 +47,7 @@ public class GraphActivity extends AppCompatActivity {
 
         if (bundle != null) {
             toVisit = bundle.getStringArray("toVisit");
-            g = loadZooGraphJSON(this, bundle.getString("path"), toVisit);
+            g = loadZooGraphJSON(this, bundle.getString("path"));
             start = bundle.getString("start");
         }
 

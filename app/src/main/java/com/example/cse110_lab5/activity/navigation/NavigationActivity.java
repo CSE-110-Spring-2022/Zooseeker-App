@@ -81,7 +81,7 @@ public class NavigationActivity extends AppCompatActivity {
             exhibitDirections = (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>) bundle.get(String.valueOf(curr_exhibit));
             exhibitList = bundle.getStringArray("toVisit");
             toVisit = exhibitList;
-            graph = loadZooGraphJSON(this, bundle.getString("path"), toVisit);
+            graph = ZooData.graph;
 
             plan = new ArrayList<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>>();
             // minus 3 because the bundle's extras has each pair in the plan AND the toVisit array
