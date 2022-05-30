@@ -19,6 +19,7 @@ import com.example.cse110_lab5.database.ZooData;
 import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.ViewHolder>{
     private Context context;
@@ -31,6 +32,8 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
     private ArrayList<String> detailedPath = new ArrayList<>();
     private boolean useDetailedPath = false;
 
+    private ArrayList<ArrayList<ZooData.Edge>> commonEdgePath;
+
     public NavigationAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
         this.context = context;
         this.path = path;
@@ -41,6 +44,9 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
 
         this.detailedPath = generatePathStrings(path, this.useDetailedPath);
         Log.d("detailed path", this.detailedPath.toString());
+
+        this.commonEdgePath = generateCommonEdgeConnections(path);
+        Log.d("common edge path", this.commonEdgePath.toString());
     }
 
     private ArrayList<String> generatePathStrings(GraphPath<String, ZooData.IdentifiedEdge> path, boolean useDetailedPath) {
@@ -112,7 +118,26 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
         this.useDetailedPath = toggleValue;
         this.detailedPath = generatePathStrings(this.path, this.useDetailedPath);
         Log.d("new path", String.valueOf(this.detailedPath));
-        notifyItemRangeChanged(0, this.detailedPath.size());
+    }
+
+    private ArrayList<ArrayList<ZooData.Edge>> generateCommonEdgeConnections(GraphPath<String, ZooData.IdentifiedEdge> exhibitPath){
+        ArrayList<ArrayList<ZooData.Edge>> edgeConnections = new ArrayList<>();
+        List<ZooData.IdentifiedEdge> edgeList = exhibitPath.getEdgeList();
+        ArrayList<ZooData.Edge> currentRoad = new ArrayList<>();
+        String lastStreetName = edgeDao.get(edgeList.get(0).getId()).street;
+        for(int i = 0; i < path.getEdgeList().size(); i++) {
+            ZooData.IdentifiedEdge edge = edgeList.get(i);
+            ZooData.Edge dbEdge = edgeDao.get(edge.getId());
+            String currentStreetName = dbEdge.street;
+            if(!currentStreetName.equals(lastStreetName)) {
+                edgeConnections.add(currentRoad);
+                currentRoad = new ArrayList<>();
+            }
+            currentRoad.add(dbEdge);
+            lastStreetName = currentStreetName;
+        }
+        edgeConnections.add(currentRoad);
+        return edgeConnections;
     }
 
     @NonNull
