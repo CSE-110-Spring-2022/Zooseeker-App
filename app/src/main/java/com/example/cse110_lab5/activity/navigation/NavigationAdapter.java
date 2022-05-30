@@ -30,13 +30,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
     private NodeDao nodeDao;
 
     private ArrayList<String> detailedPath = new ArrayList<>();
-    private boolean useDetailedPath = false;
+    private boolean useDetailedPath;
 
     private ArrayList<ArrayList<ZooData.Edge>> commonEdgePath;
 
-    public NavigationAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path) {
+    public NavigationAdapter(Context context, GraphPath<String, ZooData.IdentifiedEdge> path, boolean useDetailedPath) {
         this.context = context;
         this.path = path;
+        this.useDetailedPath = useDetailedPath;
 
         GraphDatabase db = GraphDatabase.getSingleton(context);
         this.edgeDao = db.edgeDao();

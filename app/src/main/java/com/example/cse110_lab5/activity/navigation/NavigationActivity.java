@@ -93,13 +93,14 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        NavigationAdapter pathAdapter = new NavigationAdapter(this, exhibitDirections.getSecond());
+        NavigationAdapter pathAdapter = new NavigationAdapter(this, exhibitDirections.getSecond(), false);
 
         directionsSwitch = (Switch) findViewById(R.id.directionsSwitch);
         directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
                 pathAdapter.refreshView(toggled);
+                recyclerView.setAdapter(pathAdapter);
             }
         });
 
@@ -188,7 +189,8 @@ public class NavigationActivity extends AppCompatActivity {
 
                 String exhibitName = nodeDao.get(nextDirections.getFirst()).name;
                 total.setText(exhibitName);
-                recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
+                boolean toggled = directionsSwitch.isChecked();
+                recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond(), toggled));
             });
     }
 
@@ -224,7 +226,16 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
+        boolean toggled = directionsSwitch.isChecked();
+        NavigationAdapter pathAdapter = new NavigationAdapter(this, nextDirections.getSecond(), toggled);
+        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
+                pathAdapter.refreshView(toggled);
+                recyclerView.setAdapter(pathAdapter);
+            }
+        });
+        recyclerView.setAdapter(pathAdapter);
 
     }
 
@@ -247,8 +258,16 @@ public class NavigationActivity extends AppCompatActivity {
         TextView total = findViewById(R.id.Exhibit_Name);
         String name = nodeDao.get(nextDirections.getFirst()).name;
         total.setText(name);
-        recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond()));
-    }
+        boolean toggled = directionsSwitch.isChecked();
+        NavigationAdapter pathAdapter = new NavigationAdapter(this, nextDirections.getSecond(), toggled);
+        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
+                pathAdapter.refreshView(toggled);
+                recyclerView.setAdapter(pathAdapter);
+            }
+        });
+        recyclerView.setAdapter(pathAdapter);    }
 
     //Refactor name
     public String detectOffTrack(Coord coord, List<ZooData.Node> exhibits, ZooData.Node target) {
