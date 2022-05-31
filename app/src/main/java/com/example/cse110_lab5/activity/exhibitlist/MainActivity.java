@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String start = "entrance_exit_gate";
-                String filepath = "sample_zoo_graph.json";
-                notEmpty.putExtra("filepath", filepath);
+                String path = "sample_zoo_graph.json";
+                notEmpty.putExtra("filepath", path);
                 notEmpty.putExtra("start", start);
                 notEmpty.putExtra("toVisit", nodeDao.getSelected().toArray(new String[]{}));
                 startActivity(notEmpty);
