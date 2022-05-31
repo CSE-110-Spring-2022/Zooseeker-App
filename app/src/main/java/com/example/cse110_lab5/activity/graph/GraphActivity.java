@@ -47,7 +47,7 @@ public class GraphActivity extends AppCompatActivity {
 
         if (bundle != null) {
             toVisit = bundle.getStringArray("toVisit");
-            g = loadZooGraphJSON(this, bundle.getString("path"));
+            g = loadZooGraphJSON(this, bundle.getString("filepath"));
             start = bundle.getString("start");
         }
 
@@ -77,7 +77,7 @@ public class GraphActivity extends AppCompatActivity {
             }
 
 	        nav.putExtra("toVisit", toVisit);
-            nav.putExtra("path", bundle.getString("path"));
+            //nav.putExtra("path", bundle.getString("path"));
 
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
