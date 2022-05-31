@@ -70,14 +70,7 @@ public class GraphActivity extends AppCompatActivity {
             total.setText("Total: " + oEadapter.getItemCount());
 
             Intent nav = new Intent(this, NavigationActivity.class);
-
-            for (int i = 0;  i< plan.size(); i++) {
-                Log.d("graph", ""+i);
-                nav.putExtra(String.valueOf(i), plan.get(i));
-            }
-
-	        nav.putExtra("toVisit", toVisit);
-            //nav.putExtra("path", bundle.getString("path"));
+            nav.putExtra("plan", getOrderedExhibits(plan));
 
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
