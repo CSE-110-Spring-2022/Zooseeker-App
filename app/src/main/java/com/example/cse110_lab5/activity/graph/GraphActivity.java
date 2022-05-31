@@ -70,7 +70,9 @@ public class GraphActivity extends AppCompatActivity {
             total.setText("Total: " + oEadapter.getItemCount());
 
             Intent nav = new Intent(this, NavigationActivity.class);
-            nav.putExtra("plan", getOrderedExhibits(plan));
+            ArrayList<String> orderedExhibits = getOrderedExhibits(plan);
+            orderedExhibits.add(start);
+            nav.putExtra("plan", orderedExhibits.toArray(new String[orderedExhibits.size()]));
 
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
@@ -170,13 +172,13 @@ public class GraphActivity extends AppCompatActivity {
      * @param plan      a List of pairs of (destination, path_to_destination)
      * @return          the list of exhibits in order in String[] format
      */
-    public static String[] getOrderedExhibits(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
+    public static ArrayList<String> getOrderedExhibits(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
         ArrayList<String> orderedExhibits = new ArrayList<>();
 
         for(int i = 0; i < plan.size(); i++) {
             orderedExhibits.add(plan.get(i).getFirst());
         }
 
-        return (String[]) orderedExhibits.toArray();
+        return orderedExhibits;
     }
 }

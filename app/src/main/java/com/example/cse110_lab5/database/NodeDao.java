@@ -26,6 +26,9 @@ public interface NodeDao {
     @Query("SELECT * FROM `nodes` WHERE `kind`='exhibit'")
     List<ZooData.Node> getExhibits();
 
+    @Query("SELECT * FROM `nodes` WHERE `lat` IS NOT NULL AND `lng` IS NOT NULL")
+    List<ZooData.Node> getExhibitsWithLocations();
+
     @Query("SELECT * FROM `nodes`")
     LiveData<List<ZooData.Node>> getAllLive();
 

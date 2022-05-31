@@ -77,8 +77,8 @@ public class ZooData {
         public String name;
         public List<String> tags;
         public boolean selected;
-        public double lat;
-        public double lng;
+        public Double lat;
+        public Double lng;
 
         public String parent_id;
 
@@ -94,8 +94,8 @@ public class ZooData {
                     '}';
         }
 
-        //Constructor for exhibit without parent_id or exhibit_group
-        public Node(String id, String kind, String name, List<String> tags, double lat, double lng){
+        /*//Constructor for exhibit without parent_id or exhibit_group
+        public Node(String id, String kind, String name, List<String> tags, Double lat, Double lng){
             this.id = id;
             this.kind = kind;
             this.name = name;
@@ -115,7 +115,7 @@ public class ZooData {
             this.selected = false;
             this.parent_id = parent_id;
             //might need to grab lat and long from parent during compile time
-        }
+        }*/
 
         public static List<Node> loadJSON(Context context, String path) {
             try {
