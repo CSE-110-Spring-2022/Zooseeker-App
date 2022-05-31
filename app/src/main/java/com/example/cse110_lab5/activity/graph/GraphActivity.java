@@ -64,11 +64,10 @@ public class GraphActivity extends AppCompatActivity {
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
             GraphAdapter oEadapter = new GraphAdapter(this, plan);
-
-            int amtExs = oEadapter.getItemCount();
-            TextView total = findViewById(R.id.total);
-            total.setText("Total: " + amtExs);
             recyclerView.setAdapter(oEadapter);
+
+            TextView total = findViewById(R.id.total);
+            total.setText("Total: " + oEadapter.getItemCount());
 
             Intent nav = new Intent(this, NavigationActivity.class);
 
@@ -169,5 +168,22 @@ public class GraphActivity extends AppCompatActivity {
         }
 
         return currShortest;
+    }
+
+    /**
+     * Helper function to get the list of exhibits we plan to visit, in the order we plan to visit
+     * them in.
+     *
+     * @param plan      a List of pairs of (destination, path_to_destination)
+     * @return          the list of exhibits in order in String[] format
+     */
+    public static String[] getOrderedExhibits(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
+        ArrayList<String> orderedExhibits = new ArrayList<>();
+
+        for(int i = 0; i < plan.size(); i++) {
+            orderedExhibits.add(plan.get(i).getFirst());
+        }
+
+        return (String[]) orderedExhibits.toArray();
     }
 }
