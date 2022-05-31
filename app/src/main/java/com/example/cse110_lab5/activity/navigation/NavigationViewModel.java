@@ -3,11 +3,12 @@ package com.example.cse110_lab5.activity.navigation;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import static com.example.cse110_lab5.activity.graph.GraphActivity.tsp;
+import static com.example.cse110_lab5.activity.graph.GraphActivity.getOrderedExhibits;
 import com.example.cse110_lab5.activity.location.Coord;
 import com.example.cse110_lab5.database.EdgeDao;
 import com.example.cse110_lab5.database.GraphDatabase;
@@ -17,11 +18,9 @@ import com.example.cse110_lab5.database.ZooData;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -92,7 +91,7 @@ public class NavigationViewModel extends AndroidViewModel {
         if(this.plan.length > 1 && currExhibit != plan.length - 1) {
             ArrayList<String> newPlan = new ArrayList<>(Arrays.asList(this.plan));
             newPlan.remove(this.currExhibit);
-            this.plan = newPlan.toArray(new String[newPlan.size()]);
+            this.plan = newPlan.toArray(new String[0]);
             updateFromLocation();
         }
     }
@@ -101,8 +100,36 @@ public class NavigationViewModel extends AndroidViewModel {
         String target = nodeDao.get(plan[currExhibit]).id;
         String closestExhibit = findClosestExhibit(coord, nodeDao.getExhibitsWithLocations());
 
-        Log.d("Closest Exhibit", closestExhibit);
+        ArrayList<String> visitedExhibits = new ArrayList<>(List.of(this.plan)
+                .subList(0, currExhibit));
+        ArrayList<String> remainingExhibits = new ArrayList<>(List.of(this.plan)
+                .subList(currExhibit, this.plan.length));
+        ArrayList<String> tspPath = getOrderedExhibits(tsp(
+                ZooData.graph,
+                closestExhibit,
+                remainingExhibits
+                        .subList(0, remainingExhibits.size() - 1) // Exclude returning to the start
+                        .toArray(new String[remainingExhibits.size() - 1]),
+                "entrance_exit_gate"));
 
+        Log.d("Navigation/Closest Exhibit", closestExhibit);
+        Log.d("Navigation/Remaining Exhibits", remainingExhibits.toString());
+        Log.d("Navigation/Optimal Remaining Path", tspPath.toString());
+
+        if(!remainingExhibits.equals(tspPath)) { // If the optimal path is not the current path
+            //TODO: Prompt replan
+
+            // Construct the new plan and update the field
+            ArrayList<String> newPlan = new ArrayList<>();
+            newPlan.addAll(visitedExhibits);
+            newPlan.addAll(tspPath);
+            this.plan = newPlan.toArray(new String[0]);
+
+            Log.d("Navigation/Replanned Route", newPlan.toString());
+
+            // Change the target to the optimal next exhibit
+            target = nodeDao.get(plan[currExhibit]).id;
+        }
         this.curr_path = new DijkstraShortestPath<>(ZooData.graph).getPath(closestExhibit, target);
         displayStrings.setValue(generatePathStrings(this.curr_path, this.useDetailedPath));
     }

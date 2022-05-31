@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -152,58 +153,12 @@ public class NavigationActivity extends AppCompatActivity {
         }
 
         /* Listen for location Updates */
-        model.getLastKnownCoords().observe(this, viewModel::updateFromLocation);
-
-        /*var exhibits = nodeDao.getExhibits();
-        // Observe the model and detect off track when location is updated.
-        model.getLastKnownCoords().observe(this, (coord) -> {
-            Log.i(TAG, String.format("Observing location model update to %s", coord));
-            ZooData.Node targetNode = nodeDao.get(nextDirections.getFirst());
-            String newStartID = detectOffTrack(coord, exhibits, targetNode); //need access to list of all exhibits in path
-            Log.d(TAG, newStartID);
-
-            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> initial = plan.subList(0, curr_exhibit);
-            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> newPlan = plan.subList(curr_exhibit, plan.size());
-            List<String> remainderIds = new ArrayList<String>();
-            for (Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> node : newPlan){
-                if(!node.getFirst().equals(gateID))remainderIds.add(node.getFirst());
+        model.getLastKnownCoords().observe(this, new Observer<Coord>() {
+            @Override
+            public void onChanged(Coord coord) {
+                viewModel.updateFromLocation(coord);
+                total.setText(viewModel.getCurrExhibitName());
             }
-            if(remainderIds.size() == 0){
-                remainderIds.add(gateID);
-            }
-            String[] toVisit = new String[remainderIds.size()];
-            remainderIds.toArray(toVisit);
-            Log.d("plan/toVisit", Arrays.toString(toVisit));
-            newPlan = GraphActivity.tsp(graph, newStartID, toVisit);
-
-            // this removes the directions to the newStartID at the beginning and end of TSP since it's useless for us
-            // apart from rerouting
-            Log.d("plan/newOriginal", newPlan.toString());
-            newPlan.remove(0);
-            newPlan.remove(newPlan.size()-1);
-            Log.d("plan/initial", initial.toString());
-            Log.d("plan/new", newPlan.toString());
-
-            if(newPlan.size() > 0){
-                String lastExhibit = newPlan.get(newPlan.size()-1).getFirst();
-                if(!lastExhibit.equals(gateID)) {
-                    newPlan.add(new Pair<>(gateID, new DijkstraShortestPath<>(graph).getPath(newPlan.get(newPlan.size()-1).getFirst(), gateID)));
-                }
-
-                if(!newPlan.get(0).getFirst().equals(plan.get(curr_exhibit))){
-                    // prompt for replan to see if they actually want to accept our replan
-                }
-                initial.addAll(newPlan);
-            }
-            plan = initial;
-
-            nextDirections =
-                    plan.get(curr_exhibit);
-
-            String exhibitName = nodeDao.get(nextDirections.getFirst()).name;
-            total.setText(exhibitName);
-            boolean toggled = directionsSwitch.isChecked();
-            recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond(), toggled));
-        });*/
+        });
     }
 }
