@@ -180,7 +180,10 @@ public class ZooData {
 
             importer.importGraph(graph, reader);
 
-            NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
+            GraphDatabase db = GraphDatabase.getSingleton(context);
+            NodeDao nodeDao = db.nodeDao();
+            EdgeDao edgeDao = db.edgeDao();
+
             List<ZooData.Node> nodes = nodeDao.getExhibits();
             for (ZooData.Node node : nodes){
                 if(node.parent_id != null){
@@ -188,6 +191,8 @@ public class ZooData {
                     IdentifiedEdge edge = graph.addEdge(node.id, node.parent_id);
                     edge.setId(node.id + "_to_" + node.parent_id);
                     graph.setEdgeWeight(edge, 0);
+
+                    edgeDao.insert(new Edge(edge.id, edge.id));
                 }
             }
             return graph;

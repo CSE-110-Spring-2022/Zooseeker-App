@@ -151,50 +151,78 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     private ArrayList<String> generatePathStrings(GraphPath<String, ZooData.IdentifiedEdge> path, boolean useDetailedPath) {
-
-        ArrayList<String> pathStrings2 = new ArrayList<>();
-        for(int i = 0; i < path.getEdgeList().size(); i++) {
-            pathStrings2.add(path.getEdgeList().get(i).toString());
-        }
-        return pathStrings2;
-        /*
         ArrayList<String> pathStrings = new ArrayList<>();
         String lastStreetName = "";
+
         if(useDetailedPath) {
             Log.d("new path", "using detailed");
             for(int i = 0; i < path.getEdgeList().size(); i++) {
                 ZooData.IdentifiedEdge edge = path.getEdgeList().get(i);
-                ZooData.Node targetNode = nodeDao.get(edge.getTargetId());
+                ZooData.Node targetNode = nodeDao.get(path.getVertexList().get(i+1));
                 ZooData.Edge dbEdge = edgeDao.get(edge.getId());
 
                 String streetName = dbEdge.street;
                 String proceedOrContinue = lastStreetName.equals(streetName) ? "Continue" : "Proceed";
                 String weight = String.valueOf(path.getGraph().getEdgeWeight(edge));
-                String destination = targetNode.kind.equals("intersection") ?
-                        targetNode.name.replace("/", "and") :
-                        targetNode.name;
 
-                pathStrings.add(String.format(
-                        i != path.getEdgeList().size() - 1 ? "%s on %s %s ft towards the corner of %s" : "%s on %s %s ft to the %s Exhibit",
-                        proceedOrContinue,
-                        streetName,
-                        weight,
-                        destination
-                ));
+                String destination;
+                switch(targetNode.kind) {
+                    case "exhibit":
+                        destination = String.format("the %s Exhibit", targetNode.name);
+                        break;
+                    case "exhibit_group":
+                        destination = String.format("%s", targetNode.name);
+                        break;
+                    default:
+                    case "intersection":
+                        if(targetNode.name.split("/").length > 1) {
+                            destination = String.format("the corner of %s", targetNode.name.replace("/", "and"));
+                        } else {
+                            destination = String.format("the %s intersection", targetNode.name);
+                        }
+                        break;
+                }
+
+                if(targetNode.parent_id != null) {
+                    pathStrings.add(String.format("Find the %s Exhibit", targetNode.name));
+                } else {
+                    pathStrings.add(String.format(
+                            i != path.getEdgeList().size() - 1 ? "%s on %s %s ft towards %s" : "%s on %s %s ft to %s",
+                            proceedOrContinue,
+                            streetName,
+                            weight,
+                            destination
+                    ));
+                }
 
                 lastStreetName = streetName;
             }
+
         } else {
             Log.d("new path", "using basic");
             double totalDist = 0;
             for(int i = 0; i < path.getEdgeList().size(); i++) {
                 ZooData.IdentifiedEdge edge = path.getEdgeList().get(i);
-                ZooData.Node targetNode = nodeDao.get(edge.getTargetId());
+                ZooData.Node targetNode = nodeDao.get(path.getVertexList().get(i+1));
                 ZooData.Edge dbEdge = edgeDao.get(edge.getId());
 
-                String destination = targetNode.kind.equals("intersection") ?
-                        "the corner of " + targetNode.name.replace("/", "and") :
-                        "the " + targetNode.name + " Exhibit";
+                String destination;
+                switch(targetNode.kind) {
+                    case "exhibit":
+                        destination = String.format("the %s Exhibit", targetNode.name);
+                        break;
+                    case "exhibit_group":
+                        destination = String.format("%s", targetNode.name);
+                        break;
+                    default:
+                    case "intersection":
+                        if(targetNode.name.split("/").length > 1) {
+                            destination = String.format("the corner of %s", targetNode.name.replace("/", "and"));
+                        } else {
+                            destination = String.format("the %s intersection", targetNode.name);
+                        }
+                        break;
+                }
 
                 String streetName = dbEdge.street;
                 if(i != path.getEdgeList().size() - 1) {
@@ -211,34 +239,18 @@ public class NavigationViewModel extends AndroidViewModel {
                         totalDist = 0;
                     }
                 } else {
-                    pathStrings.add(String.format("Proceed on %s %s ft to the %s Exhibit",
-                            streetName,
-                            totalDist + path.getGraph().getEdgeWeight(edge),
-                            targetNode.name
-                    ));
+                    if (targetNode.parent_id != null) {
+                        pathStrings.add(String.format("Find the %s Exhibit", targetNode.name));
+                    } else {
+                        pathStrings.add(String.format("Proceed on %s %s ft towards %s",
+                                streetName,
+                                totalDist + path.getGraph().getEdgeWeight(edge),
+                                destination
+                        ));
+                    }
                 }
             }
         }
-        return pathStrings;*/
-    }
-
-    private ArrayList<ArrayList<ZooData.Edge>> generateCommonEdgeConnections(GraphPath<String, ZooData.IdentifiedEdge> exhibitPath){
-        ArrayList<ArrayList<ZooData.Edge>> edgeConnections = new ArrayList<>();
-        List<ZooData.IdentifiedEdge> edgeList = exhibitPath.getEdgeList();
-        ArrayList<ZooData.Edge> currentRoad = new ArrayList<>();
-        String lastStreetName = edgeDao.get(edgeList.get(0).getId()).street;
-        for(int i = 0; i < exhibitPath.getEdgeList().size(); i++) {
-            ZooData.IdentifiedEdge edge = edgeList.get(i);
-            ZooData.Edge dbEdge = edgeDao.get(edge.getId());
-            String currentStreetName = dbEdge.street;
-            if(!currentStreetName.equals(lastStreetName)) {
-                edgeConnections.add(currentRoad);
-                currentRoad = new ArrayList<>();
-            }
-            currentRoad.add(dbEdge);
-            lastStreetName = currentStreetName;
-        }
-        edgeConnections.add(currentRoad);
-        return edgeConnections;
+        return pathStrings;
     }
 }
