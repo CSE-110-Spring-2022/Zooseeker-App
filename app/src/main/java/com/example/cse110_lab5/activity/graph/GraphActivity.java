@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
-import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 import com.example.cse110_lab5.activity.navigation.NavigationActivity;
-import com.example.cse110_lab5.database.GraphDatabase;
-import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
