@@ -1,10 +1,7 @@
 package com.example.cse110_lab5.activity.navigation;
 
-import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,45 +19,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
-import com.example.cse110_lab5.activity.graph.GraphActivity;
 import com.example.cse110_lab5.activity.location.Coord;
 import com.example.cse110_lab5.activity.location.LocationModel;
-import com.example.cse110_lab5.database.GraphDatabase;
-import com.example.cse110_lab5.database.NodeDao;
-import com.example.cse110_lab5.database.ZooData;
-
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.alg.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    public RecyclerView recyclerView;
-    private int curr_exhibit = 0;
-    private final PermissionChecker permissionChecker = new PermissionChecker(this);
-    Pair<String,GraphPath<String, ZooData.IdentifiedEdge>> nextDirections; 
-    NodeDao nodeDao;
-
     Bundle bundle;
-    List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan;
-    Graph<String, ZooData.IdentifiedEdge> graph;
 
-    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
-    private final String TAG = "Location";
-
-    private final String gateID = "entrance_exit_gate";
-
-    private boolean useLocationService;
-    private LocationModel model;
-
+    public RecyclerView recyclerView;
     private NavigationViewModel viewModel;
 
+    private LocationModel model;
+
     TextView total;
+
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +110,7 @@ public class NavigationActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+        boolean useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
         // Set up the model
         model = new ViewModelProvider(this).get(LocationModel.class);

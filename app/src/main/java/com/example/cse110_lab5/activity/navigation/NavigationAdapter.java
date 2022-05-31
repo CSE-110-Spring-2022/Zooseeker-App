@@ -1,7 +1,5 @@
 package com.example.cse110_lab5.activity.navigation;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
-import com.example.cse110_lab5.database.EdgeDao;
-import com.example.cse110_lab5.database.GraphDatabase;
-import com.example.cse110_lab5.database.NodeDao;
-import com.example.cse110_lab5.database.ZooData;
-
-import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
 import java.util.List;
