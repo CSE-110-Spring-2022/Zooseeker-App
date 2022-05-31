@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ZooData {
 
-    public static final Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
+    public static Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
     @Entity(tableName = "edges")
     public static class Edge {
@@ -168,6 +168,7 @@ public class ZooData {
      * @return              a Graph object containing the graph represented by the JSON file
      */
     public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
+        graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
         JSONImporter<String, IdentifiedEdge> importer = new JSONImporter<>();
         importer.setVertexFactory(v -> v);
