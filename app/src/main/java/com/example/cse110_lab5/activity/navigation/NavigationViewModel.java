@@ -101,6 +101,8 @@ public class NavigationViewModel extends AndroidViewModel {
         String target = nodeDao.get(plan[currExhibit]).id;
         String closestExhibit = findClosestExhibit(coord, nodeDao.getExhibitsWithLocations());
 
+        Log.d("Closest Exhibit", closestExhibit);
+
         this.curr_path = new DijkstraShortestPath<>(ZooData.graph).getPath(closestExhibit, target);
         displayStrings.setValue(generatePathStrings(this.curr_path, this.useDetailedPath));
     }

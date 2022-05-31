@@ -110,6 +110,20 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
 
+        Button mockButton = findViewById(R.id.mock_btn);
+        mockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String lat = ((EditText)findViewById(R.id.lat)).getText().toString();
+                String lon = ((EditText)findViewById(R.id.lon)).getText().toString();
+                Log.d("lat", lat);
+                Log.d("lon", lon);
+                if(!lat.equals("") && !lon.equals("")) {
+                    model.mockLocation(new Coord(Double.parseDouble(lat), Double.parseDouble(lon)));
+                }
+            }
+        });
+
         Switch directionsSwitch = findViewById(R.id.directionsSwitch);
         directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -192,80 +206,4 @@ public class NavigationActivity extends AppCompatActivity {
             recyclerView.setAdapter(new NavigationAdapter(this, nextDirections.getSecond(), toggled));
         });*/
     }
-
-    public void onMockPressed(View v){
-        String lat = ((EditText)findViewById(R.id.lat)).getText().toString();
-        String lon = ((EditText)findViewById(R.id.lon)).getText().toString();
-        Log.d("lat", lat);
-        Log.d("lon", lon);
-        if(!lat.equals("") && !lon.equals(""))
-            model.mockLocation(new Coord(Double.parseDouble(lat),Double.parseDouble(lon)));
-    }
-
-    /*public void onNextPressed(View v) {
-        //List<Coord> json = LocationModel.loadJSON(this, "test_route.json");
-//        Log.d("Location", json.toString());
-//        model.mockRoute(json, 2000, TimeUnit.MILLISECONDS);
-        Log.d("Navigation", "Next button pressed");
-        if (curr_exhibit != plan.size() - 1) {
-            curr_exhibit += 1;
-
-            Button button = findViewById(R.id.prev_bttn);
-            button.setBackgroundColor(getResources().getColor(R.color.green_500));
-            button.setClickable(true);
-        }
-        if (curr_exhibit == plan.size() - 1){
-            Button button = findViewById(R.id.next_bttn);
-            button.setBackgroundColor(Color.GRAY);
-            button.setClickable(false);
-        }
-	nextDirections =
-		plan.get(curr_exhibit);
-
-        TextView total = findViewById(R.id.Exhibit_Name);
-        String name = nodeDao.get(nextDirections.getFirst()).name;
-        total.setText(name);
-        boolean toggled = directionsSwitch.isChecked();
-        NavigationAdapter pathAdapter = new NavigationAdapter(this, nextDirections.getSecond(), toggled);
-        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
-                pathAdapter.refreshView(toggled);
-                recyclerView.setAdapter(pathAdapter);
-            }
-        });
-        recyclerView.setAdapter(pathAdapter);
-
-    }
-
-    public void onPrevPressed(View v) {
-        Log.d("Navigation", "Prev button pressed");
-        if (curr_exhibit != 1) {
-            curr_exhibit -= 1;
-            Button button = findViewById(R.id.next_bttn);
-            button.setBackgroundColor(getResources().getColor(R.color.green_500));
-            button.setClickable(true);
-        }
-        if(curr_exhibit == 1){
-            Button button = findViewById(R.id.prev_bttn);
-            button.setBackgroundColor(Color.GRAY);
-            button.setClickable(false);
-        }
-	nextDirections = 
-		plan.get(curr_exhibit);
-
-        TextView total = findViewById(R.id.Exhibit_Name);
-        String name = nodeDao.get(nextDirections.getFirst()).name;
-        total.setText(name);
-        boolean toggled = directionsSwitch.isChecked();
-        NavigationAdapter pathAdapter = new NavigationAdapter(this, nextDirections.getSecond(), toggled);
-        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
-                pathAdapter.refreshView(toggled);
-                recyclerView.setAdapter(pathAdapter);
-            }
-        });
-        recyclerView.setAdapter(pathAdapter);    }*/
-
 }
