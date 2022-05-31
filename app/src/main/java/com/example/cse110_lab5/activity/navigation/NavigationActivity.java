@@ -206,7 +206,6 @@ public class NavigationActivity extends AppCompatActivity {
     public void onClearPlanPressed(View view){
         NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         nodeDao.clearAll();
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
+        finish();
     }
 }

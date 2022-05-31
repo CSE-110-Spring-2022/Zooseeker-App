@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +35,15 @@ import java.util.Set;
 public class GraphActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
+
+    ActivityResultLauncher<Intent> navLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    finish();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +89,7 @@ public class GraphActivity extends AppCompatActivity {
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    startActivity(nav);
+                    navLauncher.launch(nav);
                 }
             });
         }
@@ -215,4 +228,12 @@ public class GraphActivity extends AppCompatActivity {
         startActivity(mainActivity);
     }
 }
+
+
+//    @Override
+//    public void onRestart() {
+//        super.onRestart();
+//        finish();
+//    }
+
 
