@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 import com.example.cse110_lab5.activity.navigation.NavigationActivity;
+import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -196,15 +199,23 @@ public class GraphActivity extends AppCompatActivity {
      *                  respective target node
      */
     public List<Double> generateCumulativeDistances
-            (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan){
+            (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
         ArrayList<Double> cumulativeDistances = new ArrayList<>();
         Double totalDistance = 0.0;
-        for(Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> path: plan){
-            if(path.getSecond() != null){
+        for (Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> path : plan) {
+            if (path.getSecond() != null) {
                 totalDistance += path.getSecond().getWeight();
             }
             cumulativeDistances.add(totalDistance);
         }
         return cumulativeDistances;
     }
+
+    public void onClearPlanPressed(View view){
+        NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+        nodeDao.clearAll();
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        startActivity(mainActivity);
+    }
 }
+

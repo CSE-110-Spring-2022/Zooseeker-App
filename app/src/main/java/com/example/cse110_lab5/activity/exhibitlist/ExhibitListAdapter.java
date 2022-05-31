@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -67,13 +66,11 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
         private final TextView textView;
         private ZooData.Node exhibitItem;
         private final CheckBox checkBox;
-        private final Button clearSelection;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.exhibit_name);
             this.checkBox = itemView.findViewById(R.id.selected);
-            this.clearSelection = itemView.findViewById(R.id.exhibit_clear_button);
 
             this.checkBox.setOnClickListener(view -> {
                 if(selectedExhibits.contains(this.exhibitItem.id)){
