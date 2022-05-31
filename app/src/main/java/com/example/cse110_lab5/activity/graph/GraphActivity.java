@@ -63,8 +63,9 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
-            GraphAdapter oEadapter = new GraphAdapter(this, plan);
+            GraphAdapter oEadapter = new GraphAdapter(this, plan, generateCumulativeDistances(plan));
             recyclerView.setAdapter(oEadapter);
+
 
             TextView total = findViewById(R.id.total);
             total.setText("Total: " + oEadapter.getItemCount());
@@ -184,5 +185,18 @@ public class GraphActivity extends AppCompatActivity {
         }
 
         return orderedExhibits;
+    }
+
+    public List<Double> generateCumulativeDistances
+            (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan){
+        ArrayList<Double> cumulativeDistances = new ArrayList<>();
+        Double totalDistance = 0.0;
+        for(Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> path: plan){
+            if(path.getSecond() != null){
+                totalDistance += path.getSecond().getWeight();
+            }
+            cumulativeDistances.add(totalDistance);
+        }
+        return cumulativeDistances;
     }
 }
