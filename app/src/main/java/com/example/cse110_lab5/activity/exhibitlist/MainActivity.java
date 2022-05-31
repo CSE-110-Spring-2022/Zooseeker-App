@@ -102,7 +102,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClearExhibitsPressed(View v){
+    /**
+     * Sets all exhibits to unselected in the Node Database and on the display
+     *
+     * @param view the corresponding display view for the MainActivity
+     */
+    public void onClearExhibitsPressed(View view){
         NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         nodeDao.clearAll();
     }

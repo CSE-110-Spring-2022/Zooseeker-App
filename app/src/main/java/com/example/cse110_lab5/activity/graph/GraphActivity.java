@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
-import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 import com.example.cse110_lab5.activity.navigation.NavigationActivity;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
@@ -224,19 +223,18 @@ public class GraphActivity extends AppCompatActivity {
         return cumulativeDistances;
     }
 
+    /**
+     * Sets all exhibit items unselected in database
+     * Closes the corresponding NavigationActivity which will subsequently return
+     * to exhibit selection
+     *
+     * @param view the corresponding display View for the NavigationActivity
+     */
     public void onClearPlanPressed(View view){
         NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         nodeDao.clearAll();
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
+        finish();
     }
 }
-
-
-//    @Override
-//    public void onRestart() {
-//        super.onRestart();
-//        finish();
-//    }
 
 
