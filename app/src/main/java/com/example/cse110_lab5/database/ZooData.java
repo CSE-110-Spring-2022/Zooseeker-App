@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ZooData {
 
-    public static final Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
+    public static Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
     @Entity(tableName = "edges")
     public static class Edge {
@@ -77,8 +77,8 @@ public class ZooData {
         public String name;
         public List<String> tags;
         public boolean selected;
-        public double lat;
-        public double lng;
+        public Double lat;
+        public Double lng;
 
         public String parent_id;
 
@@ -89,14 +89,13 @@ public class ZooData {
                     ", kind='" + kind + '\'' +
                     ", name=" + name +
                     ", tags=" + tags +
-                    ", tags=" + tags +
                     ", lat=" + lat +
                     ", lng=" + lng +
                     '}';
         }
 
         //Constructor for exhibit without parent_id or exhibit_group
-        public Node(String id, String kind, String name, List<String> tags, double lat, double lng){
+        public Node(String id, String kind, String name, List<String> tags, Double lat, Double lng){
             this.id = id;
             this.kind = kind;
             this.name = name;
@@ -143,6 +142,13 @@ public class ZooData {
             return "(" + getSource() + " :" + id + ": " + getTarget() + ")";
         }
 
+        public String getTargetId() {
+            return getTarget().toString();
+        }
+        public String getSourceId() {
+            return getSource().toString();
+        }
+
         public static void attributeConsumer(Pair<IdentifiedEdge, String> pair, Attribute attr) {
             IdentifiedEdge edge = pair.getFirst();
             String attrName = pair.getSecond();
@@ -162,6 +168,7 @@ public class ZooData {
      * @return              a Graph object containing the graph represented by the JSON file
      */
     public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
+        graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
         JSONImporter<String, IdentifiedEdge> importer = new JSONImporter<>();
         importer.setVertexFactory(v -> v);
@@ -173,7 +180,10 @@ public class ZooData {
 
             importer.importGraph(graph, reader);
 
-            NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
+            GraphDatabase db = GraphDatabase.getSingleton(context);
+            NodeDao nodeDao = db.nodeDao();
+            EdgeDao edgeDao = db.edgeDao();
+
             List<ZooData.Node> nodes = nodeDao.getExhibits();
             for (ZooData.Node node : nodes){
                 if(node.parent_id != null){
@@ -181,6 +191,8 @@ public class ZooData {
                     IdentifiedEdge edge = graph.addEdge(node.id, node.parent_id);
                     edge.setId(node.id + "_to_" + node.parent_id);
                     graph.setEdgeWeight(edge, 0);
+
+                    edgeDao.insert(new Edge(edge.id, edge.id));
                 }
             }
             return graph;

@@ -7,7 +7,10 @@
 
     <include
         android:id="@+id/imageView2"
-        layout="@layout/top_bar" />
+        layout="@layout/top_bar"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/Exhibit_Name"
@@ -31,25 +34,23 @@
         android:paddingLeft="24dp"
         android:paddingTop="24dp"
         android:paddingRight="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/lat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/next_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="20dp"
         android:layout_marginBottom="36dp"
-        android:onClick="onNextPressed"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/path_to_exhibit"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/prev_bttn" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.758"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/mock_btn"
@@ -66,13 +67,24 @@
         android:id="@+id/prev_bttn"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="36dp"
-        android:onClick="onPrevPressed"
         android:text="Prev"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/next_bttn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.244"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/skip_bttn"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:text="Skip"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/path_to_exhibit" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/lat"
@@ -81,7 +93,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginBottom="8dp"
         android:hint="Latitude"
-        android:inputType="numberSigned"
+        android:inputType="numberSigned|numberDecimal"
         android:minHeight="48dp"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/lon"
@@ -94,10 +106,22 @@
         android:layout_marginStart="64dp"
         android:layout_marginBottom="8dp"
         android:hint="Longitude"
-        android:inputType="numberSigned"
+        android:inputType="numberSigned|numberDecimal"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/prev_bttn"
         app:layout_constraintStart_toStartOf="@+id/path_to_exhibit" />
+
+    <Switch
+        android:id="@+id/directionsSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:text="Detailed View"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.913" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

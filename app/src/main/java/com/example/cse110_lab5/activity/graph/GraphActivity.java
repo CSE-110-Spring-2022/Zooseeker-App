@@ -47,7 +47,7 @@ public class GraphActivity extends AppCompatActivity {
 
         if (bundle != null) {
             toVisit = bundle.getStringArray("toVisit");
-            g = loadZooGraphJSON(this, bundle.getString("path"));
+            g = loadZooGraphJSON(this, bundle.getString("filepath"));
             start = bundle.getString("start");
         }
 
@@ -64,21 +64,15 @@ public class GraphActivity extends AppCompatActivity {
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
             GraphAdapter oEadapter = new GraphAdapter(this, plan);
-
-            int amtExs = oEadapter.getItemCount() -2;
-            TextView total = findViewById(R.id.total);
-            total.setText("Total: " + amtExs);
             recyclerView.setAdapter(oEadapter);
 
+            TextView total = findViewById(R.id.total);
+            total.setText("Total: " + oEadapter.getItemCount());
+
             Intent nav = new Intent(this, NavigationActivity.class);
-
-            for (int i = 0;  i< plan.size(); i++) {
-                Log.d("graph", ""+i);
-                nav.putExtra(String.valueOf(i), plan.get(i));
-            }
-
-	        nav.putExtra("toVisit", toVisit);
-            nav.putExtra("path", bundle.getString("path"));
+            ArrayList<String> orderedExhibits = getOrderedExhibits(plan);
+            orderedExhibits.add(start);
+            nav.putExtra("plan", orderedExhibits.toArray(new String[orderedExhibits.size()]));
 
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
@@ -91,19 +85,42 @@ public class GraphActivity extends AppCompatActivity {
 
     /**
      * Approximation of TSP that finds the approximate shortest path starting from start and hitting
-     * each node in visit before ending at start.
+     * each node in visit before ending at end.
+     *
+     * @param g             The graph to search through
+     * @param start         The id of the starting node
+     * @param visit         The ids of each of the nodes to visit, excluding the start
+     * @param end           The id of the ending node
+     *
+     * @return              The path represented as a list of pairs of nodes and the paths to reach
+     *                      that node from the previous node. Returns null if a given node to visit
+     *                      is unreachable.
+     */
+    public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit, String end) {
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = tsp(g, start, visit);
+        if(path.size() != 0) {
+            String prev = path.get(path.size() - 1).getFirst();
+            path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(prev, end)));
+        } else {
+            path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(start, end)));
+        }
+        return path;
+    }
+
+    /**
+     * Approximation of TSP that finds the approximate shortest path starting from start and hitting
+     * each node in visit.
      *
      * @param g             The graph to search through
      * @param start         The id of the starting node
      * @param visit         The ids of each of the nodes to visit, excluding the start
      *
      * @return              The path represented as a list of pairs of nodes and the paths to reach
-     *                      that node from the previous node. Includes the start node itself (with a
-     *                      null path). Returns null if a given node to visit is unreachable.
+     *                      that node from the previous node. Returns null if a given node to visit
+     *                      is unreachable.
      */
     public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit) {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> finalPath = new ArrayList<>();
-        finalPath.add(new Pair<>(start, null));
 
         Set<String> remaining = new HashSet<>(Arrays.asList(visit));
         String prev = start;
@@ -124,8 +141,6 @@ public class GraphActivity extends AppCompatActivity {
             prev = shortestPath.getEndVertex();
             remaining.remove(prev);
         }
-
-        finalPath.add(new Pair<>(start, new DijkstraShortestPath<>(g).getPath(prev, start)));
 
         return finalPath;
     }
@@ -152,5 +167,22 @@ public class GraphActivity extends AppCompatActivity {
         }
 
         return currShortest;
+    }
+
+    /**
+     * Helper function to get the list of exhibits we plan to visit, in the order we plan to visit
+     * them in.
+     *
+     * @param plan      a List of pairs of (destination, path_to_destination)
+     * @return          the list of exhibits in order in String[] format
+     */
+    public static ArrayList<String> getOrderedExhibits(List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
+        ArrayList<String> orderedExhibits = new ArrayList<>();
+
+        for(int i = 0; i < plan.size(); i++) {
+            orderedExhibits.add(plan.get(i).getFirst());
+        }
+
+        return orderedExhibits;
     }
 }
