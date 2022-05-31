@@ -175,12 +175,10 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView exhibitName;
-        private final TextView distance;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             exhibitName = (TextView) itemView.findViewById(R.id.direction);
-            distance = (TextView) itemView.findViewById(R.id.distance);
         }
 
     }
