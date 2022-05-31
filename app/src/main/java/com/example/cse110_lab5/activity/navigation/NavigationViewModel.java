@@ -30,7 +30,6 @@ public class NavigationViewModel extends AndroidViewModel {
 
     GraphPath<String, ZooData.IdentifiedEdge> curr_path;
 
-    // TODO: make these SharedPreferences
     String[] plan;
     int currExhibit = 0;
     boolean useDetailedPath = false;
@@ -66,6 +65,14 @@ public class NavigationViewModel extends AndroidViewModel {
 
     public String getCurrExhibitName() {
         return nodeDao.get(plan[currExhibit]).name;
+    }
+
+    public void setCurrExhibit(int curr) {
+        this.currExhibit= curr;
+    }
+
+    public int getCurrExhibit() {
+        return currExhibit;
     }
 
     public void toggleDetailedDirections() {

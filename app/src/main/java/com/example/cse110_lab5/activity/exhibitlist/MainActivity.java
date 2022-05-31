@@ -1,6 +1,8 @@
 package com.example.cse110_lab5.activity.exhibitlist;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,10 +20,13 @@ import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.activity.exhibitlist.ExhibitListAdapter;
 import com.example.cse110_lab5.activity.exhibitlist.ExhibitListViewModel;
 import com.example.cse110_lab5.activity.graph.GraphActivity;
+import com.example.cse110_lab5.activity.navigation.NavigationActivity;
+import com.example.cse110_lab5.database.Converters;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,59 +37,70 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ExhibitListViewModel viewModel = new ViewModelProvider(this).get(ExhibitListViewModel.class);
 
-        String[] sampleExhibits = {"lions", "gators", "gorillas", "arctic_foxes"};
-        //for (String exhibit : sampleExhibits) {
-        //    sampleExhibitItems.add(new ZooData.Node(exhibit));
-        //}
-        ExhibitListAdapter adapter = new ExhibitListAdapter();
-        adapter.setHashStableIds(true);
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        //Instantiate Database
-        NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
-        List<ZooData.Node> sampleExhibitItems = nodeDao.getExhibits();
+        int curr_exhibit = sharedPref.getInt("curr_exhibit", -1);
 
-        //Search bar
-        EditText searchBar = findViewById(R.id.search_bar);
-        searchBar.addTextChangedListener(new TextWatcher(){
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.d("search_bar_before",charSequence.toString());
-            }
+        if(curr_exhibit != -1){
+            Intent nav = new Intent(this, NavigationActivity.class);
+            startActivity(nav);
+        } else {
+            setContentView(R.layout.activity_main);
+            ExhibitListViewModel viewModel = new ViewModelProvider(this).get(ExhibitListViewModel.class);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count){
-                Log.d("search_bar",charSequence.toString());
-                List<ZooData.Node> sampleExhibitItems = nodeDao.getFiltered(charSequence.toString());
-                adapter.setExhibitItems(sampleExhibitItems);
-            }
+            String[] sampleExhibits = {"lions", "gators", "gorillas", "arctic_foxes"};
+            //for (String exhibit : sampleExhibits) {
+            //    sampleExhibitItems.add(new ZooData.Node(exhibit));
+            //}
+            ExhibitListAdapter adapter = new ExhibitListAdapter();
+            adapter.setHashStableIds(true);
 
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
+            //Instantiate Database
+            NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+            List<ZooData.Node> sampleExhibitItems = nodeDao.getExhibits();
 
-        adapter.setExhibitItems(sampleExhibitItems);
-        adapter.setOnCheckBoxClickedHandler(viewModel::toggleSelected);
-        viewModel.getTodoListItems().observe(this, adapter::setExhibitItems);
-        recyclerView = findViewById(R.id.exhibit_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+            //Search bar
+            EditText searchBar = findViewById(R.id.search_bar);
+            searchBar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.d("search_bar_before", charSequence.toString());
+                }
 
-        Intent notEmpty = new Intent(this, GraphActivity.class);
+                @Override
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                    Log.d("search_bar", charSequence.toString());
+                    List<ZooData.Node> sampleExhibitItems = nodeDao.getFiltered(charSequence.toString());
+                    adapter.setExhibitItems(sampleExhibitItems);
+                }
 
-        final Button button = findViewById(R.id.plan_bttn);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String start = "entrance_exit_gate";
-                String path = "sample_zoo_graph.json";
-                notEmpty.putExtra("filepath", path);
-                notEmpty.putExtra("start", start);
-                notEmpty.putExtra("toVisit", nodeDao.getSelected().toArray(new String[]{}));
-                startActivity(notEmpty);
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
 
+            adapter.setExhibitItems(sampleExhibitItems);
+            adapter.setOnCheckBoxClickedHandler(viewModel::toggleSelected);
+            viewModel.getTodoListItems().observe(this, adapter::setExhibitItems);
+            recyclerView = findViewById(R.id.exhibit_list);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+
+            Intent notEmpty = new Intent(this, GraphActivity.class);
+
+            final Button button = findViewById(R.id.plan_bttn);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String start = "entrance_exit_gate";
+                    String path = "sample_zoo_graph.json";
+                    notEmpty.putExtra("filepath", path);
+                    notEmpty.putExtra("start", start);
+                    notEmpty.putExtra("toVisit", nodeDao.getSelected().toArray(new String[]{}));
+                    startActivity(notEmpty);
+                }
+            });
+        }
     }
 }
