@@ -17,6 +17,9 @@ public interface NodeDao {
     @Insert
     List<Long> insertAll(List<ZooData.Node> nodes);
 
+    @Query("UPDATE `nodes` SET `selected`=0")
+    int clearAll();
+
     @Query("SELECT * FROM `nodes` WHERE `id`=:id")
     ZooData.Node get(String id);
 

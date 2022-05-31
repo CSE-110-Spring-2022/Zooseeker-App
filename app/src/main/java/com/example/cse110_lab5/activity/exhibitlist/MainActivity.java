@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Loading Preferences Current Exhibit", curr_exhibit + "");
         String plan = sharedPref.getString("plan", "");
         Log.d("Loading Preferences Plan", plan);
-        if(curr_exhibit != -1){
+        if (curr_exhibit != -1) {
             Intent nav = new Intent(this, NavigationActivity.class);
             nav.putExtra("plan", Converters.fromString(plan).toArray(new String[0]));
             nav.putExtra("curr_exhibit", curr_exhibit);
@@ -100,5 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onClearExhibitsPressed(View v){
+        NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+        nodeDao.clearAll();
     }
 }
