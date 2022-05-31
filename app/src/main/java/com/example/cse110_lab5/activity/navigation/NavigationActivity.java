@@ -31,10 +31,6 @@ import java.util.Arrays;
 import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
-import com.example.cse110_lab5.database.ZooData;
-
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.util.Pair;
 
 public class NavigationActivity extends AppCompatActivity {
 
