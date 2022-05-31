@@ -86,7 +86,7 @@ public class TestGraph {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = GraphActivity.tsp(g, start, toVisit);
 
         // Ensure that the generated path is of expected size (just the entrance and exit)
-        assertEquals(2, path.size());
+        assertEquals(0, path.size());
     }
 
     /**
@@ -100,11 +100,11 @@ public class TestGraph {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit);
 
         // Ensure that the generated path is of expected size (entrance and exit, and two exhibits)
-        assertEquals(4, paths.size());
+        assertEquals(2, paths.size());
 
         // Ensure that the paths between each exhibit are the smallest possible size and have correct lengths
-        int[] expectedWeights = {310, 200, 510};
-        int[] expectedLengths = {3, 1, 4};
+        int[] expectedWeights = {200, 510};
+        int[] expectedLengths = {1, 4};
         for(int i = 1; i < paths.size(); i++) {
             Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> pair = paths.get(i);
             if (pair.getSecond() != null) {
