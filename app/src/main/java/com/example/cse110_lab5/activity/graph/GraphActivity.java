@@ -98,8 +98,12 @@ public class GraphActivity extends AppCompatActivity {
      */
     public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit, String end) {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = tsp(g, start, visit);
-        String prev = path.get(path.size()-1).getFirst();
-        path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(prev, end)));
+        if(path.size() != 0) {
+            String prev = path.get(path.size() - 1).getFirst();
+            path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(prev, end)));
+        } else {
+            path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(start, end)));
+        }
         return path;
     }
 

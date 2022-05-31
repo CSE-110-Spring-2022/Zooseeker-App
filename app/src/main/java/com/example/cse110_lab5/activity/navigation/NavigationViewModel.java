@@ -97,6 +97,7 @@ public class NavigationViewModel extends AndroidViewModel {
     }
 
     public void updateFromLocation(Coord coord) {
+        this.lastKnownCoord = coord;
         String target = nodeDao.get(plan[currExhibit]).id;
         String closestExhibit = findClosestExhibit(coord, nodeDao.getExhibitsWithLocations());
 
