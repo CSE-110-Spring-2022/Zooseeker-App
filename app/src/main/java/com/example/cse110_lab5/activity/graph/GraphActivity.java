@@ -46,9 +46,9 @@ public class GraphActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         if (bundle != null) {
+            toVisit = bundle.getStringArray("toVisit");
             g = loadZooGraphJSON(this, bundle.getString("path"));
             start = bundle.getString("start");
-            toVisit = bundle.getStringArray("toVisit");
         }
 
         if (toVisit.length == 0) {
@@ -73,8 +73,12 @@ public class GraphActivity extends AppCompatActivity {
             Intent nav = new Intent(this, NavigationActivity.class);
 
             for (int i = 0;  i< plan.size(); i++) {
+                Log.d("graph", ""+i);
                 nav.putExtra(String.valueOf(i), plan.get(i));
             }
+
+	        nav.putExtra("toVisit", toVisit);
+            nav.putExtra("path", bundle.getString("path"));
 
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +129,7 @@ public class GraphActivity extends AppCompatActivity {
 
         return finalPath;
     }
+
 
     /**
      * Helper function to find the shortest path in a ManyToManyShortestPaths object

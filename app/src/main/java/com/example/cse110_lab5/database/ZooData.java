@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
@@ -26,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ZooData {
+
+    public static final Graph<String, IdentifiedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
     @Entity(tableName = "edges")
     public static class Edge {
@@ -74,6 +77,10 @@ public class ZooData {
         public String name;
         public List<String> tags;
         public boolean selected;
+        public double lat;
+        public double lng;
+
+        public String parent_id;
 
         @Override
         public String toString() {
@@ -82,15 +89,33 @@ public class ZooData {
                     ", kind='" + kind + '\'' +
                     ", name=" + name +
                     ", tags=" + tags +
+                    ", tags=" + tags +
+                    ", lat=" + lat +
+                    ", lng=" + lng +
                     '}';
         }
 
-        public Node(String id, String kind, String name, List<String> tags){
+        //Constructor for exhibit without parent_id or exhibit_group
+        public Node(String id, String kind, String name, List<String> tags, double lat, double lng){
             this.id = id;
             this.kind = kind;
             this.name = name;
             this.tags = tags;
             this.selected = false;
+            this.lat = lat;
+            this.lng = lng;
+        }
+
+        //Constructor for exhibit with parent_id / part of an exhibit_group
+        @Ignore //know idea what this does but it fixes the errors for multiple constructors
+        public Node(String id, String kind, String name, List<String> tags, String parent_id){
+            this.id = id;
+            this.kind = kind;
+            this.name = name;
+            this.tags = tags;
+            this.selected = false;
+            this.parent_id = parent_id;
+            //might need to grab lat and long from parent during compile time
         }
 
         public static List<Node> loadJSON(Context context, String path) {
@@ -137,7 +162,6 @@ public class ZooData {
      * @return              a Graph object containing the graph represented by the JSON file
      */
     public static Graph<String, IdentifiedEdge> loadZooGraphJSON(Context context, String path) {
-        Graph<String, IdentifiedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedEdge.class);
 
         JSONImporter<String, IdentifiedEdge> importer = new JSONImporter<>();
         importer.setVertexFactory(v -> v);
@@ -147,8 +171,19 @@ public class ZooData {
             InputStream inputStream = context.getAssets().open(path);
             Reader reader = new InputStreamReader(inputStream);
 
-            importer.importGraph(g, reader);
-            return g;
+            importer.importGraph(graph, reader);
+
+            NodeDao nodeDao = GraphDatabase.getSingleton(context).nodeDao();
+            List<ZooData.Node> nodes = nodeDao.getExhibits();
+            for (ZooData.Node node : nodes){
+                if(node.parent_id != null){
+                    graph.addVertex(node.id);
+                    IdentifiedEdge edge = graph.addEdge(node.id, node.parent_id);
+                    edge.setId(node.id + "_to_" + node.parent_id);
+                    graph.setEdgeWeight(edge, 0);
+                }
+            }
+            return graph;
         } catch (IOException e) {
             Log.e("IO", "Could not load zoo graph info, " + e);
             return null;

@@ -42,9 +42,9 @@ public class TodoDatabaseTest {
                 .build();
         edgeDao = db.edgeDao();
         nodeDao = db.nodeDao();
-        testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}));
-        testNode2 = new ZooData.Node("test-exhibit2", "exhibit", "test2", Arrays.asList(new String[]{"tag1", "penguins"}));
-        testNode3 = new ZooData.Node("test-exhibit3", "exhibit", "test3", Arrays.asList(new String[]{"penguins"}));
+        testNode = new ZooData.Node("test-exhibit", "exhibit", "test", Arrays.asList(new String[]{"test", "tag1", "penguins"}),0,0);
+        testNode2 = new ZooData.Node("test-exhibit2", "exhibit", "test2", Arrays.asList(new String[]{"tag1", "penguins"}), 0, 0);
+        testNode3 = new ZooData.Node("test-exhibit3", "exhibit", "test3", Arrays.asList(new String[]{"penguins"}), 0,0);
         long nodeID = nodeDao.insert(testNode);
         long nodeID2 = nodeDao.insert(testNode2);
         long nodeID3 = nodeDao.insert(testNode3);
