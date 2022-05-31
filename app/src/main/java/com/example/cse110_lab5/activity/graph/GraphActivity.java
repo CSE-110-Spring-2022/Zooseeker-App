@@ -63,7 +63,7 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
-            GraphAdapter oEadapter = new GraphAdapter(this, plan.subList(1, plan.size() - 1));
+            GraphAdapter oEadapter = new GraphAdapter(this, plan);
 
             int amtExs = oEadapter.getItemCount();
             TextView total = findViewById(R.id.total);
@@ -91,19 +91,38 @@ public class GraphActivity extends AppCompatActivity {
 
     /**
      * Approximation of TSP that finds the approximate shortest path starting from start and hitting
-     * each node in visit before ending at start.
+     * each node in visit before ending at end.
+     *
+     * @param g             The graph to search through
+     * @param start         The id of the starting node
+     * @param visit         The ids of each of the nodes to visit, excluding the start
+     * @param end           The id of the ending node
+     *
+     * @return              The path represented as a list of pairs of nodes and the paths to reach
+     *                      that node from the previous node. Returns null if a given node to visit
+     *                      is unreachable.
+     */
+    public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit, String end) {
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> path = tsp(g, start, visit);
+        String prev = path.get(path.size()-1).getFirst();
+        path.add(new Pair<>(end, new DijkstraShortestPath<>(g).getPath(prev, end)));
+        return path;
+    }
+
+    /**
+     * Approximation of TSP that finds the approximate shortest path starting from start and hitting
+     * each node in visit.
      *
      * @param g             The graph to search through
      * @param start         The id of the starting node
      * @param visit         The ids of each of the nodes to visit, excluding the start
      *
      * @return              The path represented as a list of pairs of nodes and the paths to reach
-     *                      that node from the previous node. Includes the start node itself (with a
-     *                      null path). Returns null if a given node to visit is unreachable.
+     *                      that node from the previous node. Returns null if a given node to visit
+     *                      is unreachable.
      */
     public static List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> tsp(Graph<String, ZooData.IdentifiedEdge> g, String start, String[] visit) {
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> finalPath = new ArrayList<>();
-        finalPath.add(new Pair<>(start, null));
 
         Set<String> remaining = new HashSet<>(Arrays.asList(visit));
         String prev = start;
@@ -124,8 +143,6 @@ public class GraphActivity extends AppCompatActivity {
             prev = shortestPath.getEndVertex();
             remaining.remove(prev);
         }
-
-        finalPath.add(new Pair<>(start, new DijkstraShortestPath<>(g).getPath(prev, start)));
 
         return finalPath;
     }
