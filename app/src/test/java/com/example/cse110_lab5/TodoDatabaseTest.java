@@ -1,9 +1,7 @@
 package com.example.cse110_lab5;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import android.content.Context;
 
@@ -34,6 +32,9 @@ public class TodoDatabaseTest {
     private ZooData.Node testNode2;
     private ZooData.Node testNode3;
 
+    /**
+     * Initialize sample database for testing
+     */
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -49,12 +50,15 @@ public class TodoDatabaseTest {
         long nodeID2 = nodeDao.insert(testNode2);
         long nodeID3 = nodeDao.insert(testNode3);
     }
-
+    
     @After
     public void closeDb() throws IOException {
         db.close();
     }
 
+    /**
+     * Testing to see that ZooData are being inserted and retrieved from the database correctly
+     */
     @Test
     public void testGet() {
         ZooData.Edge testEdge = new ZooData.Edge("test-edge", "test street");

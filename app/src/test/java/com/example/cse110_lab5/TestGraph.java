@@ -116,6 +116,10 @@ public class TestGraph {
         }
     }
 
+    /**
+     * Ensure that path-generating algorithm that tracks back to the entrance gate following
+     * visiting list of exhibits returns the correct shortest path
+     */
     @Test
     public void testEndingNodeShortestPath(){
         String start = "entrance_exit_gate";
@@ -131,10 +135,14 @@ public class TestGraph {
                 System.out.println(pair.getSecond().getLength());
                 assertEquals(expectedWeights[i - 1], pair.getSecond().getWeight(), 0.0001);
                 assertEquals(expectedLengths[i - 1], pair.getSecond().getLength());
-
             }
         }
     }
+
+    /**
+     * Ensure that the iterative algorithm returning cumulative distances returned for the route
+     * summary page are correct
+     */
     @Test
     public void testGenerateCumulativeDistances(){
         String start = "entrance_exit_gate";
@@ -151,6 +159,10 @@ public class TestGraph {
         }
     }
 
+    /**
+     * Ensure that the algorithm for extracting the order of exhibits returns the list of path
+     * exhibits in the correct order
+     */
     @Test
     public void testGetExhibitNames(){
         String start = "entrance_exit_gate";
