@@ -33,9 +33,11 @@ public class NavigationViewModel extends AndroidViewModel {
     String[] plan;
     int currExhibit = 0;
     boolean useDetailedPath = false;
+    boolean replanRoute = false;
 
     Coord lastKnownCoord;
     MutableLiveData<List<String>> displayStrings;
+    MutableLiveData<Boolean> ot = new MutableLiveData<>();
 
     public NavigationViewModel(@NonNull Application application) {
         super(application);
@@ -107,6 +109,16 @@ public class NavigationViewModel extends AndroidViewModel {
         }
     }
 
+    public MutableLiveData<Boolean> getOt() {
+        return ot;
+    }
+
+    public void replan() {
+        ot.setValue(false);
+        replanRoute = true;
+        updateFromLocation();
+    }
+
     public void updateFromLocation(Coord coord) {
         this.lastKnownCoord = coord;
         String target = nodeDao.get(plan[currExhibit]).id;
@@ -130,17 +142,20 @@ public class NavigationViewModel extends AndroidViewModel {
 
         if(!remainingExhibits.equals(tspPath)) { // If the optimal path is not the current path
             //TODO: Prompt replan
+            ot.setValue(true);
+            if (replanRoute) {
+                ArrayList<String> newPlan = new ArrayList<>();
+                newPlan.addAll(visitedExhibits);
+                newPlan.addAll(tspPath);
+                this.plan = newPlan.toArray(new String[0]);
 
+                Log.d("Navigation/Replanned Route", newPlan.toString());
+
+                // Change the target to the optimal next exhibit
+                target = nodeDao.get(plan[currExhibit]).id;
+                replanRoute = false;
+            }
             // Construct the new plan and update the field
-            ArrayList<String> newPlan = new ArrayList<>();
-            newPlan.addAll(visitedExhibits);
-            newPlan.addAll(tspPath);
-            this.plan = newPlan.toArray(new String[0]);
-
-            Log.d("Navigation/Replanned Route", newPlan.toString());
-
-            // Change the target to the optimal next exhibit
-            target = nodeDao.get(plan[currExhibit]).id;
         }
         this.curr_path = new DijkstraShortestPath<>(ZooData.graph).getPath(closestExhibit, target);
         displayStrings.setValue(generatePathStrings(this.curr_path, this.useDetailedPath));

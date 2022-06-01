@@ -1,4 +1,5 @@
 package com.example.cse110_lab5.activity.graph;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,17 +23,20 @@ import java.util.List;
 public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.ViewHolder>{
     private List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs = Collections.emptyList();
     private Context context;
+    private List<Double> cumulativeDistances = Collections.emptyList();
 
-    public GraphAdapter(Context context, List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs) {
+    public GraphAdapter(Context context, List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plannedExs, List<Double> cumulativeDistances) {
         this.plannedExs = plannedExs;
         this.context = context;
+        this.cumulativeDistances = cumulativeDistances;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.exhibit_planned, parent, false);
+                .inflate(R.layout.exhibit_planned_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,15 +44,15 @@ public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> object = plannedExs.get(position);
         ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
-
+        Double distance = this.cumulativeDistances.get(position);
         if(node == null) {
             holder.exhibitName.setText(object.getFirst());
             Log.d("Nodes", "node " + object.getFirst() + " did not exist in database");
         } else {
             holder.exhibitName.setText(node.name);
+            holder.cumulativeDistance.setText(distance.toString() + "ft");
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -57,10 +61,12 @@ public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView exhibitName;
+        private final TextView cumulativeDistance;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             exhibitName = (TextView) itemView.findViewById(R.id.exhibit_planned);
+            cumulativeDistance = (TextView) itemView.findViewById(R.id.cumulative_distance);
         }
 
     }
