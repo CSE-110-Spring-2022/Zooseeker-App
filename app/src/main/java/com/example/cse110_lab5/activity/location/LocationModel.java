@@ -109,17 +109,4 @@ public class LocationModel extends AndroidViewModel {
             }
         });
     }
-
-    public static List<Coord> loadJSON(Context context, String path) {
-        try {
-            InputStream input = context.getAssets().open(path);
-            Reader reader = new InputStreamReader(input);
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<Coord>>(){}.getType();
-            return gson.fromJson(reader, type);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Collections. emptyList();
-        }
-    }
 }

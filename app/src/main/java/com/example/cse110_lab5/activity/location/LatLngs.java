@@ -13,13 +13,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LatLngs {
-    public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
-    public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
-
+    /**
+     *
+     * @param location to convert to a Longitude and Latitude pair
+     * @return the corresponding LatLng for the given location
+     */
     public static LatLng fromLocation(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
+    /**
+     *
+     * @param latLng the Latitude and Longitude pair to convert
+     * @return the corresponding Location for that pair
+     */
     public static Location toGPSLocation(LatLng latLng) {
         Location location = new Location(LocationManager.GPS_PROVIDER);
         location.setLatitude(latLng.latitude);
@@ -30,6 +37,12 @@ public class LatLngs {
         return location;
     }
 
+    /**
+     *
+     * @param l1 first longitude and latitude pair
+     * @param l2 second longitude and latitude pair
+     * @return   the midpoint latitude and longitude pair between the two
+     */
     public static LatLng midpoint(LatLng l1, LatLng l2) {
         return new LatLng(
             (l1.latitude + l2.latitude) / 2,
@@ -37,6 +50,13 @@ public class LatLngs {
         );
     }
 
+    /**
+     *
+     * @param l1 first longitude and latitude pair
+     * @param l2 second longitude and latitude pair
+     * @param n  the number of divisions to generate between the pairs
+     * @return a list of Latitude and Longitude pairs between the two pairs
+     */
     public static List<LatLng> pointsBetween(LatLng l1, LatLng l2, int n) {
         var dLat = Math.abs(l1.latitude - l2.latitude);
         var dLng = Math.abs(l1.longitude - l2.longitude);
