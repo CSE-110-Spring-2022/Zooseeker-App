@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
         adapter.setExhibitItems(sampleExhibitItems);
         adapter.setOnCheckBoxClickedHandler(viewModel::toggleSelected);
         viewModel.getTodoListItems().observe(this, adapter::setExhibitItems);
+
+        TextView compactList = findViewById(R.id.compact_list);
+        viewModel.getSelectedItems().observe(this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                compactList.setText("Selected Exhibits: \n" + String.join(", ", strings));
+            }
+        });
         recyclerView = findViewById(R.id.exhibit_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

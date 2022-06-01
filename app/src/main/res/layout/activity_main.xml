@@ -54,7 +54,7 @@
       android:layout_marginTop="4dp"
       android:paddingLeft="24dp"
       android:paddingRight="24dp"
-      app:layout_constraintBottom_toTopOf="@+id/plan_bttn"
+      app:layout_constraintBottom_toTopOf="@+id/compact_list"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/search_bar" />
@@ -74,4 +74,18 @@
       app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toEndOf="@+id/textView2"
       app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/compact_list"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:gravity="left"
+      android:paddingLeft="24dp"
+      android:paddingRight="24dp"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp"
+      android:hint="No Exhibits Selected"
+      app:layout_constraintBottom_toTopOf="@+id/plan_bttn"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

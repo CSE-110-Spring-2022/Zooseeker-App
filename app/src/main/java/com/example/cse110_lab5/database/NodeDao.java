@@ -44,6 +44,9 @@ public interface NodeDao {
     @Query("SELECT id FROM `nodes` WHERE `kind`='exhibit' AND `selected`=1")
     List<String> getSelected();
 
+    @Query("SELECT name FROM `nodes` WHERE `kind`='exhibit' AND `selected`=1")
+    LiveData<List<String>> getSelectedLive();
+
     @Query("SELECT * FROM `nodes` WHERE `kind`='gate'")
     ZooData.Node getGate();
 
