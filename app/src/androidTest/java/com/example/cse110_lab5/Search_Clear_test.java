@@ -1,4 +1,4 @@
-package com.example.cse110_lab5.activity.exhibitlist;
+package com.example.cse110_lab5;
 
 
 import static androidx.test.espresso.Espresso.onView;
@@ -22,6 +22,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
