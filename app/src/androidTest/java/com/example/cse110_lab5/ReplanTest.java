@@ -4,7 +4,6 @@ package com.example.cse110_lab5;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -33,9 +32,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Tests replan user story. Goes off track through mocking feature and replans when prompted.
- */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ReplanTest {
@@ -91,26 +87,6 @@ public class ReplanTest {
                         isDisplayed()));
         textView.check(matches(withText("Flamingos")));
 
-        ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.Exhibit_Name), withText("Flamingos"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialTextView.perform(longClick());
-
-        ViewInteraction materialTextView2 = onView(
-                allOf(withId(R.id.Exhibit_Name), withText("Flamingos"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialTextView2.perform(click());
-
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.lat),
                         childAtPosition(
@@ -141,11 +117,12 @@ public class ReplanTest {
                         isDisplayed()));
         materialButton3.perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(android.R.id.message), withText("Do you wants to Replan?"),
-                        withParent(withParent(withId(androidx.appcompat.R.id.scrollView))),
+        ViewInteraction frameLayout = onView(
+                allOf(withId(androidx.appcompat.R.id.contentPanel),
+                        withParent(allOf(withId(androidx.appcompat.R.id.parentPanel),
+                                withParent(withId(android.R.id.content)))),
                         isDisplayed()));
-        textView2.check(matches(isDisplayed()));
+        frameLayout.check(matches(isDisplayed()));
 
         ViewInteraction materialButton4 = onView(
                 allOf(withId(android.R.id.button1), withText("Yes"),
@@ -156,39 +133,13 @@ public class ReplanTest {
                                 3)));
         materialButton4.perform(scrollTo(), click());
 
-        ViewInteraction textView3 = onView(
+        ViewInteraction textView2 = onView(
                 allOf(withId(R.id.Exhibit_Name), withText("Capuchin Monkeys"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView3.check(matches(withText("Capuchin Monkeys")));
-
-        ViewInteraction materialTextView3 = onView(
-                allOf(withId(R.id.Exhibit_Name), withText("Capuchin Monkeys"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialTextView3.perform(click());
+        textView2.check(matches(withText("Capuchin Monkeys")));
 
         ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.Exhibit_Name), withText("Flamingos"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView4.check(matches(withText("Flamingos")));
-
-        ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.clear_plan), withText("Clear"),
                         childAtPosition(
                                 childAtPosition(
@@ -196,7 +147,7 @@ public class ReplanTest {
                                         0),
                                 10),
                         isDisplayed()));
-        materialButton6.perform(click());
+        materialButton5.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
