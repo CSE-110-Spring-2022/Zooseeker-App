@@ -36,6 +36,10 @@ public class ExhibitListViewModel extends AndroidViewModel {
         todoListItems = todoListItemDao.getAllExhibitLive();
     }
 
+    public LiveData<List<String>> getSelectedItems() {
+        return todoListItemDao.getSelectedLive();
+    }
+
     public void toggleSelected(ZooData.Node zooDataNode) {
         zooDataNode.selected = !zooDataNode.selected;
         todoListItemDao.update(zooDataNode);

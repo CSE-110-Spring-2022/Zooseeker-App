@@ -28,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="-24dp"
+        android:buttonTint="@color/green_500"
         app:layout_constraintBottom_toBottomOf="@+id/exhibit_name"
         app:layout_constraintStart_toEndOf="@+id/exhibit_name"
         app:layout_constraintTop_toTopOf="@+id/exhibit_name"
