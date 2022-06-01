@@ -5,7 +5,6 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.internal.Objects;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Coord {
     public Coord(double lat, double lng) {
@@ -20,20 +19,21 @@ public class Coord {
         return new Coord(lat, lng);
     }
 
-    public static Coord fromLatLng(LatLng latLng) {
-        return Coord.of(latLng.latitude, latLng.longitude);
-    }
-
-    public LatLng toLatLng() {
-        return new LatLng(lat, lng);
-    }
-
     public static Coord fromLocation(Location location) {
         return Coord.of(location.getLatitude(), location.getLongitude());
     }
 
+    /**
+     *  Calculates the Great-Circle distance on a sphere between the current Coordinate
+     *  and the input parameter
+     *
+     * @param coord the Coordinate to find the distance from
+     * @return the distance between Coordinates
+     */
     public double distanceTo(Coord coord){
         double rad = 6371; // Earth's radius in km - change to change output units
+
+        // convert the input from degrees to radians
         double lat1 = lat * Math.PI/180;
         double lat2 = coord.lat * Math.PI/180;
         double lon1 = lng * Math.PI/180;
@@ -42,12 +42,17 @@ public class Coord {
         double dLon = lon2 - lon1;
         double dLat = lat2 - lat1;
 
+        // haversines formula
         double a = Math.pow(Math.sin(dLat/2), 2) + Math.cos(lat1)*Math.cos(lat2)*Math.pow(Math.sin(dLon/2),2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
         return c*rad;
     }
 
+    /**
+     * @param o object to compare with
+     * @return true if the longitude and latitude of the object match
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,11 +61,21 @@ public class Coord {
         return Double.compare(coord.lat, lat) == 0 && Double.compare(coord.lng, lng) == 0;
     }
 
+    /**
+     *  Finds the hash given Coordinate latitude and longitude
+     *
+     * @return the corresponding hash for the Coordinate
+     */
     @Override
     public int hashCode() {
         return Objects.hashCode(lat, lng);
     }
 
+    /**
+     * Formats a coordinate with its given latitude and longitude
+     *
+     * @return the formatted String for the Coordinate
+     */
     @NonNull
     @Override
     public String toString() {

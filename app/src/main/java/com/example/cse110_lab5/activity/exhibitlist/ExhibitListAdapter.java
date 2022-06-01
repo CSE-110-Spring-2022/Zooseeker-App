@@ -24,6 +24,7 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     private ArrayList<String> selectedExhibits = new ArrayList<>();
 
     public void setExhibitItems(List<ZooData.Node> newExhibitItems) {
+        // Clear current exhibit list and update it to the new one passed in
         this.allExhibits.clear();
         this.allExhibits = newExhibitItems;
         notifyDataSetChanged();
@@ -34,10 +35,6 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     }
 
     public void setHashStableIds(boolean b) {
-    }
-
-    public static void toggleCompleted(ZooData.Node exhibitItem){
-        exhibitItem.selected = !exhibitItem.selected;
     }
 
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,6 +69,8 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
             this.textView = itemView.findViewById(R.id.exhibit_name);
             this.checkBox = itemView.findViewById(R.id.selected);
 
+            // when an exhibit's check box is selected, check if it's already in the selectedExhibits list
+            // and remove or add it accordingly
             this.checkBox.setOnClickListener(view -> {
                 if(selectedExhibits.contains(this.exhibitItem.id)){
                     selectedExhibits.remove(this.exhibitItem.id);

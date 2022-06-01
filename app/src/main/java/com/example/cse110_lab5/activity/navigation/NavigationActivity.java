@@ -1,7 +1,6 @@
 package com.example.cse110_lab5.activity.navigation;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
@@ -9,14 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +23,16 @@ import com.example.cse110_lab5.activity.location.Coord;
 import com.example.cse110_lab5.activity.location.LocationModel;
 import com.example.cse110_lab5.database.Converters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 
+/**
+ * This activity handles displaying instructions navigating from the user's location to the exhibits
+ * they want to visit, in the optimal route minimizing the distance they have to walk. This activity
+ * also handles establishing the user's location, and prompting the user when the optimal plan
+ * is different from the one currently instructed.
+ */
 public class NavigationActivity extends AppCompatActivity {
 
     Bundle bundle;
@@ -50,144 +51,130 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation);
 
-        Intent intent = getIntent();
-        bundle = intent.getExtras();
-
         viewModel = new ViewModelProvider(this)
                 .get(NavigationViewModel.class);
 
-        int curr_exhibit = -1;
-        String plan = "";
+        /* Get the plan and the current exhibit destination from the calling Activity */
+        Intent intent = getIntent();
+        bundle = intent.getExtras();
         if(bundle.containsKey("curr_exhibit") && bundle.containsKey("plan")){
             viewModel.setPlan((String[]) bundle.get("plan"));
             viewModel.setCurrExhibit((int)bundle.get("curr_exhibit"));
         }
 
-        total = findViewById(R.id.Exhibit_Name);
-
+        /* Update the Adapter based on the ViewModel */
         NavigationAdapter adapter = new NavigationAdapter();
         viewModel.getDisplayStrings().observe(this, adapter::update);
+        total = findViewById(R.id.Exhibit_Name);
         total.setText(viewModel.getCurrExhibitName());
         viewModel.updateFromLocation();
 
-        Button prevButton = findViewById(R.id.prev_bttn);
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        /* Button Handlers */
+        {
+            Button prevButton = findViewById(R.id.prev_bttn);
+            prevButton.setOnClickListener(view -> {
                 viewModel.toPrevExhibit();
                 total.setText(viewModel.getCurrExhibitName());
-            }
-        });
+            });
 
-        Button nextButton = findViewById(R.id.next_bttn);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Button nextButton = findViewById(R.id.next_bttn);
+            nextButton.setOnClickListener(view -> {
                 viewModel.toNextExhibit();
                 total.setText(viewModel.getCurrExhibitName());
-            }
-        });
+            });
 
-        Button skipButton = findViewById(R.id.skip_bttn);
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Button skipButton = findViewById(R.id.skip_bttn);
+            skipButton.setOnClickListener(view -> {
                 viewModel.skipExhibit();
                 total.setText(viewModel.getCurrExhibitName());
-            }
-        });
+            });
 
-        Button mockButton = findViewById(R.id.mock_btn);
-        mockButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String lat = ((EditText)findViewById(R.id.lat)).getText().toString();
-                String lon = ((EditText)findViewById(R.id.lon)).getText().toString();
+            Button mockButton = findViewById(R.id.mock_btn);
+            mockButton.setOnClickListener(view -> {
+                String lat = ((EditText) findViewById(R.id.lat)).getText().toString();
+                String lon = ((EditText) findViewById(R.id.lon)).getText().toString();
                 Log.d("lat", lat);
                 Log.d("lon", lon);
-                if(!lat.equals("") && !lon.equals("")) {
+                if (!lat.equals("") && !lon.equals("")) {
                     model.mockLocation(new Coord(Double.parseDouble(lat), Double.parseDouble(lon)));
                 }
-            }
-        });
+            });
 
-        Switch directionsSwitch = findViewById(R.id.directionsSwitch);
-        directionsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton directionsButton, boolean toggled) {
-                viewModel.toggleDetailedDirections();
-            }
-        });
+            Switch directionsSwitch = findViewById(R.id.directionsSwitch);
+            directionsSwitch.setOnCheckedChangeListener((directionsButton, toggled) -> viewModel.toggleDetailedDirections());
 
+        }
+
+        /* Bind RecyclerView to the Adapter */
         recyclerView = (RecyclerView) findViewById(R.id.path_to_exhibit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        boolean useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+        /* Location Service Setup */
+        {
+            boolean useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
-        // Set up the model
-        model = new ViewModelProvider(this).get(LocationModel.class);
+            // Set up the model
+            model = new ViewModelProvider(this).get(LocationModel.class);
 
-        // If GPS is enabled, then update the model from the Location service.
-        if (useLocationService) {
-            var permissionChecker = new PermissionChecker(this);
-            if(permissionChecker.ensurePermissions()) return;
+            // If GPS is enabled, then update the model from the Location service.
+            if (useLocationService) {
+                var permissionChecker = new PermissionChecker(this);
+                if (permissionChecker.ensurePermissions()) return;
 
-            var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            var provider = LocationManager.GPS_PROVIDER;
-            model.addLocationProviderSource(locationManager, provider);
-        }
+                var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                var provider = LocationManager.GPS_PROVIDER;
+                model.addLocationProviderSource(locationManager, provider);
+            }
 
-        /* Listen for location Updates */
-        model.getLastKnownCoords().observe(this, new Observer<Coord>() {
-            @Override
-            public void onChanged(Coord coord) {
+            // Update ViewModel whenever the location changes
+            model.getLastKnownCoords().observe(this, coord -> {
                 viewModel.updateFromLocation(coord);
                 total.setText(viewModel.getCurrExhibitName());
-            }
-        });
+            });
+        }
 
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage("Do you wants to Replan?");
-        builder1.setCancelable(true);
+        /* Handle prompt Dialog when user is offtrack */
+        {
+            AlertDialog.Builder replanAlertBuilder = new AlertDialog.Builder(this);
+            replanAlertBuilder.setMessage("Do you want to replan?");
+            replanAlertBuilder.setCancelable(true);
 
-        builder1.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+            // User wants to replan
+            replanAlertBuilder.setPositiveButton(
+                    "Yes",
+                    (dialog, id) -> {
                         viewModel.replan();
                         total.setText(viewModel.getCurrExhibitName());
                         dialog.cancel();
-                    }
-                });
+                    });
 
-        builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+            // User does not want to replan
+            replanAlertBuilder.setNegativeButton(
+                    "No",
+                    (dialog, id) -> dialog.cancel());
 
-        AlertDialog alert11 = builder1.create();
-        //alert11.show();
+            AlertDialog replanAlert = replanAlertBuilder.create();
 
-        viewModel.getOt().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
+            // Determine when to show Dialog by observing the ViewModel
+            viewModel.getOffTrack().observe(this, aBoolean -> {
                 if (aBoolean) {
-                   alert11.show();
+                    replanAlert.show();
                 }
-            }
-        });
+            });
+        }
     }
 
+    /**
+     * Preserve data when app is closed in any way
+     */
     @Override
     protected void onPause() {
         super.onPause();
         String plan = Converters.fromArrayList(Arrays.asList(viewModel.getPlan()));
         int curr_exhibit = viewModel.getCurrExhibit();
 
+        // Load plan and current exhibit into SharedPreferences
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
@@ -195,10 +182,14 @@ public class NavigationActivity extends AppCompatActivity {
         editor.putString("plan", plan);
         editor.putInt("curr_exhibit", curr_exhibit);
         editor.apply();
+
         Log.d("Navigation Saving Preferences Plan", plan);
         Log.d("Navigation Saving Preferences Exhibit", curr_exhibit + "");
     }
 
+    /**
+     * Clear the plan and current exhibit when button is pressed
+     */
     public void onClearPlanPressed(View view){
         NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         nodeDao.clearAll();
