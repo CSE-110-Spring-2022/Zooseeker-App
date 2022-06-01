@@ -35,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ExhibitListViewModel viewModel = new ViewModelProvider(this).get(ExhibitListViewModel.class);
 
-        String[] sampleExhibits = {"lions", "gators", "gorillas", "arctic_foxes"};
-        //for (String exhibit : sampleExhibits) {
-        //    sampleExhibitItems.add(new ZooData.Node(exhibit));
-        //}
         ExhibitListAdapter adapter = new ExhibitListAdapter();
         adapter.setHashStableIds(true);
 
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.plan_bttn);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String start = "entrance_exit_gate";
+                String start = nodeDao.getGate().id;
                 String path = "sample_zoo_graph.json";
                 notEmpty.putExtra("filepath", path);
                 notEmpty.putExtra("start", start);

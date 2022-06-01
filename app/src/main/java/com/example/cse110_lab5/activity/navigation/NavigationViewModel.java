@@ -45,7 +45,7 @@ public class NavigationViewModel extends AndroidViewModel {
         this.edgeDao = db.edgeDao();
         this.nodeDao = db.nodeDao();
 
-        ZooData.Node start = nodeDao.get("entrance_exit_gate");
+        ZooData.Node start = nodeDao.getGate();
         this.lastKnownCoord = new Coord(start.lat, start.lng);
     }
 
@@ -111,7 +111,7 @@ public class NavigationViewModel extends AndroidViewModel {
                 remainingExhibits
                         .subList(0, remainingExhibits.size() - 1) // Exclude returning to the start
                         .toArray(new String[remainingExhibits.size() - 1]),
-                "entrance_exit_gate"));
+                nodeDao.getGate().id));
 
         Log.d("Navigation/Closest Exhibit", closestExhibit);
         Log.d("Navigation/Remaining Exhibits", remainingExhibits.toString());

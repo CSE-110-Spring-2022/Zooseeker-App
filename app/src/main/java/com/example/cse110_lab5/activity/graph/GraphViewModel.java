@@ -23,42 +23,4 @@ public class GraphViewModel extends AndroidViewModel {
         edgeDao = db.edgeDao();
         nodeDao = db.nodeDao();
     }
-
-    //ADAPT THIS FOR OUR NEW DATABASE
-    /**
-    public LiveData<List<TodoListItem>> getTodoListItems() {
-        if (todoListItems == null) {
-            loadUsers();
-        }
-        return todoListItems;
-    }
-
-
-    public void toggleCompleted (Node node, Edge edge) {
-        node.completed = !todoListItem.completed;
-        todoListItemDao.update(todoListItem);
-
-        todoListItem.completed = !todoListItem.completed;
-        todoListItemDao.update(todoListItem);
-    }
-
-
-    private void loadUsers() {
-        todoListItems = todoListItemDao.getAllLive();
-    }
-
-    public void updateText(TodoListItem todoListItem, String newText) {
-        todoListItem.text = newText;
-        todoListItemDao.update(todoListItem);
-    }
-    public void createTodo(String text) {
-        int endOfListOrder = todoListItemDao.getOrderForAppend();
-        TodoListItem newItem = new TodoListItem(text, false, endOfListOrder);
-        todoListItemDao.insert(newItem);
-    }
-    public void deleteTodo(TodoListItem todoListItem){
-        todoListItemDao.delete(todoListItem);
-    }
-
-     */
 }
