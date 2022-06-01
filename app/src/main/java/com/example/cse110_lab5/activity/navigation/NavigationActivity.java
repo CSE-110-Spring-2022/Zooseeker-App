@@ -28,6 +28,9 @@ import com.example.cse110_lab5.database.Converters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
+import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.database.NodeDao;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -194,5 +197,15 @@ public class NavigationActivity extends AppCompatActivity {
         editor.apply();
         Log.d("Navigation Saving Preferences Plan", plan);
         Log.d("Navigation Saving Preferences Exhibit", curr_exhibit + "");
+    }
+
+    public void onClearPlanPressed(View view){
+        NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+        nodeDao.clearAll();
+
+        viewModel.setPlan(new String[0]);
+        viewModel.setCurrExhibit(-1);
+
+        finish();
     }
 }

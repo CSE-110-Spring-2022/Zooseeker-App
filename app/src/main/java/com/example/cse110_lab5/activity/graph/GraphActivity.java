@@ -7,12 +7,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.activity.navigation.NavigationActivity;
+import com.example.cse110_lab5.database.GraphDatabase;
+import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -31,6 +37,15 @@ import java.util.Set;
 public class GraphActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;
+
+    ActivityResultLauncher<Intent> navLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    finish();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +91,7 @@ public class GraphActivity extends AppCompatActivity {
             final Button button = findViewById(R.id.nav_bttn);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    startActivity(nav);
+                    navLauncher.launch(nav);
                 }
             });
         }
@@ -196,15 +211,30 @@ public class GraphActivity extends AppCompatActivity {
      *                  respective target node
      */
     public List<Double> generateCumulativeDistances
-            (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan){
+            (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
         ArrayList<Double> cumulativeDistances = new ArrayList<>();
         Double totalDistance = 0.0;
-        for(Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> path: plan){
-            if(path.getSecond() != null){
+        for (Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> path : plan) {
+            if (path.getSecond() != null) {
                 totalDistance += path.getSecond().getWeight();
             }
             cumulativeDistances.add(totalDistance);
         }
         return cumulativeDistances;
     }
+
+    /**
+     * Sets all exhibit items unselected in database
+     * Closes the corresponding NavigationActivity which will subsequently return
+     * to exhibit selection
+     *
+     * @param view the corresponding display View for the NavigationActivity
+     */
+    public void onClearPlanPressed(View view){
+        NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
+        nodeDao.clearAll();
+        finish();
+    }
 }
+
+

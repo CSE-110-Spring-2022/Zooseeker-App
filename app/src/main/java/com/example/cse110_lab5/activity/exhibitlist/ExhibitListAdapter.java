@@ -1,6 +1,5 @@
 package com.example.cse110_lab5.activity.exhibitlist;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import java.util.function.Consumer;
 public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.ViewHolder> {
     private List<ZooData.Node> allExhibits = Collections.emptyList();
     private Consumer<ZooData.Node> onCheckBoxClicked;
-    private Context context;
     private ArrayList<String> selectedExhibits = new ArrayList<>();
 
     public void setExhibitItems(List<ZooData.Node> newExhibitItems) {
@@ -53,8 +51,6 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setExhibitItem(allExhibits.get(position));
-        //ZooData.Node node = GraphDatabase.getSingleton(context).nodeDao().get(object.getFirst());
-
     }
 
     @Override
@@ -96,6 +92,8 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
             this.checkBox.setChecked(exhibitItem.selected);
             this.exhibitItem = exhibitItem;
         }
+
+
     }
 }
 
