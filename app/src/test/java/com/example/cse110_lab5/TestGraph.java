@@ -152,14 +152,14 @@ public class TestGraph {
     }
 
     @Test
-    public void testGetOrderedExhibits(){
+    public void testGetExhibitNames(){
         String start = "entrance_exit_gate";
         String[] toVisit = {"lions", "gorillas", "arctic_foxes"};
         List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit);
 
-        ArrayList<String> orderedExhibits = GraphActivity.getOrderedExhibits(paths);
-        ArrayList<String> expectedOrderedExhibits =
+        ArrayList<String> exhibitNames = GraphActivity.getExhibitNames(paths);
+        ArrayList<String> expectedExhibitNames =
                 new ArrayList<>(Arrays.asList("gorillas", "lions", "arctic_foxes"));
-        assertEquals(orderedExhibits, expectedOrderedExhibits);
+        assertEquals(exhibitNames, expectedExhibitNames);
     }
 }
