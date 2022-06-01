@@ -3,6 +3,7 @@ package com.example.cse110_lab5.activity.navigation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.activity.location.Coord;
 import com.example.cse110_lab5.activity.location.LocationModel;
+import com.example.cse110_lab5.database.Converters;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -48,8 +53,11 @@ public class NavigationActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this)
                 .get(NavigationViewModel.class);
 
-        if (bundle != null) {
+        int curr_exhibit = -1;
+        String plan = "";
+        if(bundle.containsKey("curr_exhibit") && bundle.containsKey("plan")){
             viewModel.setPlan((String[]) bundle.get("plan"));
+            viewModel.setCurrExhibit((int)bundle.get("curr_exhibit"));
         }
 
         total = findViewById(R.id.Exhibit_Name);
@@ -169,5 +177,22 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String plan = Converters.fromArrayList(Arrays.asList(viewModel.getPlan()));
+        int curr_exhibit = viewModel.getCurrExhibit();
+
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("plan", plan);
+        editor.putInt("curr_exhibit", curr_exhibit);
+        editor.apply();
+        Log.d("Navigation Saving Preferences Plan", plan);
+        Log.d("Navigation Saving Preferences Exhibit", curr_exhibit + "");
     }
 }
