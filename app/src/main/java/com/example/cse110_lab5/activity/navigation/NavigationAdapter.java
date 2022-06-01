@@ -16,6 +16,12 @@ import java.util.List;
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.ViewHolder>{
     private List<String> detailedPath = new ArrayList<>();
 
+    /**
+     * Update the list of instructions to the destination
+     *
+     * @param detailedPath      a list of Strings representing the new list of instructions
+     *                          to display
+     */
     public void update(List<String> detailedPath) {
         this.detailedPath = detailedPath;
         notifyDataSetChanged();
