@@ -43,6 +43,8 @@ public class LocationModel extends AndroidViewModel {
 
         // Create and add the mock source.
         mockSource = new MutableLiveData<>();
+
+        // update last known coords using mock source as its source for setting the coordinate values
         lastKnownCoords.addSource(mockSource, lastKnownCoords::setValue);
     }
 
@@ -70,10 +72,12 @@ public class LocationModel extends AndroidViewModel {
             public void onLocationChanged(@NonNull Location location) {
                 var coord = Coord.fromLocation(location);
                 Log.i(TAG, String.format("Model received GPS location update: %s", coord));
+                // get the location manager's gps data ready for use for updating last known coords
                 providerSource.postValue(coord);
             }
         };
         // Register for updates.
+        // Just for realistic purposes, we used 3seconds and 2meters as the update constraints
         locationManager.requestLocationUpdates(provider, 3000, 2f, locationListener);
 
         locationProviderSource = providerSource;
@@ -85,6 +89,7 @@ public class LocationModel extends AndroidViewModel {
         lastKnownCoords.removeSource(locationProviderSource);
     }
 
+    // simple function that uses a coordinate input to to mock the location
     @VisibleForTesting
     public void mockLocation(Coord coords) {
         mockSource.postValue(coords);
@@ -93,6 +98,8 @@ public class LocationModel extends AndroidViewModel {
     @VisibleForTesting
     public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
         return Executors.newSingleThreadExecutor().submit(() -> {
+            // take in a list of coordinates on the route and mock the location with the specified
+            // delay in between
             int i = 1;
             int n = route.size();
             for (var coord : route) {

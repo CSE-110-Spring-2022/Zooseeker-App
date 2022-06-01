@@ -32,6 +32,8 @@ public class Coord {
      */
     public double distanceTo(Coord coord){
         double rad = 6371; // Earth's radius in km - change to change output units
+
+        // convert the input from degrees to radians
         double lat1 = lat * Math.PI/180;
         double lat2 = coord.lat * Math.PI/180;
         double lon1 = lng * Math.PI/180;
@@ -40,6 +42,7 @@ public class Coord {
         double dLon = lon2 - lon1;
         double dLat = lat2 - lat1;
 
+        // haversines formula
         double a = Math.pow(Math.sin(dLat/2), 2) + Math.cos(lat1)*Math.cos(lat2)*Math.pow(Math.sin(dLon/2),2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
