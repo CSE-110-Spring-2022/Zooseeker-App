@@ -202,12 +202,10 @@ public class NavigationActivity extends AppCompatActivity {
     public void onClearPlanPressed(View view){
         NodeDao nodeDao = GraphDatabase.getSingleton(this).nodeDao();
         nodeDao.clearAll();
-        SharedPreferences sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("plan", "");
-        editor.putInt("curr_exhibit", -1);
-        editor.apply();
+
+        viewModel.setPlan(new String[0]);
+        viewModel.setCurrExhibit(-1);
+
         finish();
     }
 }
