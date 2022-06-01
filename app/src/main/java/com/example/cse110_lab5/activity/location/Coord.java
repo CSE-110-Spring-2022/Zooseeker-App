@@ -5,7 +5,6 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.internal.Objects;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Coord {
     public Coord(double lat, double lng) {
@@ -18,21 +17,6 @@ public class Coord {
 
     public static Coord of(double lat, double lng) {
         return new Coord(lat, lng);
-    }
-
-    /**
-     * @param latLng the input LatLng to create a Coordinate from
-     * @return the transformed Coord
-     */
-    public static Coord fromLatLng(LatLng latLng) {
-        return Coord.of(latLng.latitude, latLng.longitude);
-    }
-
-    /**
-     * @return a Latitude and Longitude object with the Coord attributes
-     */
-    public LatLng toLatLng() {
-        return new LatLng(lat, lng);
     }
 
     public static Coord fromLocation(Location location) {
