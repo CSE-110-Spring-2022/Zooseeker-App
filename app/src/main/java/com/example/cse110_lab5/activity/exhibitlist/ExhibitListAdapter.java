@@ -25,10 +25,6 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     private Context context;
     private ArrayList<String> selectedExhibits = new ArrayList<>();
 
-    /*public ExhibitListAdapter(List<ExhibitItem> selectedExhibits, Context context){
-        this.selectedExhibits = selectedExhibits;
-        this.context = context;
-    }*/
     public void setExhibitItems(List<ZooData.Node> newExhibitItems) {
         this.allExhibits.clear();
         this.allExhibits = newExhibitItems;
@@ -69,9 +65,6 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     public ArrayList<String> getSelectedExhibits() {
         return selectedExhibits;
     }
-
-    //@Override
-    //public long getItemId(int position) {return allExhibits.get(position).id;}
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;

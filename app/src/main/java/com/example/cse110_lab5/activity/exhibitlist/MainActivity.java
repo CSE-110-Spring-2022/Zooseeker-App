@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Start of Main", "Start");
         ZooData.graph = loadZooGraphJSON(this, "sample_zoo_graph.json");
 
         SharedPreferences sharedPref = this.getSharedPreferences(
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             final Button button = findViewById(R.id.plan_bttn);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    String start = "entrance_exit_gate";
+                    String start = nodeDao.getGate().id;
                     String path = "sample_zoo_graph.json";
                     notEmpty.putExtra("filepath", path);
                     notEmpty.putExtra("start", start);
