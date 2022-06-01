@@ -34,6 +34,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+/**
+ * This Activity handles the actual planning aspect of the app. A lot of its functionality is backend
+ * calculations of finding the optimal path between the selected exhibits and then displaying that
+ * in a simple list view. It shows the total exhibits selected at the top of the screen and gets the
+ * plan ready for actual navigation
+ */
 public class GraphActivity extends AppCompatActivity {
 
     public RecyclerView recyclerView;

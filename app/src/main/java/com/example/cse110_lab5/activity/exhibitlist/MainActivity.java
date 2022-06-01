@@ -30,6 +30,11 @@ import com.example.cse110_lab5.database.ZooData;
 
 import java.util.List;
 
+/**
+ * This Activity is the initial app screen that has the list of all exhibits that you can search
+ * through and select for planning. It has functionality to clear the exhibits and shows a compact
+ * list of the exhibits selected so far at the bottom of the screen
+ */
 public class MainActivity extends AppCompatActivity {
 
     // RecyclerView for the list of all the exhibits to select
