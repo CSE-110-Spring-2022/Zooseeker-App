@@ -120,7 +120,7 @@ public class NavigationActivity extends AppCompatActivity {
         // If GPS is enabled, then update the model from the Location service.
         if (useLocationService) {
             var permissionChecker = new PermissionChecker(this);
-            permissionChecker.ensurePermissions();
+            if(permissionChecker.ensurePermissions()) return;
 
             var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             var provider = LocationManager.GPS_PROVIDER;
