@@ -1,6 +1,6 @@
 package com.example.cse110_lab5.activity.navigation;
 
-import static com.example.cse110_lab5.activity.graph.GraphActivity.getOrderedExhibits;
+import static com.example.cse110_lab5.activity.graph.GraphActivity.getExhibitNames;
 import static com.example.cse110_lab5.activity.graph.GraphActivity.tsp;
 
 import android.app.Application;
@@ -128,7 +128,7 @@ public class NavigationViewModel extends AndroidViewModel {
                 .subList(0, currExhibit));
         ArrayList<String> remainingExhibits = new ArrayList<>(List.of(this.plan)
                 .subList(currExhibit, this.plan.length));
-        ArrayList<String> tspPath = getOrderedExhibits(tsp(
+        ArrayList<String> tspPath = getExhibitNames(tsp(
                 ZooData.graph,
                 closestExhibit,
                 remainingExhibits

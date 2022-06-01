@@ -15,34 +15,34 @@ import java.util.List;
 
 public class ExhibitListViewModel extends AndroidViewModel {
     private LiveData<List<ZooData.Node>> todoListItems;
-    private final NodeDao todoListItemDao;
+    private final NodeDao nodeDao;
 
     public ExhibitListViewModel(@NonNull Application application) {
         super(application);
         Context context = getApplication().getApplicationContext();
         GraphDatabase db = GraphDatabase.getSingleton(context);
-        todoListItemDao = db.nodeDao();
+        nodeDao = db.nodeDao();
     }
 
-    public LiveData<List<ZooData.Node>> getTodoListItems() {
+    public LiveData<List<ZooData.Node>> getExhibitItems() {
         if (todoListItems == null) {
-            loadUsers();
+            loadExhibits();
         }
 
         return todoListItems;
     }
 
-    private void loadUsers() {
-        todoListItems = todoListItemDao.getAllExhibitLive();
+    private void loadExhibits() {
+        todoListItems = nodeDao.getAllExhibitLive();
     }
 
     public LiveData<List<String>> getSelectedItems() {
-        return todoListItemDao.getSelectedLive();
+        return nodeDao.getSelectedLive();
     }
 
     public void toggleSelected(ZooData.Node zooDataNode) {
         zooDataNode.selected = !zooDataNode.selected;
-        todoListItemDao.update(zooDataNode);
+        nodeDao.update(zooDataNode);
     }
 
 }
