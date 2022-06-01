@@ -239,7 +239,6 @@ public class GraphActivity extends AppCompatActivity {
         for(int i = 0; i < plan.size(); i++) {
             exhibitNames.add(plan.get(i).getFirst());
         }
-
         return exhibitNames;
     }
 
@@ -253,7 +252,7 @@ public class GraphActivity extends AppCompatActivity {
      * @return          A List of the minimum total distance required in the plan to each
      *                  respective target node
      */
-    public List<Double> generateCumulativeDistances
+    public static List<Double> generateCumulativeDistances
             (List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> plan) {
         ArrayList<Double> cumulativeDistances = new ArrayList<>();
         Double totalDistance = 0.0;

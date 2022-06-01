@@ -2,8 +2,7 @@ package com.example.cse110_lab5;
 
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -20,6 +19,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.example.cse110_lab5.R;
 import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
 
 import org.hamcrest.Description;
@@ -29,30 +29,33 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Test clearing feature
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LionTest {
+public class ClearTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void lionTest() {
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.search_bar),
+    public void clearTest() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.exhibit_clear_button), withText("Clear Selected"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                5),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("lio"), closeSoftKeyboard());
+        materialButton.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.exhibit_name), withText("Lions"),
-                        withParent(withParent(withId(R.id.exhibit_list))),
+                allOf(withId(R.id.compact_list), withText("Selected Exhibits: \n"),
+                        withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("Lions")));
+        textView.check(matches(withText("Selected Exhibits: \n")));
     }
 
     private static Matcher<View> childAtPosition(

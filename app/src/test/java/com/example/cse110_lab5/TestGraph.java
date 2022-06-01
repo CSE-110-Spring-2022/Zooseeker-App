@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -114,5 +116,62 @@ public class TestGraph {
         }
     }
 
+    /**
+     * Ensure that path-generating algorithm that tracks back to the entrance gate following
+     * visiting list of exhibits returns the correct shortest path
+     */
+    @Test
+    public void testEndingNodeShortestPath(){
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"lions", "gorillas", "arctic_foxes"};
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit, start);
+        assertEquals(4, paths.size());
+        System.out.println(paths.toString());
+        int[] expectedWeights = {200, 600, 310, 200};
+        int[] expectedLengths = {1, 3, 2, 2};
+        for(int i = 1; i < paths.size(); i++) {
+            Pair<String, GraphPath<String, ZooData.IdentifiedEdge>> pair = paths.get(i);
+            if (pair.getSecond() != null) {
+                System.out.println(pair.getSecond().getLength());
+                assertEquals(expectedWeights[i - 1], pair.getSecond().getWeight(), 0.0001);
+                assertEquals(expectedLengths[i - 1], pair.getSecond().getLength());
+            }
+        }
+    }
 
+    /**
+     * Ensure that the iterative algorithm returning cumulative distances returned for the route
+     * summary page are correct
+     */
+    @Test
+    public void testGenerateCumulativeDistances(){
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"lions", "gorillas", "arctic_foxes"};
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit);
+
+        List<Double> cumulativeDistances = GraphActivity.generateCumulativeDistances(paths);
+        List<Double> expectedDistances = new ArrayList<>();
+        expectedDistances.add(210.0);
+        expectedDistances.add(410.0);
+        expectedDistances.add(1010.0);
+        for (int i = 0; i < cumulativeDistances.size(); i++){
+            assertEquals(cumulativeDistances.get(i), expectedDistances.get(i), 0.0001);
+        }
+    }
+
+    /**
+     * Ensure that the algorithm for extracting the order of exhibits returns the list of path
+     * exhibits in the correct order
+     */
+    @Test
+    public void testGetExhibitNames(){
+        String start = "entrance_exit_gate";
+        String[] toVisit = {"lions", "gorillas", "arctic_foxes"};
+        List<Pair<String, GraphPath<String, ZooData.IdentifiedEdge>>> paths = GraphActivity.tsp(g, start, toVisit);
+
+        ArrayList<String> exhibitNames = GraphActivity.getExhibitNames(paths);
+        ArrayList<String> expectedExhibitNames =
+                new ArrayList<>(Arrays.asList("gorillas", "lions", "arctic_foxes"));
+        assertEquals(exhibitNames, expectedExhibitNames);
+    }
 }
