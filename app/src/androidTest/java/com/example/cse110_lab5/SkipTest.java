@@ -3,7 +3,6 @@ package com.example.cse110_lab5;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -32,13 +31,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class Success_Scenario_Test {
+public class SkipTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void success_Scenario_Test() {
+    public void skip_Test() {
         ViewInteraction materialCheckBox = onView(
                 allOf(withId(R.id.selected),
                         childAtPosition(
@@ -54,7 +53,7 @@ public class Success_Scenario_Test {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.exhibit_list),
-                                        3),
+                                        1),
                                 1),
                         isDisplayed()));
         materialCheckBox2.perform(click());
@@ -64,7 +63,7 @@ public class Success_Scenario_Test {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.exhibit_list),
-                                        5),
+                                        2),
                                 1),
                         isDisplayed()));
         materialCheckBox3.perform(click());
@@ -74,7 +73,7 @@ public class Success_Scenario_Test {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.exhibit_list),
-                                        6),
+                                        3),
                                 1),
                         isDisplayed()));
         materialCheckBox4.perform(click());
@@ -84,7 +83,7 @@ public class Success_Scenario_Test {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.exhibit_list),
-                                        2),
+                                        4),
                                 1),
                         isDisplayed()));
         materialCheckBox5.perform(click());
@@ -100,16 +99,22 @@ public class Success_Scenario_Test {
         materialButton.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.exhibit_planned), withText("Flamingos"),
+                allOf(withId(R.id.exhibit_planned), withText("Bali Mynah"),
                         withParent(withParent(withId(R.id.planned_exhibits))),
                         isDisplayed()));
-        textView.check(matches(withText("Flamingos")));
+        textView.check(matches(withText("Bali Mynah")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.total), withText("Total: 5"),
-                        withParent(withParent(withId(android.R.id.content))),
+                allOf(withId(R.id.exhibit_planned), withText("Emerald Dove"),
+                        withParent(withParent(withId(R.id.planned_exhibits))),
                         isDisplayed()));
-        textView2.check(matches(withText("Total: 5")));
+        textView2.check(matches(withText("Emerald Dove")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.exhibit_planned), withText("Blue Capped Motmot"),
+                        withParent(withParent(withId(R.id.planned_exhibits))),
+                        isDisplayed()));
+        textView3.check(matches(withText("Blue Capped Motmot")));
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.nav_bttn), withText("Navigate"),
@@ -121,106 +126,43 @@ public class Success_Scenario_Test {
                         isDisplayed()));
         materialButton2.perform(click());
 
-        ViewInteraction switch_ = onView(
-                allOf(withId(R.id.directionsSwitch), withText("Detailed View"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                9),
-                        isDisplayed()));
-        switch_.perform(click());
-
-        ViewInteraction switch_2 = onView(
-                allOf(withId(R.id.directionsSwitch), withText("Detailed View"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                9),
-                        isDisplayed()));
-        switch_2.perform(click());
-
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
+                allOf(withId(R.id.skip_bttn), withText("Skip"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                6),
                         isDisplayed()));
         materialButton3.perform(click());
 
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.Exhibit_Name), withText("Emerald Dove"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView4.check(matches(withText("Emerald Dove")));
+
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.Exhibit_Name), withText("Emerald Dove"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialTextView.perform(click());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.Exhibit_Name), withText("Emerald Dove"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialTextView2.perform(click());
+
         ViewInteraction materialButton4 = onView(
-                allOf(withId(android.R.id.button1), withText("Yes"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(androidx.appcompat.R.id.buttonPanel),
-                                        0),
-                                3)));
-        materialButton4.perform(scrollTo(), click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
-        ViewInteraction switch_3 = onView(
-                allOf(withId(R.id.directionsSwitch), withText("Detailed View"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                9),
-                        isDisplayed()));
-        switch_3.perform(click());
-
-        ViewInteraction switch_4 = onView(
-                allOf(withId(R.id.directionsSwitch), withText("Detailed View"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                9),
-                        isDisplayed()));
-        switch_4.perform(click());
-
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton6.perform(click());
-
-        ViewInteraction materialButton7 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton7.perform(click());
-
-        ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.next_bttn), withText("Next"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton8.perform(click());
-
-        ViewInteraction materialButton9 = onView(
                 allOf(withId(R.id.clear_plan), withText("Clear"),
                         childAtPosition(
                                 childAtPosition(
@@ -228,13 +170,7 @@ public class Success_Scenario_Test {
                                         0),
                                 10),
                         isDisplayed()));
-        materialButton9.perform(click());
-
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.compact_list), withText("Selected Exhibits: \n"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView3.check(matches(withText("Selected Exhibits: \n")));
+        materialButton4.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
