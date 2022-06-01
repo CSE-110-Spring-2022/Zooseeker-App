@@ -31,6 +31,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Test clear function. Adds several exhibits to plan and runs through them, clearing the plan at the end.
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SearchClearTest {

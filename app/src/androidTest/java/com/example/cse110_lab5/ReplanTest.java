@@ -33,6 +33,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Tests replan user story. Goes off track through mocking feature and replans when prompted.
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ReplanTest {

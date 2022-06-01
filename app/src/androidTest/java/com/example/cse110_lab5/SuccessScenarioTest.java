@@ -30,6 +30,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Comprehensive system test. Goes through each essential user story to ensure basic app functionality.
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SuccessScenarioTest {

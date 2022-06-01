@@ -29,6 +29,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Tests skip feature. Adds several exhibits to plan and skips in the middle of run through in plan.
+ */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SkipTest {
