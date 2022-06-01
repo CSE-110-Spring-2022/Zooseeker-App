@@ -27,6 +27,12 @@ import java.util.Arrays;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 
+/**
+ * This activity handles displaying instructions navigating from the user's location to the exhibits
+ * they want to visit, in the optimal route minimizing the distance they have to walk. This activity
+ * also handles establishing the user's location, and prompting the user when the optimal plan
+ * is different from the one currently instructed.
+ */
 public class NavigationActivity extends AppCompatActivity {
 
     Bundle bundle;
