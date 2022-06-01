@@ -21,6 +21,12 @@ public abstract class GraphDatabase extends RoomDatabase {
     public abstract NodeDao nodeDao();
     public abstract EdgeDao edgeDao();
 
+    /**
+     * Get the GraphDatabase singleton
+     * @param context       the context to construct the GraphDatabase in, if it doesn't already
+     *                      exist
+     * @return              the singular GraphDatabase object
+     */
     public synchronized static GraphDatabase getSingleton(Context context) {
         if(singleton == null) {
             singleton = GraphDatabase.makeDatabase(context);
@@ -28,6 +34,11 @@ public abstract class GraphDatabase extends RoomDatabase {
         return singleton;
     }
 
+    /**
+     * Construct a GraphDatabase
+     * @param context       the context to construct the GraphDatabase in
+     * @return              the constructed GraphDatabase object
+     */
     private static GraphDatabase makeDatabase(Context context) {
         return Room.databaseBuilder(context, GraphDatabase.class, "graph.db")
                 .allowMainThreadQueries()
@@ -35,12 +46,14 @@ public abstract class GraphDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
+                        // Use a separate thread to populate the Edge and Node databases
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
+                            // Load the Edges into the database from the JSON asset
                             List<ZooData.Edge> edges = ZooData.Edge
                                     .loadJSON(context, "sample_edge_info.json");
                             getSingleton(context).edgeDao().insertAll(edges);
 
-                            //TEST
+                            // Load the Nodes into the database from the JSON asset
                             List<ZooData.Node> nodes = ZooData.Node
                                     .loadJSON(context, "sample_node_info.json");
                             getSingleton(context).nodeDao().insertAll(nodes);
@@ -51,6 +64,10 @@ public abstract class GraphDatabase extends RoomDatabase {
                 .build();
     }
 
+    /**
+     * Allow for injecting a GraphDatabase into the application for the purposes of testing
+     * @param testDatabase      the GraphDatabase to inject
+     */
     @VisibleForTesting
     public static void injectTestDatabase(GraphDatabase testDatabase) {
         if(singleton != null ) {
