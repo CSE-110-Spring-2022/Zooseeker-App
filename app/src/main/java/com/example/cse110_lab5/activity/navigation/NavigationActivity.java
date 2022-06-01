@@ -51,18 +51,11 @@ public class NavigationActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this)
                 .get(NavigationViewModel.class);
 
-        SharedPreferences sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        int curr_exhibit = sharedPref.getInt("curr_exhibit", -1);
-        String plan = sharedPref.getString("plan", "");
-
-        if(curr_exhibit != -1){
-            viewModel.setPlan((String[]) Converters.fromString(plan).toArray());
-            viewModel.setCurrExhibit(curr_exhibit);
-        }
-        else if (bundle != null) {
+        int curr_exhibit = -1;
+        String plan = "";
+        if(bundle.containsKey("curr_exhibit") && bundle.containsKey("plan")){
             viewModel.setPlan((String[]) bundle.get("plan"));
+            viewModel.setCurrExhibit((int)bundle.get("curr_exhibit"));
         }
 
         total = findViewById(R.id.Exhibit_Name);
@@ -151,9 +144,9 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        String plan = Converters.fromArrayList(Arrays.asList((String[]) bundle.get("plan")));
+    protected void onPause() {
+        super.onPause();
+        String plan = Converters.fromArrayList(Arrays.asList(viewModel.getPlan()));
         int curr_exhibit = viewModel.getCurrExhibit();
 
         SharedPreferences sharedPref = this.getSharedPreferences(
@@ -162,5 +155,8 @@ public class NavigationActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("plan", plan);
         editor.putInt("curr_exhibit", curr_exhibit);
+        editor.apply();
+        Log.d("Navigation Saving Preferences Plan", plan);
+        Log.d("Navigation Saving Preferences Exhibit", curr_exhibit + "");
     }
 }

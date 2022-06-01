@@ -1,7 +1,5 @@
 package com.example.cse110_lab5.activity.graph;
 
-import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cse110_lab5.activity.navigation.NavigationActivity;
 import com.example.cse110_lab5.R;
+import com.example.cse110_lab5.activity.navigation.NavigationActivity;
 import com.example.cse110_lab5.database.ZooData;
 
 import org.jgrapht.Graph;
@@ -37,8 +35,8 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ZooData.loadZooGraphJSON(this, "sample_zoo_graph.json");
 
-        Graph<String, ZooData.IdentifiedEdge> g = null;
         String start = "";
         String[] toVisit = {};
 
@@ -47,7 +45,6 @@ public class GraphActivity extends AppCompatActivity {
 
         if (bundle != null) {
             toVisit = bundle.getStringArray("toVisit");
-            g = loadZooGraphJSON(this, bundle.getString("filepath"));
             start = bundle.getString("start");
         }
 
@@ -62,7 +59,7 @@ public class GraphActivity extends AppCompatActivity {
             recyclerView = (RecyclerView) findViewById(R.id.planned_exhibits);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(g, start, toVisit);
+            List<Pair<String,GraphPath<String, ZooData.IdentifiedEdge>>> plan = tsp(ZooData.graph, start, toVisit);
             GraphAdapter oEadapter = new GraphAdapter(this, plan);
             recyclerView.setAdapter(oEadapter);
 
@@ -72,6 +69,7 @@ public class GraphActivity extends AppCompatActivity {
             Intent nav = new Intent(this, NavigationActivity.class);
             ArrayList<String> orderedExhibits = getOrderedExhibits(plan);
             orderedExhibits.add(start);
+            nav.putExtra("curr_exhibit", 0);
             nav.putExtra("plan", orderedExhibits.toArray(new String[orderedExhibits.size()]));
 
             final Button button = findViewById(R.id.nav_bttn);

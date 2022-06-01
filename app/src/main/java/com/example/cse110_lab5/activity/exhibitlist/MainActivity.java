@@ -1,5 +1,7 @@
 package com.example.cse110_lab5.activity.exhibitlist;
 
+import static com.example.cse110_lab5.database.ZooData.loadZooGraphJSON;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cse110_lab5.R;
-import com.example.cse110_lab5.activity.exhibitlist.ExhibitListAdapter;
-import com.example.cse110_lab5.activity.exhibitlist.ExhibitListViewModel;
 import com.example.cse110_lab5.activity.graph.GraphActivity;
 import com.example.cse110_lab5.activity.navigation.NavigationActivity;
 import com.example.cse110_lab5.database.Converters;
@@ -26,7 +26,6 @@ import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 import com.example.cse110_lab5.database.ZooData;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,23 +36,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Start of Main", "Start");
+        ZooData.graph = loadZooGraphJSON(this, "sample_zoo_graph.json");
 
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
         int curr_exhibit = sharedPref.getInt("curr_exhibit", -1);
-
+        Log.d("Loading Preferences Current Exhibit", curr_exhibit + "");
+        String plan = sharedPref.getString("plan", "");
+        Log.d("Loading Preferences Plan", plan);
         if(curr_exhibit != -1){
             Intent nav = new Intent(this, NavigationActivity.class);
+            nav.putExtra("plan", Converters.fromString(plan).toArray(new String[0]));
+            nav.putExtra("curr_exhibit", curr_exhibit);
             startActivity(nav);
         } else {
             setContentView(R.layout.activity_main);
             ExhibitListViewModel viewModel = new ViewModelProvider(this).get(ExhibitListViewModel.class);
-
-            String[] sampleExhibits = {"lions", "gators", "gorillas", "arctic_foxes"};
-            //for (String exhibit : sampleExhibits) {
-            //    sampleExhibitItems.add(new ZooData.Node(exhibit));
-            //}
             ExhibitListAdapter adapter = new ExhibitListAdapter();
             adapter.setHashStableIds(true);
 

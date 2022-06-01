@@ -1,14 +1,16 @@
 package com.example.cse110_lab5.activity.navigation;
 
+import static com.example.cse110_lab5.activity.graph.GraphActivity.getOrderedExhibits;
+import static com.example.cse110_lab5.activity.graph.GraphActivity.tsp;
+
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
-import static com.example.cse110_lab5.activity.graph.GraphActivity.tsp;
-import static com.example.cse110_lab5.activity.graph.GraphActivity.getOrderedExhibits;
 import com.example.cse110_lab5.activity.location.Coord;
 import com.example.cse110_lab5.database.EdgeDao;
 import com.example.cse110_lab5.database.GraphDatabase;
@@ -21,8 +23,6 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.lifecycle.MutableLiveData;
 
 public class NavigationViewModel extends AndroidViewModel {
     private final EdgeDao edgeDao;
@@ -52,6 +52,22 @@ public class NavigationViewModel extends AndroidViewModel {
         this.plan = plan;
     }
 
+    public String[] getPlan(){
+        return this.plan;
+    }
+
+    public void setCurrExhibit(int curr) {
+        this.currExhibit= curr;
+    }
+
+    public int getCurrExhibit() {
+        return currExhibit;
+    }
+
+    public String getCurrExhibitName() {
+        return nodeDao.get(plan[currExhibit]).name;
+    }
+
     public void updateFromLocation() {
         updateFromLocation(lastKnownCoord);
     }
@@ -61,18 +77,6 @@ public class NavigationViewModel extends AndroidViewModel {
             displayStrings = new MutableLiveData<>();
         }
         return displayStrings;
-    }
-
-    public String getCurrExhibitName() {
-        return nodeDao.get(plan[currExhibit]).name;
-    }
-
-    public void setCurrExhibit(int curr) {
-        this.currExhibit= curr;
-    }
-
-    public int getCurrExhibit() {
-        return currExhibit;
     }
 
     public void toggleDetailedDirections() {
