@@ -1,7 +1,8 @@
-package com.example.cse110_lab5;
+package com.example.cse110_lab5.activity.exhibitlist;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -20,7 +21,7 @@ import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.example.cse110_lab5.activity.exhibitlist.MainActivity;
+import com.example.cse110_lab5.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -31,13 +32,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchBarTest {
+public class Search_Clear_test {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchBarTest() {
+    public void search_Clear_test() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -46,19 +47,33 @@ public class SearchBarTest {
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("Africa"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("afri"), closeSoftKeyboard());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.exhibit_name), withText("Lions"),
-                        withParent(withParent(withId(R.id.exhibit_list))),
+        ViewInteraction materialCheckBox = onView(
+                allOf(withId(R.id.selected),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.exhibit_list),
+                                        1),
+                                1),
                         isDisplayed()));
-        textView.check(matches(withText("Lions")));
+        materialCheckBox.perform(click());
+
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.exhibit_clear_button), withText("Clear Selected"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        materialButton.perform(click());
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.exhibit_name), withText("Elephant Odyssey"),
-                        withParent(withParent(withId(R.id.exhibit_list))),
+                allOf(withId(R.id.compact_list), withText("Selected Exhibits: \n"),
+                        withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView2.check(matches(withText("Elephant Odyssey")));
+        textView2.check(matches(withText("Selected Exhibits: \n")));
     }
 
     private static Matcher<View> childAtPosition(
