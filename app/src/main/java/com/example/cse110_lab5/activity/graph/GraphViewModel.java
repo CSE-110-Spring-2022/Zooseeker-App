@@ -10,8 +10,6 @@ import com.example.cse110_lab5.database.EdgeDao;
 import com.example.cse110_lab5.database.GraphDatabase;
 import com.example.cse110_lab5.database.NodeDao;
 
-import java.util.List;
-
 public class GraphViewModel extends AndroidViewModel {
     private final EdgeDao edgeDao;
     private final NodeDao nodeDao;
